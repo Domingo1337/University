@@ -285,9 +285,35 @@
     ]))
 
 (define (generate-valuation resolved)
-  ;; TODO: zaimplementuj!
-  ;; Ta implementacja mówi tylko że formuła może być spełniona, ale nie mówi jak. Uzupełnij ją!
-  'sat)
+  (define (shorten-pos var clauses)
+    (map (lambda (c)
+           (if (member var (res-clause-neg c))
+               (res-clause (res-clause-pos c)
+                           (remove var (res-clause-neg c))
+                           null)
+                c))
+         (filter (lambda (c) (not (member var (res-clause-pos c)))) clauses)))
+  (define (shorten-neg var clauses)
+    (map (lambda (c)
+           (if (member var (res-clause-pos c))
+               (res-clause (remove var (res-clause-pos c))
+                           (res-clause-neg c)
+                           null)
+               c))
+         (filter (lambda (c) (not (member var (res-clause-neg c)))) clauses)))
+  (define (iter clauses vals)
+    (if (null? clauses)
+        vals
+        (let ((clause (car clauses))
+              (rest (cdr clauses)))
+          (cond [(not (null? (res-clause-pos clause)))
+                 (iter (shorten-pos (car (res-clause-pos clause)) rest)
+                       (cons (list (car (res-clause-pos clause)) #t) vals))]
+                [(not (null? (res-clause-neg clause)))
+                 (iter (shorten-neg (car (res-clause-neg clause)) rest)
+                       (cons (list (car (res-clause-neg clause)) #f) vals))]
+                [else (iter rest vals)]))))
+  (cons 'sat (list (iter resolved null))))
 
 ;; procedura przetwarzające wejściowy CNF na wewnętrzną reprezentację klauzul
 (define (form->clauses f)
@@ -325,3 +351,32 @@
         (check-proof pf-val form))))
 
 ;;; TODO: poniżej wpisz swoje testy
+;; x1 = (p ∨ q) ∧ (¬p ∨ q) ∧ (p ∨ ¬q) ∧ (¬p ∨ ¬q)
+(define x1 '(cnf (clause (literal #t p) (literal #t q))
+                 (clause (literal #f p) (literal #t q))
+                 (clause (literal #t p) (literal #f q))
+                 (clause (literal #f p) (literal #f q))))
+;; x2 = (p ∨ q ∨ r) ∧ (¬r ∨ ¬q ∨ ¬p) ∧ (¬q ∨ r) ∧ (¬r ∨ p)
+(define x2 '(cnf (clause (literal #t p) (literal #t q) (literal #t r))
+                 (clause (literal #f p) (literal #f q) (literal #f r))
+                 (clause (literal #f q) (literal #t r))
+                 (clause (literal #t p) (literal #f r))))
+;; x3 = p ∧ (q ∨ r) ∧ (¬p ∨ q ∨ r ∨ s) ∧ (p ∨ ¬q ∨ s )
+(define x3 '(cnf (clause (literal #t p))
+                 (clause (literal #t q) (literal #t r))
+                 (clause (literal #f p) (literal #t q) (literal #t r) (literal #t s))
+                 (clause (literal #t p) (literal #f q) (literal #t s))))
+
+;; testy:
+(display "Testing: ") x1
+(display "Result: ") (prove x1)
+(display "Proof-check: ") (prove-and-check x1)
+(newline)
+(display "Testing: ") x2
+(display "Result: ") (prove x2)
+(display "Proof-check: ") (prove-and-check x2)
+(newline)
+(display "Testing: ") x3
+(display "Result: ") (prove x3)
+(display "Proof-check: ") (prove-and-check x3)
+(newline)
