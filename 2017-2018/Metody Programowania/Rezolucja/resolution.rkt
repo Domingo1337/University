@@ -211,26 +211,39 @@
         [(var<? (car ys) (car xs)) (first-shared xs (cdr ys))]
         [else (car xs)]))
 
+(define (easier? c1 c2)
+  (define (contains? xs ys)
+    (cond [(null? xs) true]
+          [(null? ys) false]        
+          [(var<? (car xs) (car ys))
+           false]
+          [(var<? (car ys) (car xs))
+           (contains? xs (cdr ys))]
+          [else (contains? (cdr xs) (cdr ys))]))
+  (and (contains? (res-clause-pos c2) (res-clause-pos c1))
+       (contains? (res-clause-neg c2) (res-clause-neg c1))))
+;;;;;;;;
+
 (define (clause-trivial? c)
   (first-shared (res-clause-pos c)
                 (res-clause-neg c)))
 
 (define (resolve c1 c2)
-  (let ((res (first-shared (res-clause-pos c1)
-                           (res-clause-neg c2))))
-    (if (false? res)
-        res
-        (res-clause (remove res (merge-vars  (res-clause-pos c1)
-                                             (res-clause-pos c2)))
-                    (remove res (merge-vars  (res-clause-neg c1)
-                                             (res-clause-neg c2)))
-                    (proof-res  res
-                                (res-clause-proof c1)
-                                (res-clause-proof c2))))))
+  (define (helper c1 c2)
+    (let ((res (first-shared (res-clause-pos c1)
+                             (res-clause-neg c2))))
+      (and res
+          (res-clause (remove res (merge-vars  (res-clause-pos c1)
+                                               (res-clause-pos c2)))
+                      (remove res (merge-vars  (res-clause-neg c1)
+                                               (res-clause-neg c2)))
+                      (proof-res  res
+                                  (res-clause-proof c1)
+                                  (res-clause-proof c2))))))
+  (or (helper c1 c2)
+      (helper c2 c1)))
                                                               
 (define (resolve-single-prove s-clause checked pending)
-  ;; TODO: zaimplementuj!
-  ;; Poniższa implementacja działa w ten sam sposób co dla większych klauzul — łatwo ją poprawić!
   (let* ((resolvents   (filter-map (lambda (c) (resolve c s-clause))
                                      checked))
          (sorted-rs    (sort resolvents < #:key res-clause-size)))
@@ -277,11 +290,11 @@
    [(clause-false? (car new))   (list 'unsat (res-clause-proof (car new)))]
    ;; jeśli klauzula jest trywialna to nie ma potrzeby jej przetwarzać
    [(clause-trivial? (car new)) (subsume-add-prove checked pending (cdr new))]
+   [(ormap (lambda (x) (easier? (car new) x)) checked) (subsume-add-prove checked pending (cdr new))]
    [else
-    ;; TODO: zaimplementuj!
-    ;; Poniższa implementacja nie sprawdza czy nowa klauzula nie jest lepsza (bądź gorsza) od już
-    ;; rozpatrzonych; popraw to!
-    (subsume-add-prove checked (insert (car new) pending) (cdr new))
+    (subsume-add-prove (filter (lambda (x) (not (easier? x (car new)))) checked)
+                       (insert (car new) (filter (lambda (x) (not (easier? x (car new))))pending))
+                       (cdr new))
     ]))
 
 (define (generate-valuation resolved)
@@ -366,6 +379,10 @@
                  (clause (literal #t q) (literal #t r))
                  (clause (literal #f p) (literal #t q) (literal #t r) (literal #t s))
                  (clause (literal #t p) (literal #f q) (literal #t s))))
+;; x4 = p ∧ ¬p
+(define x4 '(cnf (clause (literal #f p)) (clause (literal #t p))))
+;; x5 = ¬p ∧ p
+(define x5 '(cnf (clause (literal #t p)) (clause (literal #f p))))
 
 ;; testy:
 (display "Testing: ") x1
@@ -380,3 +397,10 @@
 (display "Result: ") (prove x3)
 (display "Proof-check: ") (prove-and-check x3)
 (newline)
+(display "Testing: ") x4
+(display "Result: ") (prove x4)
+(display "Proof-check: ") (prove-and-check x4)
+(newline)
+(display "Testing: ") x5
+(display "Result: ") (prove x5)
+(display "Proof-check: ") (prove-and-check x5)
