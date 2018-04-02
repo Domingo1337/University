@@ -204,15 +204,30 @@
       (rev-append (cdr xs) (cons (car xs) ys))))
 
 ;; TODO: miejsce na uzupełnienie własnych funkcji pomocniczych
+(define (first-shared xs ys)
+  (cond [(null? xs) false]
+        [(null? ys) false]
+        [(var<? (car xs) (car ys)) (first-shared (cdr xs) ys)]
+        [(var<? (car ys) (car xs)) (first-shared xs (cdr ys))]
+        [else (car xs)]))
 
 (define (clause-trivial? c)
-  ;; TODO: zaimplementuj!
-  false)
+  (first-shared (res-clause-pos c)
+                (res-clause-neg c)))
 
 (define (resolve c1 c2)
-  ;; TODO: zaimplementuj!
-  (error "Not implemented!"))
-
+  (let ((res (first-shared (res-clause-pos c1)
+                           (res-clause-neg c2))))
+    (if (false? res)
+        res
+        (res-clause (remove res (merge-vars  (res-clause-pos c1)
+                                             (res-clause-pos c2)))
+                    (remove res (merge-vars  (res-clause-neg c1)
+                                             (res-clause-neg c2)))
+                    (proof-res  res
+                                (res-clause-proof c1)
+                                (res-clause-proof c2))))))
+                                                              
 (define (resolve-single-prove s-clause checked pending)
   ;; TODO: zaimplementuj!
   ;; Poniższa implementacja działa w ten sam sposób co dla większych klauzul — łatwo ją poprawić!
