@@ -1,7 +1,7 @@
 import java.util.Random;
 
 public class Main {
-    public static boolean sorted(int[] array) {
+    public static boolean isSorted(int[] array) {
         for (int i = 0; i < array.length - 1; i++)
             if (array[i] > array[i + 1])
                 return false;
@@ -21,13 +21,12 @@ public class Main {
         Sorter sorter = new Sorter(array, 0, array.length - 1);
         long timer = System.currentTimeMillis();
 
-        sorter.start();
-        sorter.join();
+        sorter.run();
 
         timer = System.currentTimeMillis() - timer;
         System.out.println("took " + timer + "ms.");
 
-        System.out.println("Sorted? " + Main.sorted(array));
+        System.out.println("Sorted? " + isSorted(array));
         for (int x : array)
             System.out.print(x + " ");
     }

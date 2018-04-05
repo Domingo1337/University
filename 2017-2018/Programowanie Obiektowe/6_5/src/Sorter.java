@@ -1,5 +1,3 @@
-import java.io.Console;
-
 public class Sorter extends Thread {
     private int[] array;
     private static int counter = 0;
