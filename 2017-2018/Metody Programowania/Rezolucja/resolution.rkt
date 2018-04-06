@@ -242,13 +242,13 @@
                                   (res-clause-proof c2))))))
   (or (helper c1 c2)
       (helper c2 c1)))
-                                                              
-(define (resolve-single-prove s-clause checked pending)
-  (let* ((resolvents   (filter-map (lambda (c) (resolve c s-clause))
-                                     checked))
-         (sorted-rs    (sort resolvents < #:key res-clause-size)))
-    (subsume-add-prove (cons s-clause checked) pending sorted-rs)))
 
+(define (resolve-single-prove s-clause checked pending)
+  (subsume-add-prove (cons s-clause (filter (lambda (x) (not (resolve x s-clause))) checked))
+                     pending
+                     (sort-clauses (filter-map (lambda (c) (resolve c s-clause)) checked))))
+
+;;  (resolve-prove (cons s-clause (map (lambda(c) (or (resolve c s-clause) c)) checked)) pending) 
 ;; wstawianie klauzuli w posortowaną względem rozmiaru listę klauzul
 (define (insert nc ncs)
   (cond
