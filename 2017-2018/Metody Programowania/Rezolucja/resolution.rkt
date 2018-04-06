@@ -244,9 +244,16 @@
       (helper c2 c1)))
 
 (define (resolve-single-prove s-clause checked pending)
-  (subsume-add-prove (cons s-clause (filter (lambda (x) (not (resolve x s-clause))) checked))
-                     pending
-                     (sort-clauses (filter-map (lambda (c) (resolve c s-clause)) checked))))
+  (define (resolve-split resolved not-resolvable clauses)
+    (if (null? clauses) (cons resolved not-resolvable)
+        (let ((res (resolve (car clauses) s-clause)))
+          (if res
+              (resolve-split (cons res resolved) not-resolvable (cdr clauses))
+              (resolve-split resolved (cons (car clauses) not-resolvable) (cdr clauses))))))
+  (let ((clauses (resolve-split null null checked)))
+    (subsume-add-prove (sort-clauses (cons s-clause (cdr clauses)))
+                       pending
+                       (sort-clauses (car clauses)))))
 
 ;;  (resolve-prove (cons s-clause (map (lambda(c) (or (resolve c s-clause) c)) checked)) pending) 
 ;; wstawianie klauzuli w posortowaną względem rozmiaru listę klauzul
