@@ -203,7 +203,7 @@
   (if (null? xs) ys
       (rev-append (cdr xs) (cons (car xs) ys))))
 
-;; TODO: miejsce na uzupełnienie własnych funkcji pomocniczych
+;; funkcje pomocnicze
 (define (first-shared xs ys)
   (cond [(null? xs) false]
         [(null? ys) false]
@@ -255,7 +255,6 @@
                        pending
                        (sort-clauses (car clauses)))))
 
-;;  (resolve-prove (cons s-clause (map (lambda(c) (or (resolve c s-clause) c)) checked)) pending) 
 ;; wstawianie klauzuli w posortowaną względem rozmiaru listę klauzul
 (define (insert nc ncs)
   (cond
@@ -298,6 +297,7 @@
    ;; jeśli klauzula jest trywialna to nie ma potrzeby jej przetwarzać
    [(clause-trivial? (car new)) (subsume-add-prove checked pending (cdr new))]
    [(ormap (lambda (x) (easier? (car new) x)) checked) (subsume-add-prove checked pending (cdr new))]
+   [(ormap (lambda (x) (easier? (car new) x)) pending) (subsume-add-prove checked pending (cdr new))]
    [else
     (subsume-add-prove (filter (lambda (x) (not (easier? x (car new)))) checked)
                        (insert (car new) (filter (lambda (x) (not (easier? x (car new))))pending))
@@ -370,7 +370,7 @@
         (valuate-partial pf-val form)
         (check-proof pf-val form))))
 
-;;; TODO: poniżej wpisz swoje testy
+;; testy:
 ;; x1 = (p ∨ q) ∧ (¬p ∨ q) ∧ (p ∨ ¬q) ∧ (¬p ∨ ¬q)
 (define x1 '(cnf (clause (literal #t p) (literal #t q))
                  (clause (literal #f p) (literal #t q))
@@ -391,7 +391,6 @@
 ;; x5 = ¬p ∧ p
 (define x5 '(cnf (clause (literal #t p)) (clause (literal #f p))))
 
-;; testy:
 (display "Testing: ") x1
 (display "Result: ") (prove x1)
 (display "Proof-check: ") (prove-and-check x1)
