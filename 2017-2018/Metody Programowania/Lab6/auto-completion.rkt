@@ -94,30 +94,21 @@
        (= (num-of-holes t) 1)))
 
 (define (hole-context e)
-  (define (iter var-list e todo)
+  ;; zdecydowałem się na fałsz jako reprezentację wyrażenia bez dziur w funkcji pomocniczej,
+  ;; żeby móc użyć or'a zamiast kilku let'ów i if'ów
+  ;; co według mnie jest bardziej eleganckim rozwiązaniem
+  (define (rec var-list e)
     (cond [(hole? e) var-list]
-          [(let? e)  (iter var-list (let-def e) (cons (let-expr e) todo))]
-          [(let-def? e) (iter var-list (let-def-expr e) (cons (let-def-var e) todo))]
-          ;; zdecydowałem się na fałsz jako reprezentację wyrażenia bez dziur,
-          ;; żeby móc użyć w tym miejscu or'a zamiast kilku let'ów i if'ów,
-          ;; co według mnie jest bardziej eleganckim rozwiązaniem
-          [(binop? e) (or (iter var-list (binop-left e) null)
-                          (iter var-list (binop-right e) null)
-                          (if (null? todo)
-                              #f
-                              (iter var-list (car todo) (cdr todo))))]
-          [(var? e) (if (null? todo)
-                        #f
-                        (iter (if (member e var-list)
-                                  var-list
-                                  (cons e var-list))
-                              (car todo) (cdr todo)))]
-          [(const? e) (if (null? todo)
-                          #f
-                          (iter var-list (car todo) (cdr todo)))]))
-  (or (iter '() e '())
+          [(let? e)
+           (or (rec var-list (let-def-expr (let-def e)))
+               (rec (if (member (let-def-var (let-def e)) var-list)
+                         var-list
+                         (cons (let-def-var (let-def e)) var-list)) (let-expr e)))]
+          [(binop? e) (or (rec var-list (binop-left e) )
+                          (rec var-list (binop-right e) ))]
+          [else #f]))
+  (or (rec null e)
       null))
-
 
 (define (test)
   ;; funkcje pomocnicze
@@ -127,25 +118,26 @@
           [(eq? (car xs) (car ys)) (eq-list? (cdr xs) (cdr ys))]
           [else #f]))
   (define (display-false-result expr rslt)
-    (display "hole-context of '") (display expr)
-    (display " should be '") (display rslt)
-    (display ", but '") (display (hole-context expr))
-    (display " was returned instead.") (newline))
+    (fprintf (current-output-port)
+             "(hole-context ~a) should return ~s, but ~v was returned instead.\n"
+             expr rslt (hole-context expr)))
   ;;funkcja testujaca:
   (define (test-check tests)
-    (andmap identity
-            (map
-             (lambda (x) (if (eq-list? (sort (hole-context (first x)) symbol<?)
-                                       (sort (second x) symbol<?))
-                             #t
-                             (not (display-false-result (first x) (second x)))))
-             tests)))
-  ;testy jako lista list 2-elementowych '(wejscie wyjscie)
-  (test-check '(((+ 3 hole)                         ())
-                ((let (x 3) (let (y 7) (+ x hole))) (y x))
-                ((let (x 3) (let (y hole) (+ x 3))) (x))
-                ((let (x hole) (let (y 7) (+ x 3))) ())
-                ((let (kotek 7) (let (piesek 9)     (let (chomik 5) hole))) (chomik kotek piesek))
-                ((+ (let (x 4) 5) hole)             ()) 
+    (cond [(andmap identity
+                   (map
+                    (lambda (x) (if (eq-list? (sort (hole-context (first x)) symbol<?)
+                                              (sort (second x) symbol<?))
+                                    #t
+                                    (not (display-false-result (first x) (second x)))))
+                    tests)) (display "All tests passed successfully.\n") #t]
+          [else #f]))
+  
+    ;testy jako lista list 2-elementowych '(wejscie wyjscie)
+    (test-check '(((+ 3 hole)                                             ())
+                  ((let (x 3) (let (y 7) (+ x hole)))                     (y x))
+                  ((let (x 3) (let (y hole) (+ x 3)))                     (x))
+                  ((let (x hole) (let (y 7) (+ x 3)))                     ())
+                  ((let (kotek 7) (let (piesek 9) (let (chomik 5) hole))) (chomik kotek piesek))
+                  ((+ (let (x 4) 5) hole)                                 ()) 
                 )))
 (test)
