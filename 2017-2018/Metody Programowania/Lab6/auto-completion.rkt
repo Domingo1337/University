@@ -94,20 +94,17 @@
        (= (num-of-holes t) 1)))
 
 (define (hole-context e)
-  ;; zdecydowałem się na fałsz jako reprezentację wyrażenia bez dziur w funkcji pomocniczej,
-  ;; żeby móc użyć or'a zamiast kilku let'ów i if'ów
-  ;; co według mnie jest bardziej eleganckim rozwiązaniem
-  (define (rec var-list e)
+  (define (rec e var-list)
     (cond [(hole? e) var-list]
           [(let? e)
-           (or (rec var-list (let-def-expr (let-def e)))
-               (rec (if (member (let-def-var (let-def e)) var-list)
-                        var-list
-                        (cons (let-def-var (let-def e)) var-list)) (let-expr e)))]
-          [(binop? e) (or (rec var-list (binop-left e) )
-                          (rec var-list (binop-right e) ))]
+           (or (rec (let-def-expr (let-def e)) var-list)
+               (rec (let-expr e) (if (member (let-def-var (let-def e)) var-list)
+                                     var-list
+                                     (cons (let-def-var (let-def e)) var-list))))]
+          [(binop? e) (or (rec (binop-left e) var-list)
+                          (rec (binop-right e) var-list))]
           [else #f]))
-  (or (rec null e)
+  (or (rec e null)
       null))
 
 (define (test)
