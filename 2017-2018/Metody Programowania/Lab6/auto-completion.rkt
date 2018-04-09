@@ -102,8 +102,8 @@
           [(let? e)
            (or (rec var-list (let-def-expr (let-def e)))
                (rec (if (member (let-def-var (let-def e)) var-list)
-                         var-list
-                         (cons (let-def-var (let-def e)) var-list)) (let-expr e)))]
+                        var-list
+                        (cons (let-def-var (let-def e)) var-list)) (let-expr e)))]
           [(binop? e) (or (rec var-list (binop-left e) )
                           (rec var-list (binop-right e) ))]
           [else #f]))
@@ -132,12 +132,15 @@
                     tests)) (display "All tests passed successfully.\n") #t]
           [else #f]))
   
-    ;testy jako lista list 2-elementowych '(wejscie wyjscie)
-    (test-check '(((+ 3 hole)                                             ())
-                  ((let (x 3) (let (y 7) (+ x hole)))                     (y x))
-                  ((let (x 3) (let (y hole) (+ x 3)))                     (x))
-                  ((let (x hole) (let (y 7) (+ x 3)))                     ())
-                  ((let (kotek 7) (let (piesek 9) (let (chomik 5) hole))) (chomik kotek piesek))
-                  ((+ (let (x 4) 5) hole)                                 ()) 
+  ;;testy jako lista list 2-elementowych '(wejscie wyjscie)
+  (test-check '(((+ 3 hole)                                                                   ())
+                ((let (x 3) (let (y 7) (+ x hole)))                                           (y x))
+                ((let (x 3) (let (y hole) (+ x 3)))                                           (x))
+                ((let (x hole) (let (y 7) (+ x 3)))                                           ())
+                ((let (kotek 7) (let (piesek 9) (let (chomik 5) hole)))                       (chomik kotek piesek))
+                ((+ (let (x 4) 5) hole)                                                       ())
+                ((let (q 2) (+ (let (p (let (r 5) r)) p) (let (s q) (+ s (let (t 8) hole))))) (q s t))
+                ((let (x (* 2 3)) (let (x (* x x)) (let (y 1) (* x (* hole y)))))             (x y))
+                ((let (x (let (y 3) (+ y hole))) 5)                                           (y))
                 )))
 (test)

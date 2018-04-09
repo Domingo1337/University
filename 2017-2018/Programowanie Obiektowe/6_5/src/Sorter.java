@@ -48,8 +48,7 @@ public class Sorter extends Thread {
                     temp[k] = array[i++];
                 else temp[k] = array[j++];
             }
-            for (int k = 0; k <= stop - start; k++)
-                array[start + k] = temp[k];
+            System.arraycopy(temp, 0, array, start, stop - start + 1);
         }
     }
 }
