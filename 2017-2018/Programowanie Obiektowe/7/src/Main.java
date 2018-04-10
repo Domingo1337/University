@@ -3,6 +3,9 @@ import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
+
+        Samochod samochod = new Samochod(105, 2016, "Seat Ibiza", "Czerwony", "XX 2345");
+
         //Create and set up the window.
         JFrame frame = new JFrame("Swingtest");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -14,7 +17,7 @@ public class Main {
 
         JTextPane textPane = new JTextPane();
         textPane.setEditable(false);
-        textPane.setText("Tutaj będzie\njakiś tekst\n\nkiedyś");
+        textPane.setText(samochod.toString());
 
 
         JButton buttonRefresh = new JButton("refresh");
@@ -22,6 +25,7 @@ public class Main {
 
         frame.add(textPane, BorderLayout.WEST);
         frame.add(buttonRefresh, BorderLayout.SOUTH);
+        frame.add(new KontrolkaPojazdu(samochod));
         frame.add(label, BorderLayout.NORTH);
 
         //Display the window.
