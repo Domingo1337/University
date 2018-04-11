@@ -1,0 +1,101 @@
+package algorithms;
+
+public class BST<T extends Comparable<T>> implements Dict<T> {
+    private class Node<T extends Comparable<T>> {
+        Node<T> left, right, parent;
+        T data;
+
+        public Node(T data, Node<T> parent, Node<T> left, Node<T> right) {
+            this.left = left;
+            this.right = right;
+            this.parent = parent;
+            this.data = data;
+        }
+
+        public Node(T data) {
+            this(data, null, null, null);
+        }
+
+        @Override
+        public String toString() {
+            return data.toString();
+        }
+
+        public Node<T> getLeft() {
+            return left;
+        }
+
+        public void setLeft(Node<T> left) {
+            this.left = left;
+        }
+
+        public Node<T> getRight() {
+            return right;
+        }
+
+        public void setRight(Node<T> right) {
+            this.right = right;
+        }
+
+        public Node<T> getParent() {
+            return parent;
+        }
+
+        public void setParent(Node<T> parent) {
+            this.parent = parent;
+        }
+
+        public T getData() {
+            return data;
+        }
+
+        public void setData(T data) {
+            this.data = data;
+        }
+
+        public void printMe() {
+            String out = data + " ";
+            if (parent != null) out += parent.hashCode() + " ";
+            else out += "null ";
+            if (left != null) out += left.hashCode() + " ";
+            else out += "null ";
+            if (right != null) out += right.hashCode() + " ";
+            else out += "null ";
+            System.out.println(out);
+        }
+    }
+
+    private Node<T> root;
+
+    public BST(T data) {
+        this.root = new Node<T>(data, null, null, null);
+    }
+
+    public BST(Node<T> node) {
+        this.root = new Node<T>(node.getData(), null, node.getLeft(), node.getRight());
+    }
+
+    @Override
+    public void insert(T element) throws Exception {
+        Node temp = root;
+        while (temp != null) {
+
+            int res = temp.getData().compareTo(element);
+            System.out.println(temp+" rest: "+res);
+            if (res == 0) {
+                throw new Exception("Element " + element + " already in the tree.");
+            } else if (res > 0) {
+                if (temp.getLeft() != null) temp = temp.getLeft();
+                else {
+                    temp.setLeft(new Node(element, temp, null, null));
+                    return;
+                }
+            } else if (res < 0) {
+                if (temp.getRight() != null) temp = temp.getRight();
+                else {
+                    temp.setRight(new Node(element, temp, null, null));
+                    return;
+                }
+            }
+        }
+    }
