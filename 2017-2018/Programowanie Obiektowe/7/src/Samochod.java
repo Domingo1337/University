@@ -1,13 +1,20 @@
-public class Samochod extends Pojazd {
+import java.io.Serializable;
+
+public class Samochod extends Pojazd implements Serializable{
     String rejestracja;
 
-    public Samochod(int moc, int rocznik, String model, String kolor, String rejestracja) {
-        super(moc, rocznik, model, kolor);
+    public Samochod(String model, String kolor, int rocznik, String rejestracja) {
+        super(model, kolor, rocznik);
         this.rejestracja = rejestracja;
     }
 
     @Override
     public String toString() {
-        return rejestracja+": "+super.toString();
+        return "Samochod{" +
+                "rejestracja='" + rejestracja + '\'' +
+                ", model='" + model + '\'' +
+                ", kolor='" + kolor + '\'' +
+                ", rocznik=" + rocznik +
+                '}';
     }
 }
