@@ -106,7 +106,49 @@
 ;; the let-lift procedure
 
 (define (let-lift e)
-  ;; TODO: Zaimplementuj!
-  (error "nie zaimplementowano!")
-  )
+  ;;funkcje pomocnicze
+  (define (rev-append xs ys)
+    (if (null? xs) ys
+        (rev-append (cdr xs) (cons (car xs) ys))))
+  (define (reverse xs)
+    (rev-append xs '()))
   
+  ;; reprezentacja wewnetrzna
+  (define (return expr counter lets)
+    (list expr counter lets))
+  (define ret-expr first)
+  (define ret-counter second)
+  (define ret-lets third)
+  
+  ;; glowna funkcja
+  (define (lift e i lets env)
+    (define (op-iter done rest i env)
+      (if (null? rest) (return (reverse (map ret-expr done))
+                               i
+                               (map ret-lets done))
+          (let ((current (lift (car rest) i '() env)))
+            (op-iter (cons current done)
+                     (cdr rest)
+                     (ret-counter current)
+                     env))))
+    (cond [(const? e) (return e i lets)]
+          [(var? e) (return (find-in-env (var-var e) env) i lets)]
+          [(op? e)  (let ((args (op-iter '() (op-args e) i env)))
+                      (return (cons (op-op e) (ret-expr args))
+                              (ret-counter args)
+                              (foldl rev-append lets (ret-lets args))))]
+          [(let? e) (let* ((def (lift (let-def-expr (let-def e)) i '() env))
+                           (new-lets (cons (let-def-cons (number->symbol (ret-counter def))
+                                                         (ret-expr def))
+                                           (rev-append (ret-lets def) lets)))
+                           (new-env (add-to-env (let-def-var (let-def e))
+                                                (number->symbol (ret-counter def))
+                                                env)))
+                      (lift (let-expr e) (+ 1 (ret-counter def)) new-lets new-env))]))
+  
+  ;; budowanie let-wyrażeń z reprezentacji wewnetrznej
+  (define (aux lets expr)
+    (if (null? lets) expr
+        (aux (cdr lets) (let-cons (car lets) expr))))
+  (let ((lifted (lift e 0 '() empty-env)))
+    (aux (ret-lets lifted) (ret-expr lifted))))
