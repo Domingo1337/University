@@ -151,3 +151,40 @@
         (aux (cdr lets) (let-cons (car lets) expr))))
   (let ((lifted (lift e 0 '() empty-env)))
     (aux (ret-lets lifted) (ret-expr lifted))))
+
+(define (lift-test expr)
+  ;; ewaluator z wykładu 
+  (define empty-env
+    null)
+
+  (define (add-to-env x v env)
+    (cons (list x v) env))
+
+  (define (find-in-env x env)
+    (cond [(null? env) (error "undefined variable" x)]
+          [(eq? x (caar env)) (cadar env)]
+          [else (find-in-env x (cdr env))]))
+
+  (define (eval-env e env)
+    (cond [(const? e) e]
+          [(op? e)
+           (apply (op->proc (op-op e)) (map (lambda (x) (eval-env x env)) (op-args e)))]
+          [(let? e)
+           (eval-env
+            (let-expr e)
+            (env-for-let (let-def e) env))]
+          [(var? e) (find-in-env (var-var e) env)]))
+
+  (define (env-for-let def env)
+    (add-to-env
+     (let-def-var def)
+     (eval-env (let-def-expr def) env)
+     env))
+
+  (define (eval e)
+    (eval-env e empty-env))
+  (eval expr)
+  (let ((lifted (let-lift expr)))
+    (and (let-lifted-expr? lifted)
+         (= (eval lifted) (eval expr)))))
+    
