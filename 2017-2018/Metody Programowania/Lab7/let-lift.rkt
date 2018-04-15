@@ -122,25 +122,24 @@
   
   ;; glowna funkcja
   (define (lift e i lets env)
-    (define (op-iter done rest i env)
-      (if (null? rest) (return (reverse (map ret-expr done))
-                               i
-                               (map ret-lets done))
-          (let ((current (lift (car rest) i '() env)))
-            (op-iter (cons current done)
+    (define (op-iter done rest i lets env)
+      (if (null? rest) (return (reverse done) i lets)
+          (let ((current (lift (car rest) i lets env)))
+            (op-iter (cons (ret-expr current) done)
                      (cdr rest)
                      (ret-counter current)
+                     (ret-lets current)
                      env))))
     (cond [(const? e) (return e i lets)]
           [(var? e) (return (find-in-env (var-var e) env) i lets)]
-          [(op? e)  (let ((args (op-iter '() (op-args e) i env)))
+          [(op? e)  (let ((args (op-iter '() (op-args e) i lets env)))
                       (return (cons (op-op e) (ret-expr args))
                               (ret-counter args)
-                              (foldl rev-append lets (ret-lets args))))]
+                              (ret-lets args)))]
           [(let? e) (let* ((def (lift (let-def-expr (let-def e)) i '() env))
                            (new-lets (cons (let-def-cons (number->symbol (ret-counter def))
                                                          (ret-expr def))
-                                           (rev-append (ret-lets def) lets)))
+                                           (append (ret-lets def) lets)))
                            (new-env (add-to-env (let-def-var (let-def e))
                                                 (number->symbol (ret-counter def))
                                                 env)))
