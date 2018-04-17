@@ -431,3 +431,22 @@
 
 (define (eval e)
   (eval-env e empty-env))
+  
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; zad1:
+(define (fib-from i j)
+  (lcons
+   j
+   (lambda () (fib-from j (+ i j)))))
+(define (ints-from i)
+  (lcons
+   i
+   (if (> i 0) 
+       (lambda () (ints-from (- i)))
+       (lambda () (ints-from (+ 1 (- i)))))))
+
+(define fib
+  (fib-from 0 1))
+(define ints
+  (ints-from 0))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
