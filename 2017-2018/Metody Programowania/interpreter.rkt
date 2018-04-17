@@ -435,11 +435,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; zad1:
 (define (fib-from i j)
-  (lcons
+  (cons
    j
    (lambda () (fib-from j (+ i j)))))
 (define (ints-from i)
-  (lcons
+  (cons
    i
    (if (> i 0) 
        (lambda () (ints-from (- i)))
