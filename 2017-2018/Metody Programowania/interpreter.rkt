@@ -197,8 +197,9 @@
 
 (define (lambda? t)
   (and (tagged-tuple? 'lambda 3 t)
-       (list? (cadr t))
-       (andmap symbol? (cadr t))))
+       (or (and (list? (cadr t))
+                (andmap symbol? (cadr t)))
+           (symbol? (cadr t)))))
 
 (define (lambda-cons vars e)
   (list 'lambda vars e))
@@ -298,6 +299,13 @@
 (define (closure-cons xs expr env)
   (list 'closure xs expr env))
 
+(define (closure-list-cons xs expr env)
+  (list 'closure-list xs expr env))
+(define (closure-list? c)
+  (and (list? c)
+       (= (length c) 4)
+       (eq? (car c) 'closure-list)))
+
 (define (closure? c)
   (and (list? c)
        (= (length c) 4)
@@ -374,7 +382,9 @@
         [(var? e)
          (find-in-env (var-var e) env)]
         [(lambda? e)
-         (closure-cons (lambda-vars e) (lambda-expr e) env)]
+         (if (list? (lambda-vars e))
+             (closure-cons (lambda-vars e) (lambda-expr e) env)
+             (closure-list-cons (list (lambda-vars e)) (lambda-expr e) env))]
         [(lambda-rec? e)
          (closure-rec-cons (lambda-rec-name e)
                            (lambda-rec-vars e)
@@ -396,7 +406,14 @@
                (eval-cond-clauses (cdr cs) env)))))
 
 (define (apply-closure c args)
-  (cond [(closure? c)
+  (cond [(closure-list? c)
+         (eval-env
+            (closure-expr c)
+            (env-for-closure
+              (closure-vars c)
+              (list args)
+              (closure-env c)))]
+         [(closure? c)
          (eval-env
             (closure-expr c)
             (env-for-closure
@@ -434,6 +451,29 @@
   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; zad1:
+(define (lcons x f)
+  (cons x f))
+
+(define (lhead l)
+  (car l))
+
+(define (ltail l)
+  ((cdr l)))
+
+(define (nats-from m)
+  (lcons
+   m
+  (lambda () (nats-from (+ m 1)))))
+
+(define nats
+  (nats-from 0))
+
+(define (take n l)
+  (if (or (null? l) (= n 0))
+      null
+      (cons (lhead l)
+            (take (- n 1) (ltail l)))))
+
 (define (fib-from i j)
   (cons
    j
@@ -450,3 +490,32 @@
 (define ints
   (ints-from 0))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; zad2:
+(define my-append '(lambda-rec (my-append x y)
+                                (if (null? x)
+                                    y
+                                    (cons (car x)
+                                          (my-append (cdr x) y)))))
+(define reverse '(lambda (x)
+                   ((lambda-rec (rev-app xs ys)
+                                (if (null? xs)
+                                    ys
+                                    (rev-app (cdr xs) (cons (car xs) ys))))
+                    x null)))
+
+(define (lappend xs ys)
+  (if (null? xs)
+      ys
+      (cons (lhead xs) (lappend (ltail xs)  ys))))
+(define (lmap proc . xss)
+  (if (ormap null? xss)
+      null
+      (lcons (apply proc (map lhead xss))
+             (lambda ()
+               (apply lmap (cons proc (map ltail xss)))))))
+(define lints (lmap (lambda (x) (if (= 1 (modulo x 2)) (/ (+ x 1) 2) (- (/ x 2)))) nats))
+
+(define lfibs
+  (lcons 1 (lambda () (lcons 1 ( lambda () (lmap + lfibs (ltail lfibs)))))))
+
+                  
