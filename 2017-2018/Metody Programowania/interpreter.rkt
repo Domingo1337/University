@@ -286,8 +286,8 @@
            (expr? (if-else t)))
       (and (cond? t)
            (andmap (lambda (c)
-                      (and (expr? (cond-clause-cond c))
-                           (expr? (cond-clause-expr c))))
+                     (and (expr? (cond-clause-cond c))
+                          (expr? (cond-clause-expr c))))
                    (cond-clauses t)))
       (and (lambda? t)
            (expr? (lambda-expr t)))
@@ -411,59 +411,59 @@
          (bool->val (const? (eval-env (const-expr e) env)))]
         [(app? e)
          (apply-closure
-           (eval-env (app-proc e) env)
-           (map (lambda (a) (eval-env a env))
-                (app-args e)))]))
+          (eval-env (app-proc e) env)
+          (map (lambda (a) (eval-env a env))
+               (app-args e)))]))
 
 (define (eval-cond-clauses cs env)
   (if (null? cs)
       (error "no true clause in cond")
       (let ([cond (cond-clause-cond (car cs))]
             [expr (cond-clause-expr (car cs))])
-           (if (val->bool (eval-env cond env))
-               (eval-env expr env)
-               (eval-cond-clauses (cdr cs) env)))))
+        (if (val->bool (eval-env cond env))
+            (eval-env expr env)
+            (eval-cond-clauses (cdr cs) env)))))
 
 (define (apply-closure c args)
   (cond [(closure-list? c)
          (eval-env
-            (closure-expr c)
-            (env-for-closure
-              (closure-vars c)
-              (list args)
-              (closure-env c)))]
-         [(closure? c)
+          (closure-expr c)
+          (env-for-closure
+           (closure-vars c)
+           (list args)
+           (closure-env c)))]
+        [(closure? c)
          (eval-env
-            (closure-expr c)
-            (env-for-closure
-              (closure-vars c)
-              args
-              (closure-env c)))]
+          (closure-expr c)
+          (env-for-closure
+           (closure-vars c)
+           args
+           (closure-env c)))]
         [(closure-rec? c)
          (eval-env
-           (closure-rec-expr c)
-           (add-to-env
-            (closure-rec-name c)
-            c
-            (env-for-closure
-              (closure-rec-vars c)
-              args
-              (closure-rec-env c))))]))
+          (closure-rec-expr c)
+          (add-to-env
+           (closure-rec-name c)
+           c
+           (env-for-closure
+            (closure-rec-vars c)
+            args
+            (closure-rec-env c))))]))
 
 (define (env-for-closure xs vs env)
   (cond [(and (null? xs) (null? vs)) env]
         [(and (not (null? xs)) (not (null? vs)))
          (add-to-env
-           (car xs)
-           (car vs)
-           (env-for-closure (cdr xs) (cdr vs) env))]
+          (car xs)
+          (car vs)
+          (env-for-closure (cdr xs) (cdr vs) env))]
         [else (error "arity mismatch")]))
 
 (define (env-for-let def env)
   (add-to-env
-    (let-def-var def)
-    (eval-env (let-def-expr def) env)
-    env))
+   (let-def-var def)
+   (eval-env (let-def-expr def) env)
+   env))
 
 (define (eval e)
   (eval-env e empty-env))
@@ -482,7 +482,7 @@
 (define (nats-from m)
   (lcons
    m
-  (lambda () (nats-from (+ m 1)))))
+   (lambda () (nats-from (+ m 1)))))
 
 (define nats
   (nats-from 0))
@@ -511,10 +511,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; zad2:
 (define my-append '(lambda-rec (append x y)
-                                (if (null? x)
-                                    y
-                                    (cons (car x)
-                                          (append (cdr x) y)))))
+                               (if (null? x)
+                                   y
+                                   (cons (car x)
+                                         (append (cdr x) y)))))
 (define reverse '(lambda (x)
                    ((lambda-rec (rev-app xs ys)
                                 (if (null? xs)
@@ -541,4 +541,21 @@
 
 (define lfibs
   (lcons 1 (lambda () (lcons 1 ( lambda () (lmap + lfibs (ltail lfibs)))))))
-                  
+
+;; pracownia 8A
+(eval '(let
+           ;; ewaluator podstawowych wyrażeń arytmetycznych racketa w rackecie w rackecie
+           (eval (lambda-rec (eval x)
+                             (if (const? x)
+                                 x
+                                 (let (op (car x))
+                                   (let (first (eval (car (cdr x))))
+                                     (let (second (eval (car (cdr (cdr x)))))
+                                       (cond ((eq? op '+) (+ first second))
+                                             ((eq? op '-) (- first second))
+                                             ((eq? op '*) (* first second))
+                                             ((eq? op '/) (/ first second)))))))))
+         ;; lista testów- argumentów dla procedury 
+         (list (eval (list '- 1 2))
+               (eval (list '* 6 7))
+               (eval (list '+ (list '* (list '* 11 2) 3) (list '/ 6 7))))))
