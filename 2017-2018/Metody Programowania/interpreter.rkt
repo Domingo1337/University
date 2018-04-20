@@ -89,6 +89,11 @@
 
 (define (let-cons def e)
   (list 'let def e))
+;; consts
+
+(define (const?? e)
+  (tagged-tuple? 'const? 2 e))
+(define const-expr second)
 
 ;; variables
 
@@ -192,6 +197,16 @@
 
 (define (null?-cons e)
   (list 'null? e))
+
+(define (list?? e)
+  (and (eq? (car e) 'list)
+       (list? e)))
+
+(define (list-cons e)
+  (define (rec xs)
+    (if (null? xs) 'null
+        (cons-cons (car xs) (rec (cdr xs)))))
+  (rec (cdr e)))
 
 ;; lambdas
 
@@ -390,6 +405,10 @@
                            (lambda-rec-vars e)
                            (lambda-rec-expr e)
                            env)]
+        [(list?? e)
+         (eval-env (list-cons e) env)]
+        [(const?? e)
+         (bool->val (const? (eval-env (const-expr e) env)))]
         [(app? e)
          (apply-closure
            (eval-env (app-proc e) env)
@@ -491,17 +510,22 @@
   (ints-from 0))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; zad2:
-(define my-append '(lambda-rec (my-append x y)
+(define my-append '(lambda-rec (append x y)
                                 (if (null? x)
                                     y
                                     (cons (car x)
-                                          (my-append (cdr x) y)))))
+                                          (append (cdr x) y)))))
 (define reverse '(lambda (x)
                    ((lambda-rec (rev-app xs ys)
                                 (if (null? xs)
                                     ys
                                     (rev-app (cdr xs) (cons (car xs) ys))))
                     x null)))
+(define my-map '(lambda-rec (map proc list)
+                            (if (null? list)
+                                null
+                                (cons (proc (car list))
+                                      (map proc (cdr list))))))
 
 (define (lappend xs ys)
   (if (null? xs)
@@ -517,5 +541,4 @@
 
 (define lfibs
   (lcons 1 (lambda () (lcons 1 ( lambda () (lmap + lfibs (ltail lfibs)))))))
-
                   
