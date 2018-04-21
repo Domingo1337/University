@@ -193,6 +193,22 @@
 (define (null?-cons e)
   (list 'null? e))
 
+;; dopisałem do języka procedurę list gwoli czytelności
+(define (list?? e)
+  (and (eq? (car e) 'list)
+       (list? e)))
+
+(define (list-cons e)
+  (define (rec xs)
+    (if (null? xs) 'null
+        (cons-cons (car xs) (rec (cdr xs)))))
+  (rec (cdr e)))
+
+;; dopisany do języka predykat const?
+(define (const?? e)
+  (tagged-tuple? 'const? 2 e))
+(define const-expr second)
+
 ;; lambdas
 
 (define (lambda? t)
@@ -383,6 +399,11 @@
                            (lambda-rec-vars e)
                            (lambda-rec-expr e)
                            env)]
+        ;; dodane do języka predykaty
+        [(list?? e)
+         (eval-env (list-cons e) env)]
+        [(const?? e)
+         (bool->val (const? (eval-env (const-expr e) env)))]
         [(app? e)
          (apply-closure
            (eval-env (app-proc e) env)
@@ -434,3 +455,23 @@
 
 (define (eval e)
   (eval-env e empty-env))
+
+;; pracownia
+(eval '(let (eval-arith
+             ;; ewaluator podstawowych wyrażeń arytmetycznych racketa w rackecie w rackecie
+             (lambda-rec (eval-arith x)
+                         (cond ((const? x) x)
+                               ((pair? x) (let (op (car x))
+                                            (let (first (eval-arith (car (cdr x))))
+                                              (let (second (eval-arith (car (cdr (cdr x)))))
+                                                (cond ((eq? op '+) (+ first second))
+                                                      ((eq? op '-) (- first second))
+                                                      ((eq? op '*) (* first second))
+                                                      ((eq? op '/) (/ first second))))))))))
+         ;; lista testów - argumentów dla procedury 
+         (list (= (- 1 2)
+                  (eval-arith (list '- 1 2)))
+               (= (* 6 7)
+                  (eval-arith (list '* 6 7)))
+               (= (+ (* (* 11 2) 3) (/ 6 7))
+                  (eval-arith (list '+ (list '* (list '* 11 2) 3) (list '/ 6 7)))))))

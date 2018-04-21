@@ -90,6 +90,24 @@
 (define (let-cons def e)
   (list 'let def e))
 
+;; lazy-lets
+
+;; predykat sprawdzajacy czy wyrazenie jest lazy-letem
+(define (lazy-let? t)
+  (and (tagged-tuple? 'lazy-let 3 t)
+       (let-def? (cadr t))))
+
+;; predykat wyrażenia leniwie obliczanego
+(define (lazy? e)
+  (tagged-tuple? 'lazy 3 e))
+
+(define (lazy-cons expr env)
+  (list 'lazy expr env))
+
+(define (lazy-expr e) (second e))
+
+(define (lazy-env e)  (third e))
+
 ;; variables
 
 (define (var? t)
@@ -293,7 +311,11 @@
 
 (define (find-in-env x env)
   (cond [(null? env) (error "undefined variable" x)]
-        [(eq? x (caar env)) (cadar env)]
+        ;; jeżeli wartość którą chcemy podstawić ma być leniwie obliczana to należy ją obliczyć
+        [(eq? x (caar env)) (let ((y (cadar env)))
+                              (if (lazy? y)
+                                  (eval-env (lazy-expr y) (lazy-env y))
+                                  y))]
         [else (find-in-env x (cdr env))]))
 
 ;; closures
@@ -383,6 +405,13 @@
                            (lambda-rec-vars e)
                            (lambda-rec-expr e)
                            env)]
+        ;; dodanie lazy-letów do języka
+        [(lazy-let? e)
+         (eval-env (let-expr e)
+                   (add-to-env
+                    (let-def-var (let-def e))
+                    (lazy-cons (let-def-expr (let-def e)) env)
+                    env))]
         [(app? e)
          (apply-closure
            (eval-env (app-proc e) env)
