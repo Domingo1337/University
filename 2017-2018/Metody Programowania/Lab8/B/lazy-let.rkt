@@ -463,3 +463,17 @@
 
 (define (eval e)
   (eval-env e empty-env))
+
+;; testy
+(andmap identity (list
+                  (= 7 (eval '( lazy-let [x (/ 5 0)] 7)))
+                  (= 5040 (eval '((lambda-rec (fact n)
+                                              (lazy-let [t 1]
+                                                        (lazy-let [f (* n (fact (- n 1)))]
+                                                                  (if (= n 0) t f))))
+                                  7)))
+                  (= 5 (eval '(let [x 4]
+                                (lazy-let [y (+ x 1)]
+                                          (let [x 10]
+                                            y)))))))
+
