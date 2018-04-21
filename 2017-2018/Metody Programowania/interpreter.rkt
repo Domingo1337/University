@@ -89,6 +89,20 @@
 
 (define (let-cons def e)
   (list 'let def e))
+
+;; lazy-lets
+
+(define (lazy-let? t)
+  (and (tagged-tuple? 'lazy-let 3 t)
+       (let-def? (cadr t))))
+(define (lazy? e)
+  (tagged-tuple? 'lazy 3 e))
+(define (lazy-cons expr env)
+  (list 'lazy expr env))
+(define lazy-expr second)
+(define lazy-env third)
+
+
 ;; consts
 
 (define (const?? e)
@@ -306,7 +320,10 @@
 
 (define (find-in-env x env)
   (cond [(null? env) (error "undefined variable" x)]
-        [(eq? x (caar env)) (cadar env)]
+        [(eq? x (caar env)) (let ((y (cadar env)))
+                              (if (lazy? y)
+                                  (eval-env (lazy-expr y) (lazy-env y))
+                                  y))]
         [else (find-in-env x (cdr env))]))
 
 ;; closures
@@ -375,6 +392,12 @@
         [(let? e)
          (eval-env (let-expr e)
                    (env-for-let (let-def e) env))]
+        [(lazy-let? e)
+         (eval-env (let-expr e)
+                   (add-to-env
+                    (let-def-var (let-def e))
+                    (lazy-cons (let-def-expr (let-def e)) env)
+                    env))]
         [(my-null? e)
          null]
         [(cons? e)
@@ -543,19 +566,21 @@
   (lcons 1 (lambda () (lcons 1 ( lambda () (lmap + lfibs (ltail lfibs)))))))
 
 ;; pracownia 8A
-(eval '(let
-           ;; ewaluator podstawowych wyrażeń arytmetycznych racketa w rackecie w rackecie
-           (eval (lambda-rec (eval x)
-                             (if (const? x)
-                                 x
-                                 (let (op (car x))
-                                   (let (first (eval (car (cdr x))))
-                                     (let (second (eval (car (cdr (cdr x)))))
-                                       (cond ((eq? op '+) (+ first second))
-                                             ((eq? op '-) (- first second))
-                                             ((eq? op '*) (* first second))
-                                             ((eq? op '/) (/ first second)))))))))
+(eval '(let (eval-arith
+             ;; ewaluator podstawowych wyrażeń arytmetycznych racketa w rackecie w rackecie
+             (lambda-rec (eval-arith x)
+                         (cond ((const? x) x)
+                               ((pair? x) (let (op (car x))
+                                            (let (first (eval-arith (car (cdr x))))
+                                              (let (second (eval-arith (car (cdr (cdr x)))))
+                                                (cond ((eq? op '+) (+ first second))
+                                                      ((eq? op '-) (- first second))
+                                                      ((eq? op '*) (* first second))
+                                                      ((eq? op '/) (/ first second))))))))))
          ;; lista testów- argumentów dla procedury 
-         (list (eval (list '- 1 2))
-               (eval (list '* 6 7))
-               (eval (list '+ (list '* (list '* 11 2) 3) (list '/ 6 7))))))
+         (list (= (- 1 2)
+                  (eval-arith (list '- 1 2)))
+               (= (* 6 7)
+                  (eval-arith (list '* 6 7)))
+               (= (+ (* (* 11 2) 3) (/ 6 7))
+                  (eval-arith (list '+ (list '* (list '* 11 2) 3) (list '/ 6 7)))))))
