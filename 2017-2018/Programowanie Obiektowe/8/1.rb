@@ -9,6 +9,24 @@ class Integer
     end
   end
 
+  def czynniki
+    array = [1]
+    i = 2
+    while i <= self
+      if self % i == 0
+        array << i
+      end
+      i += 1
+    end
+    array
+  end
+
+  def doskonala
+    sum = -self
+    self.czynniki.each {|a| sum += a}
+    self == sum
+  end
+
   def slownie
     if self > 9
       (self / 10).slownie + ' ' + (self % 10).slownie
@@ -33,24 +51,6 @@ class Integer
     else
       'zero'
     end
-  end
-
-  def czynniki
-    array = [1]
-    i = 2
-    while i <= self
-      if self % i == 0
-        array << i
-      end
-      i += 1
-    end
-    array
-  end
-
-  def doskonala
-    sum = -self
-    self.czynniki.each {|a| sum += a}
-    self == sum
   end
 end
 

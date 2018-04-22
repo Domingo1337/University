@@ -473,5 +473,5 @@
                   (eval-arith (list '- 1 2)))
                (= (* 6 7)
                   (eval-arith (list '* 6 7)))
-               (= (+ (* (* 11 2) 3) (/ 6 7))
-                  (eval-arith (list '+ (list '* (list '* 11 2) 3) (list '/ 6 7)))))))
+               (= (+ (* (* 11 2) 3) (/ 6 (- 8 1)))
+                  (eval-arith (list '+ (list '* (list '* 11 2) 3) (list '/ 6 (list '- 8 1))))))))
