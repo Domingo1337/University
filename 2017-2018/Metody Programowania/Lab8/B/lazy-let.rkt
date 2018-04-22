@@ -408,10 +408,7 @@
         ;; dodanie lazy-letów do języka
         [(lazy-let? e)
          (eval-env (let-expr e)
-                   (add-to-env
-                    (let-def-var (let-def e))
-                    (lazy-cons (let-def-expr (let-def e)) env)
-                    env))]
+                   (env-for-lazy-let (let-def e) env))]
         [(app? e)
          (apply-closure
            (eval-env (app-proc e) env)
@@ -461,6 +458,12 @@
     (eval-env (let-def-expr def) env)
     env))
 
+(define (env-for-lazy-let def env)
+  (add-to-env
+   (let-def-var def)
+   (lazy-cons (let-def-expr def) env)
+   env))
+
 (define (eval e)
   (eval-env e empty-env))
 
@@ -472,6 +475,10 @@
                                                         (lazy-let [f (* n (fact (- n 1)))]
                                                                   (if (= n 0) t f))))
                                   7)))
+                  (= 9 (eval '(lazy-let (x (let (x 5)
+                                             (lazy-let (y (* x 10))
+                                                       (- y x))))
+                                        (/ x 5))))
                   (= 5 (eval '(let [x 4]
                                 (lazy-let [y (+ x 1)]
                                           (let [x 10]
