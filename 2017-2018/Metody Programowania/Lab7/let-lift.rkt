@@ -152,39 +152,65 @@
   (let ((lifted (lift e 0 '() empty-env)))
     (aux (ret-lets lifted) (ret-expr lifted))))
 
-(define (lift-test expr)
-  ;; ewaluator z wykładu 
-  (define empty-env
-    null)
 
-  (define (add-to-env x v env)
-    (cons (list x v) env))
+(define (test)
+  (define (lift-test expr i)
+    ;; ewaluator z wykładu 
+    (define empty-env
+      null)
 
-  (define (find-in-env x env)
-    (cond [(null? env) (error "undefined variable" x)]
-          [(eq? x (caar env)) (cadar env)]
-          [else (find-in-env x (cdr env))]))
+    (define (add-to-env x v env)
+      (cons (list x v) env))
 
-  (define (eval-env e env)
-    (cond [(const? e) e]
-          [(op? e)
-           (apply (op->proc (op-op e)) (map (lambda (x) (eval-env x env)) (op-args e)))]
-          [(let? e)
-           (eval-env
-            (let-expr e)
-            (env-for-let (let-def e) env))]
-          [(var? e) (find-in-env (var-var e) env)]))
+    (define (find-in-env x env)
+      (cond [(null? env) (error "undefined variable" x)]
+            [(eq? x (caar env)) (cadar env)]
+            [else (find-in-env x (cdr env))]))
 
-  (define (env-for-let def env)
-    (add-to-env
-     (let-def-var def)
-     (eval-env (let-def-expr def) env)
-     env))
+    (define (eval-env e env)
+      (cond [(const? e) e]
+            [(op? e)
+             (apply (op->proc (op-op e)) (map (lambda (x) (eval-env x env)) (op-args e)))]
+            [(let? e)
+             (eval-env
+              (let-expr e)
+              (env-for-let (let-def e) env))]
+            [(var? e) (find-in-env (var-var e) env)]))
 
-  (define (eval e)
-    (eval-env e empty-env))
-  (eval expr)
-  (let ((lifted (let-lift expr)))
-    (and (let-lifted-expr? lifted)
-         (= (eval lifted) (eval expr)))))
+    (define (env-for-let def env)
+      (add-to-env
+       (let-def-var def)
+       (eval-env (let-def-expr def) env)
+       env))
+
+    (define (eval e)
+      (eval-env e empty-env))
+  
+    ;; funkcja testujaca 
+    (let ((lifted (let-lift expr)))
+      (and (fprintf (current-output-port)
+                    "Test #~a:\n~s\nAnswer:\n~v\n"
+                    i expr lifted)
+           (or (let-lifted-expr? lifted)
+               (display "did not pass let-lifted-expr? predicate\n"))
+           (or (= (eval lifted) (eval expr)) 
+               (not (display "was evaluated to wrong value\n")))
+           (display "passed the test successfully\n\n")
+           true)))
+  ;; iterator po testach
+  (define (aux tests counter answr)
+    (if (null? tests) answr
+        (aux (cdr tests) (+ 1 counter) (cons (lift-test (car tests) counter) answr))))
+  ;; testy
+  (let ((tests '((let (x (+ 2 (let (z 4) (let (d (+ z 1)) (- d 1))) (let (y 2) (+ 1 y)))) (+ (let (z 3) (+ 1 (let (y (+ z (let (ż 4) ż))) (* y z)))) 1 x))
+                 (let (x (let (x 4) x)) (let (x 4) (+ x (* x 2))))
+                 (let (g 1) (let (v (let (v 4) v)) (let (m 3) (let (p 1) (let (s 5) 1337)))))
+                 (let (x 3) (let (y 7) (+ x 43 3 x y x x y 3)))
+                 (let (x (+ 2 (let (z 4) (let (d (+ z 1)) (- d 1))) (let (y 2) (+ 1 y)))) (+ (let (z 3) (+ 1 (let (y (+ z 4)) (* y z)))) 1 x))
+                 (let (x (let (y (* 4 5 6)) (- y y y))) (+ x (* x (let (x (let (x (* 9 8 7)) (+ x 2 x))) (* x (+ x (let (x 3) (- 1 x))))))))
+                 (let (x (let (t 8) t)) (let (y (let (z (+ x (let (a x) (+ a x)))) (let (baba 8) (let (jaga 8) (* baba jaga (- x baba)))))) (/ y x)))
+                 (* (let (x (+ (let (y 4) y) (let (x 3) (- 1 x)))) x) (- (let (y 14) (let (x (- 1 y)) (* 1 2 3 x))) (let (t 1) 1)) (let (x (let (y (let (z 1) 2)) y)) x))
+                 )))
+    ;; zwraca true gdy wszystkie testy przeszly pomyslnie, false wpp.
+    (andmap identity (aux tests 1 '()))))
     
