@@ -54,3 +54,9 @@ class Integer
   end
 end
 
+puts 'Ack(2,1) = ' + 2.ack(1).to_s
+puts 'dzielniki 12: ' + 12.czynniki.to_s
+puts '9069103 slownie to: ' + 906245103.slownie
+puts 'czy 6 jest doskonala? ' + 6.doskonala.to_s
+puts 'czy 7 jest doskonala? ' + 7.doskonala.to_s
+

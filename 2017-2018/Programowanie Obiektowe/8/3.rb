@@ -14,7 +14,7 @@ class Jawna
       else
         res += @napis[c]
       end
-      end
+    end
     Zaszyfrowane.new res
   end
 
@@ -67,3 +67,4 @@ jawne = Jawna.new 'zakodujmy cos'
 puts jawne
 puts jawne.zaszyfruj gaderypoluki
 puts (jawne.zaszyfruj gaderypoluki).odszyfruj gaderypoluki
+

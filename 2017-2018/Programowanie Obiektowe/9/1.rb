@@ -33,18 +33,18 @@ class Funkcja
 
   def pochodna (x)
     e = 0.0000001
-    (@proc.call(x-e)+@proc.call(x+e))/(2*e)
+    (@proc.call(x + e) - @proc.call(x - e)) / (2 * e)
   end
 end
 
-
-fun = Proc.new {|x| -x * x + 2 * x + 5}
-test = Funkcja.new(fun)
-puts test.value(3.5)
-puts 'miejsca zerowe' + fun.to_s + ': '
-puts test.zerowe(-2, 5, 0.1)
+test = Funkcja.new(Proc.new {|x| Math.sin(x)})
+puts 'f(3.5) = ' + test.value(3.5).to_s
 puts
-puts 'calka od -2 do 5'
-puts test.pole(-2.0, 5.0)
+puts 'miejsca zerowe: '
+puts test.zerowe(-2.0, 5.0, 0.001)
 puts
-puts test.pochodna(3.0)
+puts 'calka:'
+puts test.pole(0, 3.1416)
+puts
+puts 'pochodna:'
+puts test.pochodna(0)
