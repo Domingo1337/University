@@ -32,7 +32,6 @@ class Funkcja2
     while x < b
       y = c
       while y < d
-
         if (value(x, y) - wysokosc).abs <= e_wys
           pary << [x, y]
         end
@@ -46,4 +45,5 @@ end
 
 fun = Funkcja2.new(Proc.new {|x, y| Math.sin(x)*Math.cos(y)})
 puts fun.value(3,3)
-puts fun.poziomica(-5, 5, -5, 5, 0)
+#puts fun.poziomica(0, 3.15, 0, 3.15, 0)
+puts fun.objetosc(0, 1, 0, 1)

@@ -1,3 +1,5 @@
 *.class
 *.iml
 *.xml
+*.dep
+*.zo

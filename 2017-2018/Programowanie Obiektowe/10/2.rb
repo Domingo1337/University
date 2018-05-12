@@ -77,55 +77,41 @@ class Kolekcja
   end
 end
 
-test = Kolekcja.new
-puts test.to_s
-test.add 100
-puts test.to_s
-test.add 10
-puts test.to_s
-test.add 1000
-puts test.to_s
-test.add 200
-puts test.to_s
-test.add 2000
-puts test.to_s
-test.add 2001
-puts test.to_s
-test.add 201
-puts test.to_s
-test.add 999
-puts test.to_s
-test.add 11
-puts test.to_s
-
 class Wyszukiwanie
   def self.binsearch kolekcja, value
+    counter = 0
     left = 0
     right = kolekcja.length - 1
     while left <= right
+      counter +=1
       center = (left+right)/2
       current = kolekcja.get center
       if  current == value
+        puts counter
         return center
       elsif current > value
         right = center - 1
       else
         left = center + 1
-        end
+      end
     end
     false
   end
   def self.interpolarsearch kolekcja, value
+    counter = 0
     left = 0
     right = kolekcja.length - 1
     while left <= right
+      counter +=1
       leftval = kolekcja.get left
       rghtval = kolekcja.get right
 
       center =  left+(right-left)*(value - leftval)/(rghtval-leftval)
       current = kolekcja.get center
       if  current == value
+        puts counter
         return center
+
       elsif current > value
         right = center - 1
       else
@@ -136,9 +122,17 @@ class Wyszukiwanie
   end
 end
 
-puts Wyszukiwanie.binsearch test, 1000
-puts Wyszukiwanie.binsearch test, 10
-puts Wyszukiwanie.binsearch test, 1
-puts Wyszukiwanie.interpolarsearch test, 1
-puts Wyszukiwanie.interpolarsearch test, 10
+test = Kolekcja.new
+
+for i in 0 ... 1000
+  test.add rand 1000
+end
+
+
+
+puts Wyszukiwanie.interpolarsearch test, 0
+puts Wyszukiwanie.interpolarsearch test, 500
 puts Wyszukiwanie.interpolarsearch test, 1000
+puts Wyszukiwanie.binsearch test, 0
+puts Wyszukiwanie.binsearch test, 500
+puts Wyszukiwanie.binsearch test, 1000
