@@ -107,8 +107,10 @@
 (define arith-grammar
   (append num-grammar
      '([add-expr {ADD-MANY   mult-expr (token #\+) add-expr}
+                 {SUB        mult-expr (token #\-) add-expr}
                  {ADD-SINGLE mult-expr}]
-       [mult-expr {MULT-MANY base-expr (token #\*) mult-expr}
+       [mult-expr {MULT-MANY   base-expr (token #\*) mult-expr}
+                  {DIV         base-expr (token #\/) mult-expr}
                   {MULT-SINGLE base-expr}]
        [base-expr {BASE-NUM numb}
                   {PARENS (token #\() add-expr (token #\))}])))
@@ -123,11 +125,39 @@
           '+
           (arith-walk-tree (second t))
           (arith-walk-tree (fourth t)))]
+        [(eq? (node-name t) 'SUB)
+         (let ((right (arith-walk-tree (fourth t))))
+           (if (binop? right)
+               (binop-cons
+                (binop-op right)
+                (binop-cons
+                 '-
+                 (arith-walk-tree (second t))
+                 (binop-left right))
+                (binop-right right))
+               (binop-cons
+                '-
+                (arith-walk-tree (second t))
+                right)))]
         [(eq? (node-name t) 'MULT-MANY)
          (binop-cons
           '*
           (arith-walk-tree (second t))
           (arith-walk-tree (fourth t)))]
+        [(eq? (node-name t) 'DIV)
+        (let ((right (arith-walk-tree (fourth t))))
+           (if (binop? right)
+               (binop-cons
+                (binop-op right)
+                (binop-cons
+                 '/
+                 (arith-walk-tree (second t))
+                 (binop-left right))
+                (binop-right right))
+               (binop-cons
+                '/
+                (arith-walk-tree (second t))
+                right)))]
         [(eq? (node-name t) 'BASE-NUM)
          (walk-tree (second t))]
         [(eq? (node-name t) 'PARENS)
