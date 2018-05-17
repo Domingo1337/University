@@ -126,38 +126,38 @@
           (arith-walk-tree (second t))
           (arith-walk-tree (fourth t)))]
         [(eq? (node-name t) 'SUB)
-         (let ((right (arith-walk-tree (fourth t))))
-           (if (binop? right)
-               (binop-cons
-                (binop-op right)
-                (binop-cons
-                 '-
-                 (arith-walk-tree (second t))
-                 (binop-left right))
-                (binop-right right))
+         (let* ((right (fourth t))
+                (oper (node-name right)))
+           (if (or (eq? oper 'ADD-MANY)
+                   (eq? oper 'SUB))
+               (arith-walk-tree
+                (list oper
+                      (list 'SUB (second t) 'token (second right))
+                      'token
+                      (fourth right)))
                (binop-cons
                 '-
                 (arith-walk-tree (second t))
-                right)))]
+                (arith-walk-tree right))))]
         [(eq? (node-name t) 'MULT-MANY)
          (binop-cons
           '*
           (arith-walk-tree (second t))
           (arith-walk-tree (fourth t)))]
         [(eq? (node-name t) 'DIV)
-        (let ((right (arith-walk-tree (fourth t))))
-           (if (binop? right)
-               (binop-cons
-                (binop-op right)
-                (binop-cons
-                 '/
-                 (arith-walk-tree (second t))
-                 (binop-left right))
-                (binop-right right))
+         (let* ((right (fourth t))
+                (oper (node-name right)))
+           (if (or (eq? oper 'MULT-MANY)
+                   (eq? oper 'DIV))
+               (arith-walk-tree
+                (list oper
+                      (list 'DIV (second t) 'token (second right))
+                      'token
+                      (fourth right)))
                (binop-cons
                 '/
                 (arith-walk-tree (second t))
-                right)))]
+                (arith-walk-tree right))))]
         [(eq? (node-name t) 'BASE-NUM)
          (walk-tree (second t))]
         [(eq? (node-name t) 'PARENS)
@@ -172,3 +172,17 @@
        'add-expr
        (string->list s))))))
 
+(define (test)
+  (define (test-aux xs ys)
+    (cond [(null? xs) #t]
+          [(= (calc (car xs)) (car ys)) (test-aux (cdr xs) (cdr ys))]
+          [else (fprintf (current-output-port)
+                         "Fail: ~a was evaluated to ~s instead of ~v.\n"
+                         (car xs) (calc (car xs)) (car ys))
+                (and (test-aux (cdr xs) (cdr ys)) #f)]))
+  (let ((tests (list "1-2" "1/2" "1/2/3*3*2" "1-2-3-4" "1/2/3/4" "0-1+2/3"))
+        (answers (list -1 0.5 1 (calc "((1-2)-3)-4") (calc "((1/2)/3)/4") (calc "0+2/3-1"))))
+    (and (test-aux tests answers)
+         (display "All tests passed succesfully.\n")
+         #t)))
+(test)
