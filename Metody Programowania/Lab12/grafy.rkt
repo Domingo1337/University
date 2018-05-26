@@ -75,17 +75,59 @@
   (import)
   (export bag^)
 
-;; TODO: zaimplementuj stos
-)
+  (define (bag? b)
+    (list? b))
+  
+  (define (bag-empty? b)
+    (null? b))
+  
+  (define empty-bag null)
+  
+  (define (bag-insert b elem)
+    (cons elem b))
+
+  (define (bag-peek b)
+    (car b))
+
+  (define (bag-remove b)
+    (cdr b))
+  )
 
 ;; struktura danych - kolejka FIFO
 ;; do zaimplementowania przez studentów
 (define-unit bag-fifo@
   (import)
   (export bag^)
+
+  (define (fifo-cons x y) (cons x y))
+  (define (fifo-left b) (car b))
+  (define (fifo-rght b) (cdr b))
+
+  (define (bag? b)
+    (and (pair? b)
+         (list? (car b))
+         (list? (cdr b))))
+
+  (define (bag-empty? b)
+    (and (null? (car b))
+         (null? (cdr b))))
   
-;; TODO: zaimplementuj kolejkę
-)
+  (define empty-bag
+    (cons null null))
+  
+  (define (bag-insert b elem)
+    (cons (cons elem (fifo-left b))
+          (fifo-rght b)))
+
+  (define (bag-peek b)
+    (if (null? (fifo-rght b))
+        (car (reverse (fifo-left b)))
+        (car (fifo-rght b))))
+  
+  (define (bag-remove b) (if (null? (fifo-rght b))
+                             (bag-remove (fifo-cons null (reverse (fifo-left b))))
+                             (fifo-cons (fifo-left b) (cdr (fifo-rght b)))))
+  )
 
 ;; sygnatura dla przeszukiwania grafu
 (define-signature graph-search^
@@ -122,12 +164,25 @@
    (list (edge 1 3)
          (edge 1 2)
          (edge 2 4))))
-;; TODO: napisz inne testowe grafy!
+(define test-graph-2
+  (graph
+   (list 1 2 3 4)
+   (list (edge 1 2)
+         (edge 3 4)
+         (edge 4 2))))
+(define test-graph-3
+  (graph
+   (list 'a 'b 'c 'd 'e)
+   (list (edge 'a 'b)
+         (edge 'b 'c)
+         (edge 'c 'a)
+         (edge 'd 'e)
+         (edge 'e 'd))))
 
 ;; otwarcie komponentu stosu
-(define-values/invoke-unit/infer bag-stack@)
+; (define-values/invoke-unit/infer bag-stack@)
 ;; opcja 2: otwarcie komponentu kolejki
-; (define-values/invoke-unit/infer bag-fifo@)
+ (define-values/invoke-unit/infer bag-fifo@)
 
 ;; testy w Quickchecku
 (require quickcheck)
@@ -137,13 +192,29 @@
 (quickcheck
  (property ([s arbitrary-symbol])
            (bag-empty? (bag-remove (bag-insert empty-bag s)))))
-;; TODO: napisz inne własności do sprawdzenia!
-;; jeśli jakaś własność dotyczy tylko stosu lub tylko kolejki,
-;; wykomentuj ją i opisz to w komentarzu powyżej własności
+
+(quickcheck
+ (property ([s arbitrary-symbol])
+           (not (bag-empty? (bag-insert empty-bag s)))))
+
+(quickcheck
+ (property ([s arbitrary-symbol])
+           (eq? s (bag-peek (bag-insert empty-bag s)))))
+
+(quickcheck
+ (property ([s arbitrary-symbol]
+            [t arbitrary-symbol])
+           ;; tylko stos
+           ;(eq? t (bag-peek (bag-insert (bag-insert empty-bag s) t)))
+           ;; tylko kolejka
+           (eq? s (bag-peek (bag-insert (bag-insert empty-bag s) t))) 
+           ))
 
 ;; otwarcie komponentu przeszukiwania
 (define-values/invoke-unit/infer graph-search@)
 
 ;; uruchomienie przeszukiwania na przykładowym grafie
 (search test-graph 1)
-;; TODO: uruchom przeszukiwanie na swoich przykładowych grafach!
+(search test-graph-2 3)
+(search test-graph-3 'a)
+(search test-graph-3 'd)
