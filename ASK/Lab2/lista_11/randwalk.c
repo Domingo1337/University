@@ -76,9 +76,13 @@ int randwalk2(uint8_t *arr, int n, int len) {
     }
 
     sum += arr[i * n + j];
-
-    /* XXX: Replace switch statement with code that does not use branch
-     * instructions. */
+	
+	dir = (dir >> k) & 3);
+	i = (dir==0) && (i > 0)	  ? i-1 : i;
+	i = (dir==1) && (i < n-1) ? i+1 : i;
+	j = (dir==2) && (j > 0)	  ? j-1 : j;
+	j = (dir==3) && (j < n-1) ? j+1 : j;
+  
   } while (--len);
 
   return sum;

@@ -99,7 +99,9 @@
   (import)
   (export bag^)
 
-  (define (fifo-cons x y) (cons x y))
+  (define (fifo-cons x y) (if (null? y)
+                              (cons null (reverse x))
+                              (cons x y)))
   (define (fifo-left b) (car b))
   (define (fifo-rght b) (cdr b))
 
@@ -116,17 +118,14 @@
     (cons null null))
   
   (define (bag-insert b elem)
-    (cons (cons elem (fifo-left b))
-          (fifo-rght b)))
+    (fifo-cons (cons elem (fifo-left b))
+               (fifo-rght b)))
 
   (define (bag-peek b)
-    (if (null? (fifo-rght b))
-        (car (reverse (fifo-left b)))
-        (car (fifo-rght b))))
+    (car (fifo-rght b)))
   
-  (define (bag-remove b) (if (null? (fifo-rght b))
-                             (bag-remove (fifo-cons null (reverse (fifo-left b))))
-                             (fifo-cons (fifo-left b) (cdr (fifo-rght b)))))
+  (define (bag-remove b)
+    (fifo-cons (fifo-left b) (cdr (fifo-rght b))))
   )
 
 ;; sygnatura dla przeszukiwania grafu
