@@ -23,18 +23,11 @@ void transpose1(int *dst, int *src, int n) {
 }
 
 void transpose2(int *dst, int *src, int n) {
-   int blocksize = 8;
-	for (int i = 0; i < n; i += blocksize) {
-	    for (int j = 0; j < n; j += blocksize) {
-	        // transpose the block beginning at [i,j]
-	        for (int k = i; k < i + blocksize; ++k) {
-	            for (int l = j; l < j + blocksize; ++l) {
-	                dst[k + l*n] = src[l + k*n];
-            }
-        }
-    }
-}
-
+	for (int i = 0; i < n; i += BLOCK) 
+	    for (int j = 0; j < n; j += BLOCK) 
+	        for (int i2 = i; i2 < i + BLOCK/2; i2++) 
+	            for (int j2 = j; j2 < j + BLOCK/2; j2++) 
+	                dst[i2 + j2*n] = src[j2 + i2*n];
 }
 
 int main(int argc, char **argv) {
