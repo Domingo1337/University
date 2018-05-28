@@ -25,7 +25,23 @@ void fill(int *arr, int n) {
 }
 
 void heapify(int *dst, int *src, int n) {
-  /* XXX: Fill in this procedure! */
+    for(int i = 0; i<n; i++)
+            dst[n+i] = src[i];
+    int begin = n/2;
+    while(begin){
+        for(int i = begin; i<begin*2; i++)
+            dst[i] = dst[i*2];
+        begin/=2;
+    }
+}
+bool heap_search(int *arr, long size, int x){
+    long i = 0;
+    long j = 1;
+    while(i<size){
+        if(arr[i]==x) return true;
+        i=2*i+(i>=x);
+    }
+    return false;
 }
 
 bool binary_search(int *arr, long size, int x) {
@@ -79,7 +95,7 @@ int main(int argc, char **argv) {
   int n = (1 << exp) - 1;
   int size = n * sizeof(int);
   int *arr = NULL, *tmp = NULL;
- 
+
   posix_memalign((void **)&arr, getpagesize(), size);
 
   printf("Generate array of 2^%d-1 elements (%d KiB)\n", exp, size >> 10);
