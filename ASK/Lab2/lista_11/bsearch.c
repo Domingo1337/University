@@ -34,16 +34,15 @@ void heapify(int *dst, int *src, int n) {
         begin/=2;
     }
 }
+
 bool heap_search(int *arr, long size, int x){
-    long i = 0;
-    long j = 1;
+    long i = 1;
     while(i<size){
         if(arr[i]==x) return true;
-        i=2*i+(i>=x);
+        i=2*i+(arr[i]>x);
     }
     return false;
 }
-
 bool binary_search(int *arr, long size, int x) {
   do {
     size >>= 1;
@@ -54,20 +53,6 @@ bool binary_search(int *arr, long size, int x) {
       return true;
   } while (size > 0);
 
-  return false;
-}
-
-bool heap_search(int *arr, long size, int x) {
-  long i = 1;
-  do {
-    int y = arr[i - 1];
-    long j = i * 2;
-    if (y < x)
-      j |= 1;
-    if (y == x)
-      return true;
-    i = j;
-  } while (i <= size);
   return false;
 }
 
