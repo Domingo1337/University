@@ -177,23 +177,47 @@
         (aux (cdr xs) (+ (car xs) (* 10 acc)))))
   (aux xs 0))
 
-(define (sym->num x xs ys)
-  (if (eq? (car xs) x)
-      (car ys)
-      (sym->num x (cdr xs)(cdr ys))))
+'(%let (xs a b)
+      (%which (d e m n o r s y)
+              (%and (%sublist xs '(0 1 2 3 4 5 6 7 8 9))
+                    (%gen-length xs 8)
+                    (%perm (list d e m n o r s y) xs)
+                    (%=/= s 0)
+                    (%=/= m 0)
+                    (%is a (+ (list->num (list s e n d))
+                              (list->num (list m o r e))))
+                    (%is b (list->num (list m o n e y)))
+                    (%= a b))))
 
-(%let (xs a b)
-(%which (d e m n o r s y)
-        (%and (%sublist xs '(0 1 2 3 4 5 6 7 8 9))
-              (%gen-length xs 8)
-              (%perm (list d e m n o r s y) xs)
-              (%=/= s 0)
-              (%=/= m 0)
-              (%is a (+ (list->num (list s e n d))
-                        (list->num (list m o r e))))
-              (%is b (list->num (list m o n e y)))
-              (%= a b))))
-              
+;;;;;;;;;;;;;;;;;;;;;;;
+;; pracownia
+(define (row-ok? xs ys)
+  (cond [(and (null? xs) (null? ys)) #t]
+        [(null? xs) (row-ok? xs (cdr ys))]
+        [(null? ys) #f]
+        [(eq? '_ (car ys))
+         (row-ok? xs (cdr ys))]
+        [(eq? '* (car ys))
+         (if (> (car xs) 1)
+             (row-ok? (cons (- (car xs) 1) (cdr xs))
+                      (cdr ys))
+             (row-ok? (cdr xs) (cdr ys)))]
+        [else #f]))
+
+(define %row-ok
+  (%rel (x xs y ys)
+        [(null null)]
+        [(xs (cons '_ ys))
+         (%row-ok xs ys)]
+        [((cons y xs) (cons * ys))
+        (%row-ok (cons x xs) ys)
+        (%is y (+ 1 x))]
+        [((cons 1 xs) (cons '* (cons '_ ys)))
+         (%row-ok xs ys)]
+        [((cons 1 xs) (cons '* null))
+         (%row-ok xs null)]))
+
+(%which (x) (%row-ok x '(* _ _ * _)))
 
 
         
