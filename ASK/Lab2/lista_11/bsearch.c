@@ -7,7 +7,6 @@
  * Time elapsed: 3.290986 seconds.
  */
 #include "common.h"
-
 void fill(int *arr, int n) {
   /* Yeah, gcc allows that, though it's non-standard extension ;) */
   int icmp(const void *a, const void *b) {
@@ -25,23 +24,10 @@ void fill(int *arr, int n) {
 }
 
 void heapify(int *dst, int *src, int n) {
-    for(int i = 0; i<n; i++)
-            dst[n+i] = src[i];
-    int begin = n/2;
-    while(begin){
-        for(int i = begin; i<begin*2; i++)
-            dst[i] = dst[i*2];
-        begin/=2;
-    }
-}
-
-bool heap_search(int *arr, long size, int x){
-    long i = 1;
-    while(i<size){
-        if(arr[i]==x) return true;
-        i=2*i+(arr[i]>x);
-    }
-    return false;
+    int i=0;
+    for(int off = n/2 + 1; off>0; off/=2)
+       for(int j = off; j<n; j+=off*2)
+          dst[i++] = src[j-1];
 }
 bool binary_search(int *arr, long size, int x) {
   do {
@@ -53,6 +39,19 @@ bool binary_search(int *arr, long size, int x) {
       return true;
   } while (size > 0);
 
+  return false;
+}
+
+bool heap_search(int *arr, long size, int x) {
+  long i = 1;
+  while(i <= size){
+    int current = arr[i - 1];
+    i *= 2;
+    i = (current<x) ? i|1 : i;
+
+    if (current == x)
+      return true;
+  } 
   return false;
 }
 
@@ -80,7 +79,7 @@ int main(int argc, char **argv) {
   int n = (1 << exp) - 1;
   int size = n * sizeof(int);
   int *arr = NULL, *tmp = NULL;
-
+ 
   posix_memalign((void **)&arr, getpagesize(), size);
 
   printf("Generate array of 2^%d-1 elements (%d KiB)\n", exp, size >> 10);
@@ -103,7 +102,14 @@ int main(int argc, char **argv) {
     if (var == 0) {
       binary_search(arr, n, rand());
     } else {
-      heap_search(arr, n, rand());
+	heap_search(arr, n, rand());	
+	/*
+	int temp = rand();
+	int b = binary_search(arr, n, temp);
+	int h = heap_search(tmp, n, temp);
+	if(b!=h)
+		printf("%d\t b: %d, h1: %d\n", temp, b, h);
+         */
     }
   }
   timer_stop(&timer);

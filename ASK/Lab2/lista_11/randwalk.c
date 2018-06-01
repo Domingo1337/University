@@ -77,11 +77,11 @@ int randwalk2(uint8_t *arr, int n, int len) {
 
     sum += arr[i * n + j];
 
-	dir = (dir >> k) & 3;
-	i -= (dir==0) & (i > 0);
-	i += (dir==1) & (i < n-1);
-	j -= (dir==2) & (j > 0);
-	j += (dir==3) & (j < n-1);
+	uint64_t d = (dir >> k) & 3;
+	i -= (d==0) & (i > 0);
+	i += (d==1) & (i < n-1);
+	j -= (d==2) & (j > 0);
+	j += (d==3) & (j < n-1);
 
   } while (--len);
 
