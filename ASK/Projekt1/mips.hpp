@@ -10,36 +10,6 @@ using namespace std;
 
 class Instruction {
 public:
-    Instruction(string input) {
-        this->output = input;
-        char last;
-        unsigned len = 1;
-        unsigned current = 0;
-        while (current < output.size() && (output[current] == '0' || output[current] == '1' || isspace(output[current])))
-            current++;
-        if (current < output.size()) {
-            last = output[current];
-            args[0] = current;
-            current = 0;
-            for (unsigned i = args[0] + 1; i < output.size(); i++) {
-                char c = output[i];
-                if(!(c == '0' || c == '1' || isspace(c))) {
-                    if(c == last) {
-                        len++;
-                    } else if (current <= 2) {
-                        lens[current++] = len;
-                        args[current] = i;
-                        last = c;
-                        len = 1;
-                    }
-                }
-            }
-            if (current <= 2) {
-                lens[current] = len;
-            }
-        }
-    }
-
     Instruction(string input, int p0, int l0, int p1, int l1, int p2, int l2) {
         output = input;
         args[0] = p0;
@@ -111,9 +81,6 @@ public:
             i = j+1;
             while(isspace(input[i]) || input[i]==',') i++;
         }
-        // for(int i = 1; i<vec.size(); i++)
-        //    cout << vec[i] <<"="<<parseArgument(vec[i])<< "\t";
-        //  cout << endl;
         Instruction * I = imap[vec[0]];
         if (I == nullptr) {
             cerr << "Invalid instruction\n";
@@ -172,6 +139,4 @@ private:
     map<string, Instruction*> imap;
     map<string, string> rmap;
     unsigned int counter;
-
-
 };
