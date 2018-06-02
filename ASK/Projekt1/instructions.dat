@@ -23,7 +23,7 @@ slti	11	5	6	5	16	16	001010ssssstttttiiiiiiiiiiiiiiii
 sltiu	11	5	6	5	16	16	001011ssssstttttiiiiiiiiiiiiiiii
 sltu	16	5	6	5	11	5	000000ssssstttttddddd00000101011
 sra	16	5	11	5	21	5	00000000000tttttdddddhhhhh000011
-srav	16	5	11	5	6	5	000000ssssstttttddddd00000000100
+srav	16	5	11	5	6	5	000000ssssstttttddddd00000000111
 srl	16	5	11	5	21	5	00000000000tttttdddddhhhhh000010
 srlv	16	5	11	5	6	5	000000ssssstttttddddd00000000110
 sub	16	5	6	5	11	5	000000ssssstttttddddd00000100010
