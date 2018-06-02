@@ -15,21 +15,21 @@ div $s, $t
 divu $s, $t
 0000 00ss ssst tttt 0000 0000 0001 1011 
 lui $t, imm
-0011 11-- ---t tttt iiii iiii iiii iiii 
+0011 1100 000t tttt iiii iiii iiii iiii 
 mfhi $d
 0000 0000 0000 0000 dddd d000 0001 0000 
 mflo $d
 0000 0000 0000 0000 dddd d000 0001 0010 
-mthi
-0
-mtlo
-0
+mthi $s
+0000 0000 0000 0000 dddd d000 0001 0001 
+mtlo $s
+0000 0000 0000 0000 dddd d000 0001 0011 
 mult $s, $t
 0000 00ss ssst tttt 0000 0000 0001 100
 multu $s, $t
 0000 00ss ssst tttt 0000 0000 0001 1001 
-nor
-0
+nor $d, $s, $t
+0000 00ss ssst tttt dddd d000 0010 0111 
 or $d, $s, $t
 0000 00ss ssst tttt dddd d000 0010 0101 
 ori $t, $s, imm`
@@ -37,7 +37,7 @@ ori $t, $s, imm`
 sll $d, $t, h
 0000 00ss ssst tttt dddd dhhh hh00 0000 
 sllv $d, $t, $s
-0000 00ss ssst tttt dddd d--- --00 0100 
+0000 00ss ssst tttt dddd d000 0000 0100 
 slt $d, $s, $t
 0000 00ss ssst tttt dddd d000 0010 1010 
 slti $t, $s, imm
@@ -47,11 +47,11 @@ sltiu $t, $s, imm
 sltu $d, $s, $t
 0000 00ss ssst tttt dddd d000 0010 1011 
 sra $d, $t, h
-0000 00-- ---t tttt dddd dhhh hh00 0011 
-srav
-
+0000 0000 000t tttt dddd dhhh hh00 0011 
+srav $d, $t, $s
+0000 0000 000t tttt dddd dhhh hh00 0111 
 srl $d, $t, h
-0000 00-- ---t tttt dddd dhhh hh00 0010 
+0000 0000 000t tttt dddd dhhh hh00 0010 
 srlv $d, $t, $s
 0000 00ss ssst tttt dddd d000 0000 0110 
 sub $d, $s, $t
@@ -59,6 +59,6 @@ sub $d, $s, $t
 subu $d, $s, $t
 0000 00ss ssst tttt dddd d000 0010 0011 
 xor $d, $s, $t
-0000 00ss ssst tttt dddd d--- --10 0110 
+0000 00ss ssst tttt dddd d000 0010 0110 
 xori $t, $s, imm
 0011 10ss ssst tttt iiii iiii iiii iiii 

@@ -94,11 +94,7 @@ public:
 
     void parseInstruction(string input) {
         vector < string > vec;
-        for (int i = 0; i < input.size(); i++) {
-            if (vec.size() >= 4) {
-                vec.push_back(input.substr(i - 1));
-                break;
-            }
+        for (int i = 0; i < input.size() && vec.size()<4; i++) {
             int j = i;
             while (!(j >= input.size() || isspace(input[j++])));
             if(input[j-2]==',')
@@ -107,15 +103,10 @@ public:
                 vec.push_back(input.substr(i, j - i - 1));
             i = j - 1;
         }
-        //   cout << "instrukcja:";
-        //   for(int i =0 ; i<vec.size(); i++)
-        //      cout <<"["<< vec[i] << "]";
-        //     cout << endl;
         Instruction * I = imap[vec[0]];
         if (I == 0) {
             cerr << "Invalid instruction\n";
         } else {
-            //cout << I->output << endl;
             if (vec.size() >= 4) {
                 cout << I->fill(parseArgument(vec[1]), parseArgument(vec[2]), parseArgument(vec[3]));
             } else if (vec.size() == 3) {
@@ -124,13 +115,8 @@ public:
                 cout << I->fill(parseArgument(vec[1]), "", "");
             } else {
                 cout << I->fill("","","");
-                return;
             }
-            cout << "\n";
-            //   for (int i = I->argc + 1; i < vec.size(); i++)
-            //      cout << vec[i];
-            //   cout << endl;
-
+            cout << "\t" << input << "\n";
         }
     }
 
@@ -141,7 +127,13 @@ public:
     string parseArgument(string arg) {
         if(arg[0]=='$')
             return rmap[arg];
+        if(arg[0]=='0' && arg[1] == 'x'){
+            //hexadecimal
+            return arg;
+        }else{
+            //decimal
         return arg;
+        }
     }
 
 private:
@@ -154,9 +146,4 @@ int main() {
     Instruction * I = IP.get("add");
     IP.parseInstruction("add $zero, $s1, $t1 #test komentarza");
     IP.parseInstruction("sub 1 10 101\tkomentarz");
-    //  cout << IP.parseArgument("$zero") << endl;
-    //  cout << IP.parseArgument("$s1") << endl;
-    //  cout << IP.parseArgument("$t1") << endl;
-    //  cout << IP.parseArgument("$t2,") << endl;
-    //  cout << IP.parseArgument("$t3") << endl;
 }
