@@ -8,7 +8,7 @@ addu $d, $s, $t
 0000 00ss ssst tttt dddd d000 0010 0001 
 and $d, $s, $t
 0000 00ss ssst tttt dddd d000 0010 0100 
-andiandi $t, $s, imm
+andi $t, $s, imm
 0011 00ss ssst tttt iiii iiii iiii iiii 
 div $s, $t
 0000 00ss ssst tttt 0000 0000 0001 1010 
@@ -32,7 +32,7 @@ nor $d, $s, $t
 0000 00ss ssst tttt dddd d000 0010 0111 
 or $d, $s, $t
 0000 00ss ssst tttt dddd d000 0010 0101 
-ori $t, $s, imm`
+ori $t, $s, imm
 0011 01ss ssst tttt iiii iiii iiii iiii 
 sll $d, $t, h
 0000 00ss ssst tttt dddd dhhh hh00 0000 
