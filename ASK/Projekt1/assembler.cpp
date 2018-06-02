@@ -5,12 +5,11 @@
 #include<map>
 #include<fstream>
 #include<algorithm>
-
+#include<cstdlib>
 using namespace std;
 
 class Instruction {
 public:
-    int argc = 0; //ile jest argumentow
     Instruction(string input) {
         this->output = input;
         char last;
@@ -35,12 +34,20 @@ public:
                     }
             }
             if (current <= 2) {
-                argc = current + 1;
                 lens[current] = len;
             }
         }
     }
 
+    Instruction(string input, int p0, int l0, int p1, int l1, int p2, int l2) {
+        output = input;
+        args[0] = p0;
+        args[1] = p1;
+        args[2] = p2;
+        lens[0] = l0;
+        lens[1] = l1;
+        lens[2] = l2;
+    }
     string fill(string arg0, string arg1, string arg2) {
         while (arg0.size() < lens[0]) arg0 = "0" + arg0;
         while (arg1.size() < lens[1]) arg1 = "0" + arg1;
@@ -62,19 +69,15 @@ private:
 class InstructionParser {
 public:
     InstructionParser(string filename) {
-        /// czyta linie pliku w formacie nazwa - spacja - nastepna linia: bajtowy szablon instrukcji
         ifstream file;
         file.open(filename);
-        string s;
-        while (getline(file, s)) {
-            string name;
-            int i = 0;
-            while (!(isspace(s[i]) || s[i] == '\n'))
-                name += s[i++];
-            getline(file, s);
-            s.erase(remove(s.begin(), s.end(), ' '), s.end());
-            /// mapa rozkaz->binary
-            imap[name] = new Instruction(s);
+        string name;
+        while(file >> name) {
+            int p0, p1, p2, l0, l1, l2;
+            string binary;
+            file >> p0 >> l0 >> p1 >> l1 >> p2 >> l2 >> binary;
+            imap[name] = new Instruction(binary, p0, l0, p1, l1, p2, l2);
+
         }
         file.close();
         /// mapa reg->binary
@@ -93,57 +96,83 @@ public:
     }
 
     void parseInstruction(string input) {
-        vector < string > vec;
-        for (int i = 0; i < input.size() && vec.size()<4; i++) {
+        vector <string> vec;
+        int i = 0;
+        //szukanie nazwy
+        while(!isspace(input[i])) i++;
+        vec.push_back(input.substr(0,i++));
+        while(isspace(input[i])) i++;
+        //szukanie argumentów
+        while(i<input.size() && vec.size()<4){
             int j = i;
-            while (!(j >= input.size() || isspace(input[j++])));
-            if(input[j-2]==',')
-                vec.push_back(input.substr(i, j - i - 2));
-            else
-                vec.push_back(input.substr(i, j - i - 1));
-            i = j - 1;
+            while(!isspace(input[j]) && input[j]!=',') j++;
+            vec.push_back(input.substr(i,j-i));
+            i = j+1;
+            while(isspace(input[i]) || input[i]==',') i++;
         }
+       // for(int i = 1; i<vec.size(); i++)
+        //    cout << vec[i] <<"="<<parseArgument(vec[i])<< "\t";
+      //  cout << endl;
         Instruction * I = imap[vec[0]];
-        if (I == 0) {
+        if (I == nullptr) {
             cerr << "Invalid instruction\n";
         } else {
+            string instr;
             if (vec.size() >= 4) {
-                cout << I->fill(parseArgument(vec[1]), parseArgument(vec[2]), parseArgument(vec[3]));
+                instr = I->fill(parseArgument(vec[1]), parseArgument(vec[2]), parseArgument(vec[3]));
             } else if (vec.size() == 3) {
-                cout << I->fill(parseArgument(vec[1]), parseArgument(vec[2]), "");
+                instr = I->fill(parseArgument(vec[1]), parseArgument(vec[2]), "");
             } else if (vec.size() == 2) {
-                cout << I->fill(parseArgument(vec[1]), "", "");
+                instr = I->fill(parseArgument(vec[1]), "", "");
             } else {
-                cout << I->fill("","","");
+                instr = I->fill("","","");
             }
-            cout << "\t" << input << "\n";
+            printf("%08x\t", (unsigned)strtol(instr.c_str(),0,2));
+            cout << input << endl;
         }
-    }
-
-    Instruction * get(string name) {
-        return imap[name];
     }
 
     string parseArgument(string arg) {
-        if(arg[0]=='$')
+        if(arg[0]=='$') {
+            if(rmap.find(arg) == rmap.end())
+                return parseArgument(arg.substr(1));
             return rmap[arg];
-        if(arg[0]=='0' && arg[1] == 'x'){
-            //hexadecimal
-            return arg;
-        }else{
-            //decimal
-        return arg;
         }
+        string ret = "";
+        unsigned short s = 0;
+        if(arg[0]=='0' && arg[1] == 'x') {
+            s = strtol(arg.c_str(), 0, 16);
+        } else {
+            s = strtol(arg.c_str(),0,10);
+        }
+        while(s>0) {
+            if(s&1==1) ret = '1'+ret;
+            else ret = '0'+ret;
+            s/=2;
+        }
+        return ret;
     }
 
+    void parseFile(string filename) {
+        ifstream file;
+        file.open(filename);
+        string line;
+        cout << ".text\n";
+        while(getline(file, line)) {
+            if(line.size()>1)
+                parseInstruction(line);
+        }
+        file.close();
+    }
 private:
     map<string, Instruction*> imap;
     map<string, string> rmap;
+
+
 };
 
 int main() {
-    InstructionParser IP("instructions.txt");
-    Instruction * I = IP.get("add");
-    IP.parseInstruction("add $zero, $s1, $t1 #test komentarza");
-    IP.parseInstruction("sub 1 10 101\tkomentarz");
+    InstructionParser IP("instrukcje.txt");
+    string s = "in1.txt";
+    IP.parseFile(s);
 }
