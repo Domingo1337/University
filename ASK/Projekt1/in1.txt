@@ -1,4 +1,0 @@
-add 	$1,$2,$3 	#komentarz
-addi 	$zero,$t0,0x17 
-addi 	$1, $2, 17 
-addi 	$1, $2, 1

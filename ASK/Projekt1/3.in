@@ -1,0 +1,5 @@
+slt $s0, $s1, $s3 #shifty
+sltiu $t4, $t3, 0x2137
+sra $6, $s6, 10
+srl $7, $t8, 2
+

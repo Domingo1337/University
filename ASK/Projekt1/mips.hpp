@@ -13,25 +13,26 @@ public:
     Instruction(string input) {
         this->output = input;
         char last;
-        int len = 1;
-        int current = 0;
+        unsigned len = 1;
+        unsigned current = 0;
         while (current < output.size() && (output[current] == '0' || output[current] == '1' || isspace(output[current])))
             current++;
         if (current < output.size()) {
             last = output[current];
             args[0] = current;
             current = 0;
-            for (int i = args[0] + 1; i < output.size(); i++) {
+            for (unsigned i = args[0] + 1; i < output.size(); i++) {
                 char c = output[i];
-                if (!(c == '0' || c == '1' || isspace(c)))
-                    if (c == last)
+                if(!(c == '0' || c == '1' || isspace(c))) {
+                    if(c == last) {
                         len++;
-                    else if (current <= 2) {
+                    } else if (current <= 2) {
                         lens[current++] = len;
                         args[current] = i;
                         last = c;
                         len = 1;
                     }
+                }
             }
             if (current <= 2) {
                 lens[current] = len;
@@ -52,18 +53,18 @@ public:
         while (arg0.size() < lens[0]) arg0 = "0" + arg0;
         while (arg1.size() < lens[1]) arg1 = "0" + arg1;
         while (arg2.size() < lens[2]) arg2 = "0" + arg2;
-        for (int i = 0; i < lens[0]; i++)
+        for (unsigned i = 0; i < lens[0]; i++)
             output[i + args[0]] = arg0[i];
-        for (int i = 0; i < lens[1]; i++)
+        for (unsigned i = 0; i < lens[1]; i++)
             output[i + args[1]] = arg1[i];
-        for (int i = 0; i < lens[2]; i++)
+        for (unsigned i = 0; i < lens[2]; i++)
             output[i + args[2]] = arg2[i];
         return output;
     }
 
 private:
-    int args[3] = {0,0,0}; // gdzie zaczynaja sie argumenty
-    int lens[3] = {0,0,0}; //jak dlugie sa argumenty;
+    unsigned args[3] = {0,0,0}; // gdzie zaczynaja sie argumenty
+    unsigned lens[3] = {0,0,0}; //jak dlugie sa argumenty;
     string output;
 };
 class InstructionParser {
@@ -97,22 +98,22 @@ public:
 
     void parseInstruction(string input) {
         vector <string> vec;
-        int i = 0;
+        unsigned i = 0;
         //szukanie nazwy
         while(!isspace(input[i])) i++;
         vec.push_back(input.substr(0,i++));
         while(isspace(input[i])) i++;
         //szukanie argumentów
-        while(i<input.size() && vec.size()<4){
+        while(i<input.size() && vec.size()<4) {
             int j = i;
             while(!isspace(input[j]) && input[j]!=',') j++;
             vec.push_back(input.substr(i,j-i));
             i = j+1;
             while(isspace(input[i]) || input[i]==',') i++;
         }
-       // for(int i = 1; i<vec.size(); i++)
+        // for(int i = 1; i<vec.size(); i++)
         //    cout << vec[i] <<"="<<parseArgument(vec[i])<< "\t";
-      //  cout << endl;
+        //  cout << endl;
         Instruction * I = imap[vec[0]];
         if (I == nullptr) {
             cerr << "Invalid instruction\n";
@@ -146,7 +147,7 @@ public:
             s = strtol(arg.c_str(),0,10);
         }
         while(s>0) {
-            if(s&1==1) ret = '1'+ret;
+            if((s&1)==1) ret = '1'+ret;
             else ret = '0'+ret;
             s/=2;
         }
@@ -157,22 +158,20 @@ public:
         ifstream file;
         file.open(filename);
         string line;
+        counter = 0;
         cout << ".text\n";
         while(getline(file, line)) {
-            if(line.size()>1)
+            if(line.size()>1) {
+                printf("%08x\t", (counter++)<<2);
                 parseInstruction(line);
+            }
         }
         file.close();
     }
 private:
     map<string, Instruction*> imap;
     map<string, string> rmap;
+    unsigned int counter;
 
 
 };
-
-int main() {
-    InstructionParser IP("instrukcje.txt");
-    string s = "in1.txt";
-    IP.parseFile(s);
-}

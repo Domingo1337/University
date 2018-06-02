@@ -1,0 +1,6 @@
+mthi $t1		#różnoargumentowe instrukcje
+mtlo $s2
+mflo $s3
+lui $t3, 0x1234
+mult $3, $4
+divu $5, $7
