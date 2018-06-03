@@ -1,4 +1,4 @@
-mthi $t1		#różnoargumentowe instrukcje
+mthi $t1		#roznoargumentowe instrukcje
 mtlo $s2
 mflo $s3
 lui $t3, 0x1234
