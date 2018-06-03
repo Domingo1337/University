@@ -1,6 +1,7 @@
 #lang racket
 
 (require racklog)
+(use-occurs-check? #t)
 
 ;; transpozycja tablicy zakodowanej jako lista list
 (define (transpose xss)
@@ -24,20 +25,33 @@
 ;; predykat binarny
 ;; (%row-ok xs ys) oznacza, że xs opisuje wiersz (lub kolumnę) ys
 (define %row-ok
-  (%rel ()
-;; TODO: uzupełnij!
-  ))
+  (%rel (xs ys zs a b)
+        [(null null)]
+        [('(1)  '(*))]
+        [((cons 1 xs) (cons '* (cons '_ ys)))
+         (%row-ok xs ys)]
+        [((cons a xs) (cons '* (cons '* ys)))
+         (%is b (- a 1))
+         (%row-ok (cons b xs) (cons '* ys))]
+        [(xs (cons '_ ys))
+         (%row-ok xs ys)]
+        ))
 
-;; TODO: napisz potrzebne ci pomocnicze predykaty
-
+(define %rows-ok
+  (%rel (xs xss ys yss)
+        [(null null)]
+        [((cons xs xss) (cons ys yss))
+         (%row-ok xs ys)
+         (%rows-ok xss yss)]))
 ;; funkcja rozwiązująca zagadkę
 (define (solve rows cols)
   (define board (make-rect (length cols) (length rows)))
   (define tboard (transpose board))
-  (define ret (%which (xss) 
+  (define ret (%which (xss yss) 
                       (%= xss board)
-;; TODO: uzupełnij!
-                      ))
+                      (%rows-ok rows xss)
+                      (%is yss (transpose xss))
+                      (%rows-ok cols yss)))
   (and ret (cdar ret)))
 
 ;; testy
@@ -51,6 +65,12 @@
           (* * _ *)
           (* _ _ *)
           (_ * * _)))
-;; TODO: możesz dodać własne testy
-
+(equal? 
+ (solve '((1 1 3) (1 1 1) (3 3) (1 1) (1 3))
+        '((3) (1) (5) () (1 3) (1 1 1) (3 1)))
+ '((* _ * _ * * *)
+   (* _ * _ _ _ *)
+   (* * * _ * * *)
+   (_ _ * _ * _ _)
+   (_ _ * _ * * *)))
 
