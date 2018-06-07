@@ -33,23 +33,47 @@ static void fill(T *dst, int size) {
 
 /* ijk (& jik) */
 static __noinline void multiply0(int n, T *a, T *b, T *c) {
-  /* XXX: Fill in this procedure! */
+    for (int i=0; i<n; i++) {
+        for (int j=0; j<n; j++) {
+            T sum = 0.0;
+            for (int k=0; k<n; k++)
+                sum += a[i*n+k] * b[k*n+j];
+            c[i*n+j] = sum;
+        }
+    }
 }
 
 /* kij (& ikj) */
 static __noinline void multiply1(int n, T *a, T *b, T *c) {
-  /* XXX: Fill in this procedure! */
+    for (int k=0; k<n; k++)
+        for (int i=0; i<n; i++) {
+            T r = a[i*n+k];
+            for (int j=0; j<n; j++)
+                c[i*n+j] += r* b[k*n+j];
+        }
 }
 
 /* jki (& kji) */
 static __noinline void multiply2(int n, T *a, T *b, T *c) {
-  /* XXX: Fill in this procedure! */
+    for (int j=0; j<n; j++)
+        for (int k=0; k<n; k++) {
+            T r = b[k*n+j];
+            for (int i=0; i<n; i++)
+                c[i*n+j] += r* a[i*n+k];
+        }
 }
 
 /* BLOCK*BLOCK tiled version */
-static __noinline void multiply3(int n, T *a, T *b, T *c) {
-  /* XXX: Fill in this procedure! */
+static __noinline void multiply3(int n, T *a, T *b, T *c) { 
+	for (int i=0; i<n;i+=BLOCK)
+	for (int j=0; j<n; j+=BLOCK)
+	for (int k=0; k<n; k+=BLOCK)
+	for (int i1=i; i1<i+BLOCK; i1++)
+	for (int j1=j; j1<j+BLOCK; j1++)
+	for (int k1=k; k1<j+BLOCK; k1++)
+        c[i1*n+j1] += a[i1*n + k1] * b[k1*n + j1];
 }
+
 
 typedef void (*matmult_t)(int n, T *a, T *b, T *c);
 
