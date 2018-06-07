@@ -35,11 +35,11 @@ static __noinline int randwalk1(uint8_t *arr, int n, int len) {
 
     sum += arr[i * n + j];
 
-    /* 
+    /*
      * We must avoid unpredictable branches in tight loops!
      *
      * GCC is not smart enough to translate following code using SETcc/CMOVcc
-     * instructions. If that's not done, then branch predictor will suffer. 
+     * instructions. If that's not done, then branch predictor will suffer.
      */
     if (d == 0) {
       if (i > 0)
@@ -60,7 +60,38 @@ static __noinline int randwalk1(uint8_t *arr, int n, int len) {
 }
 
 static __noinline int randwalk2(uint8_t *arr, int n, int len) {
-  /* XXX: Fill in this procedure! */
+  int sum = 0;
+  int i, j, k = 0;
+  uint64_t dir = 0;
+
+  /* Start in the center of 2D array */
+  i = n / 2, j = n / 2;
+
+  do {
+    k -= 2;
+    if (k < 0) {
+      k = 62;
+      dir = fast_random();
+    }
+
+    int d = (dir >> k) & 3;
+
+    sum += arr[i * n + j];
+
+    /*
+     * We must avoid unpredictable branches in tight loops!
+     *
+     * GCC is not smart enough to translate following code using SETcc/CMOVcc
+     * instructions. If that's not done, then branch predictor will suffer.
+     */
+	i -= (d==0) & (i > 0);
+	i += (d==1) & (i < n-1);
+	j -= (d==2) & (j > 0);
+	j += (d==3) & (j < n-1);
+  } while (--len);
+
+
+  return sum;
 }
 
 static __noinline int test_randwalk1(uint8_t *arr, int n, int len, int times) {

@@ -10,8 +10,8 @@
  */
 #include "common.h"
 
-/* You can modify following definitions to try out different settings. */ 
-#define T int 
+/* You can modify following definitions to try out different settings. */
+#define T int
 #define BLOCK 8
 
 static void fill(T *dst, int n) {
@@ -27,7 +27,11 @@ static __noinline void transpose1(T *dst, T *src, int n) {
 }
 
 static __noinline void transpose2(T *dst, T *src, int n) {
-  /* XXX: Fill in this procedure! */
+  for (int i = 0; i < n; i += BLOCK)
+      for (int j = 0; j < n; j += BLOCK)
+          for (int i2 = i; i2 < i + BLOCK; i2++)
+              for (int j2 = j; j2 < j + BLOCK; j2++)
+                  dst[i2 + j2*n] = src[j2 + i2*n];
 }
 
 int main(int argc, char **argv) {
@@ -64,9 +68,9 @@ int main(int argc, char **argv) {
   _timer_t timer;
   timer_reset(&timer);
   timer_start(&timer);
-  if (variant == 0) 
+  if (variant == 0)
     transpose1(dst, src, n);
-  if (variant == 1) 
+  if (variant == 1)
     transpose2(dst, src, n);
   timer_stop(&timer);
   timer_print(&timer);

@@ -26,7 +26,10 @@ static void fill(int *arr, int n) {
 }
 
 static void heapify(int *dst, int *src, int n) {
-  /* XXX: Fill in this procedure! */
+    int i=0;
+    for(int off = n/2 + 1; off>0; off/=2)
+       for(int j = off; j<n; j+=off*2)
+          dst[i++] = src[j-1];
 }
 
 static __noinline bool binary_search(int *arr, long size, int x) {
@@ -42,7 +45,15 @@ static __noinline bool binary_search(int *arr, long size, int x) {
 }
 
 static __noinline bool heap_search(int *arr, long size, int x) {
-  /* XXX: Fill in this procedure! */
+  long i = 1;
+  while(i <= size){
+    int current = arr[i - 1];
+    i *= 2;
+    i = (current<x) ? i|1 : i;
+
+    if (current == x)
+      return true;
+  }
   return false;
 }
 
