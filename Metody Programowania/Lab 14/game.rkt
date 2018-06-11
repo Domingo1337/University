@@ -132,8 +132,12 @@
 
 ;;; ----------------------------------------------------------------------------
 ;;; Implementacja osób
+;; funkcja pomocnicza
+(define (cons-n n sym list)
+  (if (< n 1) list
+      (cons sym (cons-n (- n 1) sym list))))
 
-(define (make-person name birthplace threshold)
+(define (make-person name birthplace threshold [affection 0])
   (let ((possessions '())
 	(mobile-obj  (make-mobile-object name birthplace)))
     (lambda (message)
@@ -148,6 +152,15 @@
 			      (map (lambda (p) (ask p 'name))
 				      possessions))))
 	       possessions))
+            ((eq? message 'print-affection)
+             (lambda (self)
+               (if (< affection 3) null (display "Brawo, udało ci się uwieść "))
+               (for-each (lambda (s) (display s) (display " "))
+                         (cons (ask self 'name)
+                               (cons ':
+                                     (if (< affection 0) (list '💔)
+                                         (cons-n affection '🖤 '())))))
+               (newline)))
 	    ((eq? message 'say)
 	     (lambda (self list-of-stuff)
 	       (display-message
@@ -159,7 +172,7 @@
 	       'said))
 	    ((eq? message 'have-fit)
 	     (lambda (self)
-	       (ask self 'say '("Jestem zły!!!"))
+	       (ask self 'say '("Bardzo proszę."))
 	       'I-feel-better-now))
 	    ((eq? message 'look-around)
 	     (lambda (self)
@@ -172,8 +185,22 @@
 						  '("nic")
 						  other-things)))
 		 other-things)))
-
-	    ((eq? message 'take)
+            ((eq? message 'give)
+             (lambda (self thing)
+               (if (and 
+                    (let ((things-at-place (ask (ask self 'place) 'things)))
+                      (memq thing things-at-place))
+                    (ask thing 'owned?)
+                    (eq? (ask (ask thing 'owner) 'name) 'student))
+                   (and (set! affection (+ 1 affection))
+                        (ask self 'take thing)
+                        (newline)
+                        (ask self 'print-affection)
+                        #t)
+                   (and (ask self 'say (list "Nie możesz mi dać"
+                                             (ask thing 'name)))
+                        #f))))
+            ((eq? message 'take)
 	     (lambda (self thing)
 	       (cond ((memq thing possessions)
 		      (ask self 'say
@@ -256,8 +283,8 @@
 	       ((get-method mobile-obj 'install) self)))
 	    (else (get-method mobile-obj message))))))
   
-(define (make&install-person name birthplace threshold)
-  (let ((person (make-person name birthplace threshold)))
+(define (make&install-person name birthplace threshold [affection 0])
+  (let ((person (make-person name birthplace threshold affection)))
     (ask person 'install)
     person))
 
@@ -406,7 +433,10 @@
 (define schody-parter    (make-place 'schody-parter))
 (define schody-piętro    (make-place 'schody-piętro))
 
-;; TODO: nowe lokacje
+;; nowe lokacje
+(define nadodrze (make-place 'nadodrze))
+(define dziekanat (make-place 'dziekanat))
+(define uniradio (make-place 'uni-radio))
 
 ;; Połączenia między miejscami w świecie
 ;;------------------------------------------------------
@@ -431,18 +461,20 @@
 (can-go-both-ways hol 'północ 'południe ksi)
 (can-go-both-ways piętro-zachód 'zachód 'wschód continuum)
 
-;; TODO: połączenia dla nowych lokacji
+;; połączenia dla nowych lokacji
+(can-go-both-ways wielka-wschodnia 'południe 'północ dziekanat)
+(can-go-both-ways plastyczna 'południe 'północ nadodrze)
+(can-go-both-ways uniradio 'północ 'południe schody-piętro)
 
 ;; Osoby dramatu
 ;;---------------------------------------
 
 (define student   (make&install-person 'student hol 0))
-(define fsieczkowski
-  (make&install-person 'fsieczkowski wielka-wschodnia 3))
+(define fsieczkowski (make&install-person 'fsieczkowski wielka-wschodnia 3 1))
 (define mpirog    (make&install-person 'mpirog wielka-wschodnia 3))
 (define mmaterzok (make&install-person 'mmaterzok wielka-wschodnia 3))
-(define jma       (make&install-person 'jma piętro-wschód 2))
-(define klo       (make&install-person 'klo kameralna-wschodnia 2))
+(define jma       (make&install-person 'jma piętro-wschód 2 -99))
+(define klo       (make&install-person 'klo kameralna-wschodnia 2 -99))
 (define ref       (make&install-person 'ref ksi 0))
 (define aleph1    (make&install-rover 'aleph1 continuum 3))
 
@@ -450,8 +482,20 @@
 (define trytytki     (make&install-thing 'trytytki continuum))
 (define cążki-boczne (make&install-thing 'cążki-boczne continuum))
 
-;; TODO: dodatkowe osoby i przedmioty
+;; dodatkowe osoby i przedmioty
+(define twi               (make&install-person 'twi kameralna-wschodnia 0 -99))
+(define dziennikarka      (make&install-person 'dziennikarka kameralna-zachodnia 1 2))
+(define dziennikarz       (make&install-person 'dziennikarz uniradio 2))
+(define studentka         (make&install-person 'studentka plastyczna 3 1))
+(define pani-z-dziekanatu (make&install-person 'pani-z-dziekanatu dziekanat 0 1))
 
+(define mio-mio-mate       (make&install-thing 'mio-mio-mate plastyczna))
+(define kwiaty             (make&install-thing 'kwiaty nadodrze))
+(define kanapka            (make&install-thing 'kanapka wielka-wschodnia))
+(define czekolada          (make&install-thing 'czekolada kameralna-wschodnia))
+(define kawa               (make&install-thing 'kawa kameralna-zachodnia))
+(define indeks             (make&install-thing 'indeks dziekanat))
+(define piosenka-o-miłości (make&install-thing 'piosenka-o-miłości uniradio))
 ;; Polecenia dla gracza
 ;;------------------------------------------------
 
@@ -460,7 +504,6 @@
 (define (look-around)
   (ask *player-character* 'look-around)
   #t)
-
 (define (go direction)
   (ask *player-character* 'go direction)
   (clock)
@@ -470,4 +513,25 @@
   (display-message (ask (ask *player-character* 'place) 'exits))
   #t)
 
-;; TODO: dodatkowe polecenia dla gracza
+;; dodatkowe polecenia dla gracza
+
+(define (grab)
+  (let* ((things (ask (ask *player-character* 'place) 'things))
+         (fthings (filter (lambda (thing) (not (ask thing 'owned?)))
+                          (filter (lambda (thing) (is-a thing 'ownable?))
+                                  things))))
+    (if (not (null? fthings))
+        (and (ask *player-character* 'take (pick-random fthings))
+             (clock))
+        false)))
+(define (check-inventory)
+  (ask *player-character* 'list-possessions))
+(define (give person thing)
+  (ask person 'give thing))
+(define (show-stats)
+  (let ((people (list fsieczkowski mpirog mmaterzok jma klo ref aleph1
+                      twi dziennikarka dziennikarz studentka pani-z-dziekanatu)))
+    (and (map (lambda (person) (not (ask person 'print-affection))) people))
+    (display "")))
+
+(display "Cel gry: znaleźć co najmniej jedną drugą połówkę")
