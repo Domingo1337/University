@@ -6,6 +6,22 @@
 #define PI 3.14159265358979323846
 #define PI_2 1.57079632679489661923
 
+void find_zero(double a, double b, double c){
+    std::cout << "f(x) = " << a << "x^2 + " << b << "x + " << c << std::endl;
+
+    double delta = b*b - 4.*a*c;
+    if(delta <= 0){
+        std::cerr << "delta <= 0!!!";
+        return;
+    }
+
+    delta = sqrt(delta);
+    double x1 = (-b + delta)/(2.*a);
+    double x2 = (-b - delta)/(2.*a);
+    std::cout << "f(" << x1 <<") = " << a*x1*x1 + b*x1 + c << std::endl;
+    std::cout << "f(" << x2 <<") = " << a*x2*x2 + b*x2 + c << std::endl;
+}
+
 double my_sin(double x) {
     double sign = x<0. ? -1. : 1.;
     x = std::abs(x);
@@ -37,6 +53,37 @@ double check_sin(double x, bool printResult = false) {
     if(printResult)
         std::cout <<  x << "\t" <<  sinx << "\t" <<  my_sinx << "\t" <<  difference << std::endl;
     return difference;
+}
+
+void task_1() {
+    find_zero(32, -12, -1555555555555400000000003);
+}
+
+void task_2() {
+ size_t len = 20;
+ double x[len];
+ double seventh = -1/7.;
+ double acc = 1;
+ x[0] = 1.;
+ x[1] = seventh;
+ std::cout << x[0] << "\t" << acc << std::endl;
+ acc*=seventh;
+ std::cout << x[1] << "\t" << acc << std::endl;
+ acc*=seventh;
+ for(size_t i = 2; i<len; i++, acc*=seventh){
+    x[i] = 2.*x[i-2]/7. + 13*x[i-1]/7.;
+    std::cout << x[i] << "\t" << acc << std::endl;
+ }
+}
+
+void task_3() {
+    double pi = 0;
+    double sign = 1;
+    unsigned k = 0;
+    for(k; std::abs(PI - pi) >= 0.00001; k++, sign = -sign) {
+        pi += 4. * sign / (2.*k+1.);
+    }
+    std::cout << "Przyblizone pi = " << pi << " po " << k << " iteracjach. Roznica: " << std::abs(PI - pi) << std::endl;
 }
 
 void task_5() {
@@ -72,5 +119,5 @@ void task_7() {
 
 
 int main(void) {
-    task_5();
+    task_3();
 }
