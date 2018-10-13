@@ -22,10 +22,11 @@ let rec length (l: 'a list) =
   | h::t -> 1 + (length t);; 
 
 (* to jest jakas tragedia ten cycle ale nie wiem jak to lepiej zrobic *)
-let rec cycle (l: 'a list) (n:int) =
+let cycle (l: 'a list) (n:int) =
   let rec len = length l 
       and aux (i: int) = 
-        if i < len then (take_nth l ((i-n+len) mod len))::(aux (i+1)) else [] in
+        if i < len then (take_nth l ((i-n+len) mod len))::(aux (i+1))
+        else [] in
   aux 0;;
 
 (* Zadanie 3 *)
@@ -36,14 +37,16 @@ let rec merge (cmp: 'a -> 'a -> bool) (l1: 'a list) (l2: 'a list) =
   | (h1::t1), (h2::t2) -> if cmp h1 h2 then h1::(merge cmp t1 l2) else h2::(merge cmp l1 t2);;
 
 
-let rec reverse_t (l1: 'a list) (l2: 'a list) = 
-  match l1, l2 with
-  | [], l2 -> l2;
-  | (h1::t1), l2 -> reverse_t t1 (h1::l2);; 
+let reverse (l: 'a list) =
+  let rec aux l1 l2
+    match l1, l2 with
+    | [], l2 -> l2;
+    | (h1::t1), l2 -> aux t1 (h1::l2)
+  in aux l [];; 
 
 let rec merge_t (cmp: 'a -> 'a -> bool) (l1: 'a list) (l2: 'a list) (m: 'a list) =
   match l1, l2 with
-  | [], [] -> reverse_t m []
+  | [], [] -> reverse m
   | [], (h::t)
   | (h::t), [] -> merge_t cmp [] t (h::m)
   | (h1::t1), (h2::t2) -> if cmp h1 h2 then merge_t cmp t1 l2 (h1::m) else merge_t cmp l1 t2 (h2::m);;
@@ -79,24 +82,26 @@ let rec ints (n : int) (acc: int list) =
   if n = 0 then n::acc else ints (n-1) (n::acc);;
 
 (* Zadanie 4 *)
-let rec partition (pred: 'a -> bool) (l: 'a list) = 
+let partition (pred: 'a -> bool) (l: 'a list) = 
   let rec aux lst passed failed =
     match lst with
     | [] -> (passed, failed)
-    | (h::t) -> if pred h then aux t (h::passed) failed else aux t passed (h::failed)
+    | (h::t) -> if pred h then aux t (h::passed) failed
+                          else aux t passed (h::failed)
   in aux l [] [];;
 
 let rec quick_sort (cmp: 'a -> 'a -> bool) (l: 'a list) =
   match l with
   | [] -> []
-  | (h::t) -> match partition (fun a -> cmp a h) t with (lesser, bigger) -> (quick_sort cmp lesser)@(h::(quick_sort cmp bigger));; 
+  | (h::t) -> match partition (fun a -> cmp a h) t with
+              | (lesser, bigger) -> (quick_sort cmp lesser)@(h::(quick_sort cmp bigger));; 
 
 (* Zadanie 5 *)
 let rec input (a :'a) (l: 'a list) =
   match l with
   | [] -> [[a]]
   | h::t -> let tails = input a t in
-          (a::h::t)::(map (fun lst -> h::lst) tails);;
+            (a::h::t)::(map (fun lst -> h::lst) tails);;
 
 let rec concat (l: 'a list list) =
   match l with 
@@ -108,3 +113,19 @@ let rec perms (l: 'a list) =
   | [] -> [[]]
   | h::t -> let tails = perms t in
             concat (map (fun lst -> input h lst) tails);;
+
+(* Zadanie 6 *)
+let prefixes (l: 'a list) =
+  let rec aux r acc =
+    match r with
+    | [] -> r::acc
+    | (h::t) -> match acc with 
+                | (ha::ta) -> aux t (h::(map (fun l -> h::l) acc))
+  in aux (reverse l) [[]];;
+
+let suffixes (l: 'a list) =
+  let rec aux lst acc =
+    match lst with
+    | [] -> acc
+    | (h::t) -> aux t (lst::acc);;
+  in aux l [[]];;
