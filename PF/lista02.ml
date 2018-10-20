@@ -16,6 +16,7 @@ let reverse (l: 'a list) =
     | (h1::t1), l2 -> iter t1 (h1::l2)
   in iter l [];;
 
+
 (* Zadanie 1 *)
 let rec sublists (l: 'a list) =
   match l with
@@ -23,19 +24,31 @@ let rec sublists (l: 'a list) =
   | h::t -> let tails = sublists t
             in (map (fun lst -> h::lst) tails)@tails;;
 
+let rec mappend (f: 'a -> 'b) (l: 'a list) (acc: 'b list) =
+  match l with
+  | [] -> acc
+  | h::t -> mappend f t ((f h)::acc);;
+
+let rec sublists_tail (l: 'a list) =
+ match l with
+  | [] -> [[]]
+  | h::t -> let tails = sublists t
+            in mappend (fun x -> h::x) tails tails;;
+
 (* Zadanie 2  *)
 let rec take_nth (l: 'a list) (n: int) =
   match l with
   | [] -> failwith "called with n bigger than l's length"
   | h::t ->  if n = 0 then h else take_nth t (n-1);; 
 
-(* jesli b = a n to b[i] = a[i+n mod len(a)] *)
+(* jesli b = (cycle a n) to b[i] = a[i+n mod len(a)] *)
 let cycle (l: 'a list) (n:int) =
-  let reclen = length l
+  let len = length l
   in let rec iter (i: int) =
       if i < len then (take_nth l ((i-n+len) mod len))::(iter (i+1))
       else []
      in iter 0;;
+
 
 (* Zadanie 3 *)
 let rec merge (cmp: 'a -> 'a -> bool) (l1: 'a list) (l2: 'a list) =
@@ -54,12 +67,12 @@ let rec merge_t (cmp: 'a -> 'a -> bool) (l1: 'a list) (l2: 'a list) =
 
 (* splits list in two lists with indices: 0 to n (reversed) and n+1 to the last *)
 let split (l: 'a list) (n: int) =
-  let rec iter l1 l2 n =
-    match l2, n with
+  let rec iter lst n acc =
+    match lst, n with
     | [], _
-    | _, -1 -> l1, l2
-    | (h::t), _ -> iter (h::l1) t (n-1)
-  in iter [] l n;;
+    | _, -1 -> acc, lst
+    | (h::t), _ -> iter t (n-1) (h::acc)
+  in iter l n [];;
 
 let rec merge_sort (cmp: 'a -> 'a -> bool) (l: 'a list) (n: int) =
   if n = 0 then l
@@ -69,6 +82,7 @@ let rec merge_sort (cmp: 'a -> 'a -> bool) (l: 'a list) (n: int) =
 
 let rec merge_srt (l: int list) =
   merge_sort (<=) l ((length l) -1);;
+
 
 let rec merge_rev (cmp: 'a -> 'a -> bool) (l1: 'a list) (l2: 'a list) =
   let rec iter l1 l2 m =
@@ -89,6 +103,7 @@ let rec merge_rsort (cmp: 'a -> 'a -> bool) (l: 'a list) (n: int) =
 let merge_rsrt (l: int list) =
   merge_rsort (<=) l ((length l)-1);;
 
+
 (* Zadanie 4 *)
 let partition (pred: 'a -> bool) (l: 'a list) = 
   let rec iter lst passed failed =
@@ -101,8 +116,9 @@ let partition (pred: 'a -> bool) (l: 'a list) =
 let rec quick_sort (cmp: 'a -> 'a -> bool) (l: 'a list) =
   match l with
   | [] -> []
-  | (h::t) -> match partition (fun a -> cmp a h) t with
-              | (lesser, bigger) -> (quick_sort cmp lesser)@(h::(quick_sort cmp bigger));; 
+  | (h::t) -> match partition (cmp h) t with
+              | (bigger, lesser) -> (quick_sort cmp lesser)@(h::(quick_sort cmp bigger));;
+
 
 (* Zadanie 5 *)
 let rec input (a :'a) (l: 'a list) =
@@ -112,9 +128,9 @@ let rec input (a :'a) (l: 'a list) =
             in (a::l)::(map (fun lst -> h::lst) tails);;
 
 let rec concat (l: 'a list list) =
-  match l with 
+  match l with
   | [] -> []
-  | h::t -> h@(concat t);; 
+  | h::t -> h@(concat t);;
 
 let rec perms (l: 'a list) =
   match l with
@@ -122,12 +138,13 @@ let rec perms (l: 'a list) =
   | h::t -> let tails = perms t
             in concat (map (fun lst -> input h lst) tails);;
 
+
 (* Zadanie 6 *)
 let prefixes (l: 'a list) =
   let rec iter r acc =
     match r with
-    | [] -> r::acc
-    | (h::t) ->  iter t ([h]::(map (fun l -> h::l) acc))
+    | [] -> []::acc
+    | (h::t) ->  iter t (map (fun x -> h::x) ([]::acc))
   in iter (reverse l) [];;
 
 let suffixes (l: 'a list) =
