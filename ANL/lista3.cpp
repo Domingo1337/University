@@ -8,59 +8,6 @@
 #define PI_2 1.57079632679489661923
 #define E 2.71828182845904523536
 
-void task_1a()
-{
-    double y = 1. / std::cbrt(3.);
-    for (double x = y - 0.001; x < y + 0.001; x += 0.0001)
-    {
-        double x2 = x * x;
-        double x5 = x2 * x2 * x;
-
-        std::cout << "x = " << x << "\t";
-        std::cout << std::pow(E, x2) - std::pow(E, 3. * x5) << "  <<>>  ";
-        std::cout << 1. - x2 + 3. * x5 + 0.5 * x2 * x2 - 3. * x2 * x5 + x5 * x5 * 9. / 2. << "\n";
-    }
-}
-
-double arcctg(double x)
-{
-    return PI_2 - atan(x);
-}
-
-void task_1b()
-{
-    // loop for x about 0 and about pi/2
-    for (double x = -0.00001; x < 0.00001; x+=0.000001)
-    {
-        double x2 = x * x;
-        double x3 = x * x2;
-        double x5 = x * x2 * x2;
-        double x7 = x5 * x2;
-        double x9 = x7 * x2;
-        double x11 = x9 * x2;
-        double x_3 = std::pow(x, -3.);
-
-        std::cout << "x = " << x << "\t";
-        std::cout << std::pow(x, -3.) * (atan(x) - x) << "  <<>>  ";
-        std::cout << x_3 * (-x3/3 + x5/5. - x7/7. + x9/9. - x11/11.) << "\n";
-    }
-    std::cout << std::endl;
-    for (double x = PI_2-0.00001; x < PI_2 + 0.00001; x+=0.000001)
-    {
-        double x2 = x * x;
-        double x3 = x * x2;
-        double x5 = x * x2 * x2;
-        double x7 = x5 * x2;
-        double x9 = x7 * x2;
-        double x11 = x9 * x2;
-        double x_3 = std::pow(x, -3.);
-
-        std::cout << "x = " << x << "\t";
-        std::cout << std::pow(x, -3.) * (atan(x) - x) << "  <<>>  ";
-        std::cout << x_3 * (-x3/3 + x5/5. - x7/7. + x9/9. - x11/11.) << "\n";
-    }
-}
-
 void find_zero(double a, double b, double c)
 {
     std::cout << a << "x2 + " << b << "x + " << c << " = 0\n";
@@ -76,13 +23,11 @@ void find_zero(double a, double b, double c)
 
     if (!std::isfinite(x3))
     {
-        double ba = -b / a;
-        better = std::abs(x1 - ba) > std::abs(x2 - ba) ? 1 : 2;
-        x3 = ba - (better == 1 ? x1 : x2);
+        x3 = -b/a - (better == 1 ? x1 : x2);
     }
 
     std::cout << "x1 = " << x1 << "\tx2 = " << x2 << '\n';
-    std::cout << "x3 = " << x3 << " (using x" << better << ")\n";
+    std::cout << "x3 = " << x3 << " (uzywajac x" << better << ")\n";
     std::cout << "f(x1) = " << fx1 << "\nf(x2) = " << fx2 << '\n';
     std::cout << "f(x3) = " << a * x3 * x3 + b * x3 + c << '\n';
 }
@@ -110,7 +55,7 @@ void find_zero_CT(double q, double r)
 {
     std::cout << "f(x) = x^3 + " << 3. * q << "x + " << 2. * r << '\n';
     double c = sqrt(q * q * q + r * r);
-    double x_CT = std::cbrt(r + c) + std::cbrt(r + c);
+    double x_CT = std::cbrt(r + c) + std::cbrt(r - c);
 
     double d = std::pow(r + c, 2. / 3.);
     double x = 2. * r * d / (d * d + q * d + q * q);
@@ -129,9 +74,9 @@ void task_3()
 
 int main(void)
 {
-
     std::cout << std::fixed;
     std::cout << std::setprecision(10);
 
-    task_1b();
+    // task_2();
+    task_3();
 }
