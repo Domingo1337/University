@@ -13,14 +13,14 @@ void task_3()
     double a = 0.;
     double b = 1.;
 
-    for (unsigned i = 1; i <= 15; i++)
+    for (unsigned i = 0; i <= 15; i++)
     {
         double x = (a + b) / 2.;
         double fx = x / pow(E, x) - 0.06064;
         double fa = a / pow(E, a) - 0.06064;
 
         std::cout << "[" << i << "] f(" << x << ") = " << fx;
-        std::cout << "  \t(e: " << x - 0.0646926359947960 << " | " << pow(2., -(double)i - 1.) << ")\n";
+        std::cout << "  \t(e: " << std::abs(x - 0.0646926359947960) << "\t| " << pow(2., -(double)i - 1.) << ")\n";
 
         if (fx * fa < 0.)
         {
@@ -33,7 +33,7 @@ void task_3()
     }
 }
 
-double bisect(std::function<double(double)> f, double a, double b, double e = pow(10., -10.))
+double bisect(std::function<double(double)> f, double a, double b, double e = pow(0.1, 10.))
 {
     double x = (a + b) / 2.;
     double fx = f(x);
@@ -55,10 +55,12 @@ double bisect(std::function<double(double)> f, double a, double b, double e = po
     std::cout << "f(" << x << ") = " << fx << '\n';
     return x;
 }
-
 void task_4()
 {
-    auto f = [](double x) { return x * x - log(x + 2.); };
+    auto f = [](double x)
+    {
+        return x * x - log(x + 2.);
+    };
     std::cout << "Pierwiastki f(x) = x^2 - ln(x+2):\n";
 
     //f zeruje sie na tych przedzialach:
@@ -66,57 +68,94 @@ void task_4()
     bisect(f, 0.5, 1.5);
 }
 
-double inverse(double R, double e = 0.0000001)
+double newtons(double x0, std::function<double(double)> next, bool print = true)
 {
-    double x = R <= 1. ? 1. : 0.00001;
+    double x = x0;
     double prev;
-    std::cout << x;
+    int i = 0;
+    int max_iters = 5;
+
     do
     {
         prev = x;
-        x = x * (2 - R * x);
-        std::cout << " -> " << x;
-    } while (std::abs(prev - x) >= e);
-    std::cout << "\n"
-              << 1. / R << std::endl;
-    return x;
-}
+        x = next(x);
+    }
+    while(prev != x && ++i < max_iters);
 
-double newtons(std::function<double(double)> f, std::function<double(double)> deriv, double a, double b, double e = 0.0000000001)
-{
-    double x = a;
-    double fx = f(x);
-    while (std::abs(fx) > e)
+    if(print)
     {
-        x = x - fx / deriv(x);
-        fx = f(x);
+        std::cout << "x[" << i <<"] = " << x;
     }
     return x;
 }
 
-double inv_sqrt(double R, double e = 0.0000001)
+double inverse(double R, double x0)
 {
-    double x = 0.00001;
-    double prev;
-    std::cout << x;
-    do
+    auto f = [=](double x)
     {
-        prev = x;
-        x = 0.5 * x * (3 - R);
-        std::cout << " -> " << x;
-    } while (std::abs(prev - x) >= e);
-    std::cout << "\n"
-              << 1. / R << std::endl;
-    return x;
+        return x * (2. - R * x);
+    };
+    std::cout <<"Inverse of " << R << " starting in " << x0 <<":\n";
+    newtons(x0, f);
+    std::cout <<"\t(" << 1./R << ")\n";
 }
-
 void task_5()
 {
+    double xs[]= {0.1, 0.3333333, 0.5, 1.0, 2.0, PI, 1000.0};
+    for(auto x : xs)
+    {
+        inverse(x, 1.);
+        inverse(x, 0.0001);
+        std::cout << "\n";
+    }
+}
+
+void inverse_sqrt(double a, double x0)
+{
+    auto f = [=](double x)
+    {
+        return x*(1.5 - 0.5*a*x*x);
+    };
+    std::cout <<"Inverse sqrt of " << a << " starting in " << x0 <<":\n";
+    newtons(x0, f);
+    std::cout <<"\t(" << 1./sqrt(a) << ")\n";
+}
+void task_6()
+{
+    double xs[]= {0.0001, 0.1, 0.3333333, 0.5, 1.0, 2.0, PI, 1000.0};
+    for(auto x : xs)
+    {
+        inverse_sqrt(x, 1);
+        inverse_sqrt(x, 0.00001);
+        std::cout << "\n";
+    }
+}
+
+// a = m * 2^c
+double a_sqrt(double m, double c)
+{
+    auto f = [=](double x)
+    {
+        return 0.5*(x+m/x);
+    };
+    m = newtons(0.000001, f, false);
+    c = 0.5*c;
+    return m * pow(2.,c);
+}
+void task_7()
+{
+    double ms[]= {0.5, 0.6, 0.7, 0.8, 0.9, 0.99999};
+    double cs[]= {1., -123., 120., -2., 10., 3.};
+    for(unsigned i = 0; i<sizeof(ms)/sizeof(double); i++)
+    {
+        double x = ms[i] * pow(2., cs[i]);
+        std::cout << "x = " << x << "\n";
+        std::cout << "a_sqrt = " << a_sqrt(ms[i],cs[i]) << "\tsqrt = " << sqrt(x) << "\n\n";
+    }
 }
 
 int main()
 {
     std::cout << std::setprecision(10);
-    std::cout << std::fixed;
-    inv_sqrt(0.1);
+    task_7();
 }
