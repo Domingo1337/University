@@ -43,27 +43,27 @@ let input_t (y: 'a) (xs: 'a list) =
     match xs with
     | [] -> List.map List.rev (fst acc) (* przy liczeniu permutacji rev chyba nie będzie potrzebny *)
     | h::t -> let xs = h::(snd acc)
-              in aux t ((y::xs)::(List.map (fun ys -> h::ys) (fst acc)), xs)
+      in aux t ((y::xs)::(List.map (fun ys -> h::ys) (fst acc)), xs)
   in aux xs ([[y]], []);;
 
 (* fold na podstawie ogonowej *) (* Wyniki sa odwrocone ale to nas nie boli przy liczeniu permutacji*) 
 let ins_everywhere_a (y: 'a) (xs: 'a list) =
   fst (List.fold_right (fun h acc-> let xs = h::(snd acc)
-                                    in ((y::xs)::(List.map (fun ys -> h::ys) (fst acc)), xs))
-                       xs 
-                       ([[y]], []))
+                         in ((y::xs)::(List.map (fun ys -> h::ys) (fst acc)), xs))
+         xs 
+         ([[y]], []))
 
 let ins_everywhere_b (y: 'a) (xs: 'a list) =
   fst (List.fold_left (fun acc h-> let xs = h::(snd acc) 
-                                   in ((y::xs)::(List.map (fun ys -> h::ys) (fst acc)), xs))
-                      ([[y]], [])
-                      xs)
+                        in ((y::xs)::(List.map (fun ys -> h::ys) (fst acc)), xs))
+         ([[y]], [])
+         xs)
 
 (* Zadanie 5 *)
 let rec polynomial_a (p: float list) (x: float) =
   match p with
   | [] -> 0.
-  | h::t -> h+.x*.(polynomial_5a t x);;
+  | h::t -> h+.x*.(polynomial_a t x);;
 
 let polynomial_b (p: float list) (x: float) =
   List.fold_right (fun h acc -> h+.x*.acc) p 0.;;
@@ -84,3 +84,18 @@ let perms_a (xs: 'a list) =
 
 let perms_b (xs: 'a list) =
   List.fold_right (fun x acc -> List.concat (List.map (ins_everywhere_a x) acc)) xs [[]];;
+
+(* Zadanie 7 *)
+let ins_ord_a (comp: 'a -> 'a -> bool) (y: 'a) (xs: 'a list) =
+  let (b, xs) = List.fold_right (fun x (b, xs) -> if b && comp x y then (false, x::(y::xs)) else (b, x::xs)) xs (true, [])
+  in if b then y::xs else xs;;
+
+let ins_ord_b (comp: 'a -> 'a -> bool) (y: 'a) (xs: 'a list) =
+  let (b, xs) = List.fold_left (fun (b, xs) x  -> if b && comp y x then (false, x::(y::xs)) else (b, x::xs)) (true, []) xs
+  in if b then List.rev (y::xs) else List.rev xs;;
+
+let isort_a (comp: 'a -> 'a -> bool) (xs: 'a list) =
+  List.fold_right (ins_ord_a comp) xs [];;
+
+let isort_b (comp: 'a -> 'a -> bool) (xs: 'a list) =
+  List.fold_right (ins_ord_a comp) xs [];;
