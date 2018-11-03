@@ -1,0 +1,228 @@
+USER       PID  PGID  PPID   TID PRI STAT WCHAN  CMD
+root         1     1     0     1  19 Ss   -      /sbin/init splash
+root         2     0     0     2  19 S    -      [kthreadd]
+root         4     0     2     4  39 S<   -      [kworker/0:0H]
+root         6     0     2     6  19 S    -      [ksoftirqd/0]
+root         7     0     2     7  19 S    -      [rcu_sched]
+root         8     0     2     8  19 S    -      [rcu_bh]
+root         9     0     2     9 139 S    -      [migration/0]
+root        10     0     2    10  39 S<   -      [lru-add-drain]
+root        11     0     2    11 139 S    -      [watchdog/0]
+root        12     0     2    12  19 S    -      [cpuhp/0]
+root        13     0     2    13  19 S    -      [cpuhp/1]
+root        14     0     2    14 139 S    -      [watchdog/1]
+root        15     0     2    15 139 S    -      [migration/1]
+root        16     0     2    16  19 S    -      [ksoftirqd/1]
+root        18     0     2    18  39 S<   -      [kworker/1:0H]
+root        19     0     2    19  19 S    -      [cpuhp/2]
+root        20     0     2    20 139 S    -      [watchdog/2]
+root        21     0     2    21 139 S    -      [migration/2]
+root        22     0     2    22  19 S    -      [ksoftirqd/2]
+root        24     0     2    24  39 S<   -      [kworker/2:0H]
+root        25     0     2    25  19 S    -      [cpuhp/3]
+root        26     0     2    26 139 S    -      [watchdog/3]
+root        27     0     2    27 139 S    -      [migration/3]
+root        28     0     2    28  19 S    -      [ksoftirqd/3]
+root        30     0     2    30  39 S<   -      [kworker/3:0H]
+root        31     0     2    31  19 S    -      [kdevtmpfs]
+root        32     0     2    32  39 S<   -      [netns]
+root        33     0     2    33  19 S    -      [khungtaskd]
+root        34     0     2    34  19 S    -      [oom_reaper]
+root        35     0     2    35  39 S<   -      [writeback]
+root        36     0     2    36  19 S    -      [kcompactd0]
+root        37     0     2    37  14 SN   -      [ksmd]
+root        38     0     2    38   0 SN   -      [khugepaged]
+root        39     0     2    39  39 S<   -      [crypto]
+root        40     0     2    40  39 S<   -      [kintegrityd]
+root        41     0     2    41  39 S<   -      [bioset]
+root        42     0     2    42  39 S<   -      [kblockd]
+root        47     0     2    47  39 S<   -      [ata_sff]
+root        48     0     2    48  39 S<   -      [md]
+root        49     0     2    49  39 S<   -      [devfreq_wq]
+root        50     0     2    50  39 S<   -      [watchdogd]
+root        53     0     2    53  19 S    -      [kauditd]
+root        54     0     2    54  19 S    -      [kswapd0]
+root        55     0     2    55  39 S<   -      [vmstat]
+root        56     0     2    56  39 S<   -      [bioset]
+root        57     0     2    57  19 S    -      [ecryptfs-kthrea]
+root        97     0     2    97  39 S<   -      [kthrotld]
+root        98     0     2    98  39 S<   -      [acpi_thermal_pm]
+root        99     0     2    99  39 S<   -      [bioset]
+root       100     0     2   100  39 S<   -      [bioset]
+root       101     0     2   101  39 S<   -      [bioset]
+root       102     0     2   102  39 S<   -      [bioset]
+root       103     0     2   103  39 S<   -      [bioset]
+root       104     0     2   104  39 S<   -      [bioset]
+root       105     0     2   105  39 S<   -      [bioset]
+root       106     0     2   106  39 S<   -      [bioset]
+root       111     0     2   111  39 S<   -      [ipv6_addrconf]
+root       133     0     2   133  39 S<   -      [charger_manager]
+root       173     0     2   173  19 S    -      [scsi_eh_0]
+root       174     0     2   174  39 S<   -      [scsi_tmf_0]
+root       175     0     2   175  19 S    -      [scsi_eh_1]
+root       176     0     2   176  39 S<   -      [scsi_tmf_1]
+root       177     0     2   177  19 S    -      [scsi_eh_2]
+root       178     0     2   178  39 S<   -      [scsi_tmf_2]
+root       179     0     2   179  19 S    -      [scsi_eh_3]
+root       180     0     2   180  39 S<   -      [scsi_tmf_3]
+root       183     0     2   183  41 S    -      [i915/signal:0]
+root       184     0     2   184  41 S    -      [i915/signal:1]
+root       185     0     2   185  41 S    -      [i915/signal:2]
+root       186     0     2   186  41 S    -      [i915/signal:4]
+root       189     0     2   189  39 S<   -      [bioset]
+root       192     0     2   192  39 S<   -      [kworker/3:1H]
+root       193     0     2   193  39 S<   -      [kworker/2:1H]
+root       194     0     2   194  39 S<   -      [kworker/1:1H]
+root       195     0     2   195  39 S<   -      [kworker/0:1H]
+root       196     0     2   196  39 S<   -      [ttm_swap]
+root       215     0     2   215  19 S    -      [jbd2/sda2-8]
+root       216     0     2   216  39 S<   -      [ext4-rsv-conver]
+root       250   250     1   250  19 Ss   -      /lib/systemd/systemd-journald
+root       273   273     1   273  19 Ss   -      /lib/systemd/systemd-udevd
+root       322     0     2   322  39 S<   -      [asus_wireless_w]
+root       356     0     2   356  39 S<   -      [cfg80211]
+root       374     0     2   374  90 S    -      [irq/51-iwlwifi]
+root       510     0     2   510  39 S<   -      [led_workqueue]
+systemd+   628   628     1   628  19 Ssl  -      /lib/systemd/systemd-timesyncd
+avahi      744   744     1   744  19 Ss   -      avahi-daemon: running [zenbook.local]
+message+   749   749     1   749  19 Ss   -      /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation
+avahi      761   744   744   761  19 S    -      avahi-daemon: chroot helper
+syslog     781   781     1   781  19 Ssl  -      /usr/sbin/rsyslogd -n
+whoopsie   782   782     1   782  19 Ssl  -      /usr/bin/whoopsie -f
+root       783   783     1   783  19 Ssl  -      /usr/lib/accountsservice/accounts-daemon
+root       784   784     1   784  19 Ssl  -      /usr/sbin/ModemManager
+root       785   785     1   785  19 Ss   -      /lib/systemd/systemd-logind
+root       786   786     1   786  19 Ss   -      /usr/sbin/cron -f
+root       788   788     1   788  19 Ss   -      /usr/sbin/acpid
+root       790   790     1   790  19 Ssl  -      /usr/sbin/thermald --no-daemon --dbus-enable
+root       791   791     1   791  19 Ssl  -      /usr/sbin/repowerd
+root       799   799     1   799  19 Ss   -      /usr/lib/bluetooth/bluetoothd
+root       800   800     1   800  19 Ssl  -      /usr/lib/snapd/snapd
+root       807   807     1   807  19 Ssl  -      /usr/sbin/iio-sensor-proxy
+root       891   891     1   891  19 Ss   -      /usr/sbin/irqbalance --pid=/var/run/irqbalance.pid
+root       929   929     1   929  19 Ssl  -      /usr/lib/upower/upowerd
+root       930   930     1   930  19 Ssl  -      /usr/lib/policykit-1/polkitd --no-debug
+systemd+   982   982     1   982  19 Ss   -      /lib/systemd/systemd-resolved
+root       991   991     1   991  19 SLsl -      /usr/sbin/lightdm
+root      1006  1006     1  1006  19 Ss+  -      /sbin/agetty --noclear tty1 linux
+root      1013  1013     1  1013  19 Ss   -      /sbin/wpa_supplicant -u -s -O /run/wpa_supplicant
+rtkit     1156  1156     1  1156  18 SNsl -      /usr/lib/rtkit/rtkit-daemon
+colord    1176  1176     1  1176  19 Ssl  -      /usr/lib/colord/colord
+root      1194     0     2  1194  29 S<   -      [krfcommd]
+root      1201   749     1  1201  19 Sl   -      /usr/lib/x86_64-linux-gnu/unity-greeter-session-broadcast/unity-greeter-session-broadcast-service
+mzr       1232  1232     1  1232  19 Ss   ep_pol /lib/systemd/systemd --user
+mzr       1233  1232  1232  1233  19 S    -      (sd-pam)
+mzr       1281  1281  1232  1281  19 Ss   ep_pol /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation
+mzr       1401  1401     1  1401  19 Ssl  poll_s /usr/bin/ibus-daemon --daemonize --xim --address unix:tmpdir=/tmp/ibus
+mzr       1407  1407  1232  1407  19 Ssl  poll_s /usr/lib/gvfs/gvfsd
+mzr       1412  1407  1232  1412  19 Sl   futex_ /usr/lib/gvfs/gvfsd-fuse /run/user/1000/gvfs -f -o big_writes
+mzr       1419  1401  1401  1419  19 Sl   poll_s /usr/lib/ibus/ibus-dconf
+mzr       1460  1401  1401  1460  19 Sl   poll_s /usr/lib/ibus/ibus-engine-simple
+mzr       1612  1281  1232  1612  19 Sl   poll_s /usr/lib/dconf/dconf-service
+root      1634  1634     1  1634  19 Ssl  -      /usr/lib/packagekit/packagekitd
+mzr       1656  1656  1232  1656  19 Ssl  poll_s /usr/lib/evolution/evolution-source-registry
+mzr       1686  1281  1232  1686  19 Sl   poll_s /usr/bin/python3 /usr/bin/libertined --cache-output
+mzr       1811  1811  1232  1811  19 Ssl  poll_s /usr/lib/gvfs/gvfs-udisks2-volume-monitor
+root      1818  1818     1  1818  19 Ssl  -      /usr/lib/udisks2/udisksd --no-debug
+mzr       1838  1838  1232  1838  19 Ssl  poll_s /usr/lib/gvfs/gvfs-mtp-volume-monitor
+mzr       1842  1842  1232  1842  19 Ssl  poll_s /usr/lib/gvfs/gvfs-afc-volume-monitor
+mzr       1852  1852  1232  1852  19 Ssl  poll_s /usr/lib/gvfs/gvfs-goa-volume-monitor
+mzr       1857  1857  1232  1857  19 Ssl  poll_s /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+mzr       1896  1407  1232  1896  19 Sl   poll_s /usr/lib/gvfs/gvfsd-trash --spawner :1.7 /org/gtk/gvfs/exec_spaw/0
+mzr       1963  1963  1232  1963  19 Ssl  poll_s /usr/lib/gvfs/gvfsd-metadata
+root      1974  1974     1  1974  19 Ssl  -      /usr/lib/fwupd/fwupd
+uuidd     2000  2000     1  2000  19 Ss   -      /usr/sbin/uuidd --socket-activation
+mzr       2075  1281  1232  2075  19 S    poll_s /usr/lib/x86_64-linux-gnu/gconf/gconfd-2
+mzr       2425  2425  1232  2425  19 Ssl  poll_s /usr/bin/zeitgeist-daemon
+mzr       2433  2433  1232  2433  19 Ssl  poll_s /usr/lib/zeitgeist/zeitgeist/zeitgeist-fts
+mzr       3862  1407  1232  3862  19 Sl   poll_s /usr/lib/gvfs/gvfsd-http --spawner :1.7 /org/gtk/gvfs/exec_spaw/1
+mzr       7396  1407  1232  7396  19 Sl   poll_s /usr/lib/gvfs/gvfsd-network --spawner :1.7 /org/gtk/gvfs/exec_spaw/2
+mzr       7483  1407  1232  7483  19 Sl   poll_s /usr/lib/gvfs/gvfsd-dnssd --spawner :1.7 /org/gtk/gvfs/exec_spaw/5
+root      8761  8761     1  8761  19 Ssl  -      /usr/sbin/NetworkManager --no-daemon
+mzr       9970  1281  1232  9970  19 Sl   poll_s /usr/lib/x86_64-linux-gnu/unity-scope-home/unity-scope-home
+mzr       9983  1281  1232  9983  19 Sl   poll_s /usr/bin/unity-scope-loader applications/applications.scope applications/scopes.scope commands.scope
+mzr       9986  1281  1232  9986  19 Sl   poll_s /usr/lib/x86_64-linux-gnu/unity-lens-music/unity-music-daemon
+mzr       9987  1281  1232  9987  19 Sl   poll_s /usr/lib/x86_64-linux-gnu/unity-lens-files/unity-files-daemon
+root     10197 10197   991 10197  19 Ssl+ -      /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
+root     10320   991   991 10320  19 Sl   -      lightdm --session-child 12 19
+mzr      10345 10344     1 10345  19 SLl  -      /usr/bin/gnome-keyring-daemon --daemonize --login
+mzr      10352 10352 10320 10352  19 Ss   wait   /bin/sh /usr/lib/gnome-session/run-systemd-session ubuntu-session.target
+mzr      10451 10451 10352 10451  19 Ss   -      /usr/bin/ssh-agent /usr/bin/im-launch /usr/lib/gnome-session/run-systemd-session ubuntu-session.target
+mzr      10568 10352 10352 10568  19 S    ep_pol systemctl --user start --wait ubuntu-session.target
+mzr      10583 10583  1232 10583  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/indicator-application/indicator-application-service
+mzr      10584 10584  1232 10584  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/indicator-sound/indicator-sound-service
+mzr      10586 10586  1232 10586  19 Ssl  poll_s /usr/lib/unity-settings-daemon/unity-settings-daemon
+mzr      10588 10588  1232 10588  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/indicator-datetime/indicator-datetime-service
+mzr      10590 10590  1232 10590  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/indicator-printers/indicator-printers-service
+mzr      10591 10591  1232 10591  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/indicator-messages/indicator-messages-service
+mzr      10592 10592  1232 10592  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/hud/window-stack-bridge
+mzr      10593 10593  1232 10593  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/bamf/bamfdaemon
+mzr      10594 10594  1232 10594  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/indicator-keyboard/indicator-keyboard-service --use-gtk
+mzr      10599 10599  1232 10599  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/indicator-bluetooth/indicator-bluetooth-service
+mzr      10602 10602  1232 10602  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/indicator-power/indicator-power-service
+mzr      10603 10603  1232 10603  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/indicator-session/indicator-session-service
+mzr      10611 10611  1232 10611  19 Ssl  poll_s /usr/lib/gnome-session/gnome-session-binary --session=ubuntu
+mzr      10662 10662  1232 10662  19 Ssl  poll_s /usr/lib/at-spi2-core/at-spi-bus-launcher
+mzr      10684 10662 10662 10684  19 S    ep_pol /usr/bin/dbus-daemon --config-file=/usr/share/defaults/at-spi2/accessibility.conf --nofork --print-address 3
+mzr      10687 10686  1232 10687  19 Sl   poll_s /usr/bin/pulseaudio --start --log-target=syslog
+mzr      10700 10662  1232 10700  19 Sl   poll_s /usr/lib/at-spi2-core/at-spi2-registryd --use-gnome-session
+mzr      10728 10728  1232 10728  19 Ssl  poll_s /usr/bin/compiz
+mzr      10745 10745  1232 10745  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/unity/unity-panel-service
+mzr      10749 10749  1232 10749  19 Ssl  poll_s /usr/lib/evolution/evolution-calendar-factory
+mzr      10776 10586 10586 10776  19 S    poll_s syndaemon -i 1.0 -t -K -R
+mzr      10802 10749 10749 10802  19 Sl   poll_s /usr/lib/evolution/evolution-calendar-factory-subprocess --factory contacts --bus-name org.gnome.evolution.dataserver.Subprocess.Backend.Calendarx10749x2 --own-path /org/gnome/evolution/dataserver/Subprocess/Backend/Calendar/10749/2
+mzr      10817 10611 10611 10817  19 Sl   poll_s nautilus -n
+mzr      10820 10611 10611 10820  19 SLl  poll_s /usr/bin/gnome-software --gapplication-service
+mzr      10824 10824  1232 10824  19 Ssl  poll_s /usr/lib/evolution/evolution-addressbook-factory
+mzr      10826 10749 10749 10826  19 Sl   poll_s /usr/lib/evolution/evolution-calendar-factory-subprocess --factory local --bus-name org.gnome.evolution.dataserver.Subprocess.Backend.Calendarx10749x3 --own-path /org/gnome/evolution/dataserver/Subprocess/Backend/Calendar/10749/3
+mzr      10829 10611 10611 10829  19 Sl   poll_s /usr/lib/unity-settings-daemon/unity-fallback-mount-helper
+mzr      10833 10611 10611 10833  19 Sl   poll_s /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+mzr      10842 10611 10611 10842  19 Sl   poll_s nm-applet
+mzr      10853 10824 10824 10853  19 Sl   poll_s /usr/lib/evolution/evolution-addressbook-factory-subprocess --factory local --bus-name org.gnome.evolution.dataserver.Subprocess.Backend.AddressBookx10824x2 --own-path /org/gnome/evolution/dataserver/Subprocess/Backend/AddressBook/10824/2
+mzr      10888 10888  1232 10888  19 Ssl  poll_s /home/mzr/.dropbox-dist/dropbox-lnx.x86_64-37.4.29/dropbox
+mzr      10966 10966  1232 10966  19 Ssl  poll_s /usr/lib/x86_64-linux-gnu/hud/hud-service
+mzr      10975  1281  1232 10975  19 Sl   poll_s /usr/lib/x86_64-linux-gnu/notify-osd
+mzr      10999 10611 10611 10999  19 Sl   poll_s zeitgeist-datahub
+mzr      11259 10611 10611 11259  19 Sl   poll_s update-notifier
+mzr      11456 10611 10611 11456  19 Sl   poll_s /usr/lib/x86_64-linux-gnu/deja-dup/deja-dup-monitor
+root     21730 21730     1 21730  19 Ss   -      /usr/sbin/cupsd -l
+root     21732 21732     1 21732  19 Ssl  -      /usr/sbin/cups-browsed
+root     24723     0     2 24723  39 S<   -      [kworker/u9:2]
+root     26843     0     2 26843  90 S    -      [irq/50-mei_me]
+root     26899     0     2 26899  39 S<   -      [hci0]
+root     26900     0     2 26900  39 S<   -      [hci0]
+root     26903     0     2 26903  39 S<   -      [kworker/u9:3]
+root     27278     0     2 27278  19 S    -      [kworker/u8:0]
+root     27560 27560  8761 27560  19 S    -      /sbin/dhclient -d -q -sf /usr/lib/NetworkManager/nm-dhcp-helper -pf /var/run/dhclient-wlp2s0.pid -lf /var/lib/NetworkManager/dhclient-2f8f4545-1b9d-4acc-93fb-a71445b1233f-wlp2s0.lease -cf /var/lib/NetworkManager/dhclient-wlp2s0.conf wlp2s0
+root     27757     0     2 27757  19 S    -      [kworker/u8:1]
+root     28511     0     2 28511  19 S    -      [kworker/3:2]
+root     28725     0     2 28725  19 S    -      [kworker/0:1]
+root     28868     0     2 28868  19 S    -      [kworker/u8:2]
+mzr      28997 28997  1232 28997  19 Ssl  poll_s /opt/sublime_text/sublime_text
+mzr      29010 28997 28997 29010  19 Sl   futex_ /opt/sublime_text/plugin_host 28997
+mzr      29055 10586  1232 29055  19 SLl  poll_s /opt/google/chrome/chrome --force-device-scale-factor=1.2
+mzr      29060 10586 29055 29060  19 S    pipe_w cat
+mzr      29061 10586 29055 29061  19 S    pipe_w cat
+mzr      29064 10586 29055 29064  19 S    wait   /opt/google/chrome/chrome --type=zygote --force-device-scale-factor=1.2
+mzr      29065 10586 29064 29065  19 S    skb_wa /opt/google/chrome/nacl_helper
+mzr      29068 10586 29064 29068  19 S    poll_s /opt/google/chrome/chrome --type=zygote --force-device-scale-factor=1.2
+mzr      29132 10586 29055 29132  19 Sl   poll_s /opt/google/chrome/chrome --type=gpu-process --field-trial-handle=5997253294670834536,3145191747746376343,131072 --supports-dual-gpus=false --gpu-driver-bug-workarounds=1,9,10,27,34,70,84 --disable-gl-extensions=GL_ARB_timer_query GL_EXT_timer_query GL_KHR_blend_equation_advanced GL_KHR_blend_equation_advanced_coherent --disable-accelerated-video-decode --gpu-vendor-id=0x10de --gpu-device-id=0x1341 --gpu-driver-vendor=Mesa --gpu-driver-version=17.0.3 --gpu-driver-date --gpu-secondary-vendor-ids=0x8086 --gpu-secondary-device-ids=0x1616 --gpu-active-vendor-id=0x8086 --gpu-active-device-id=0x1616 --service-request-channel-token=30D0DF93A918B28DEC246770F13E6B35
+mzr      29135 10586 29132 29135  19 S    skb_wa /opt/google/chrome/chrome --type=gpu-broker
+mzr      29224 10586 29068 29224  19 Sl   futex_ /opt/google/chrome/chrome --type=renderer --force-device-scale-factor=1.2 --field-trial-handle=5997253294670834536,3145191747746376343,131072 --service-pipe-token=A872D4F8B71EC4698C27F51A470D6BF3 --lang=en-US --extension-process --enable-offline-auto-reload --enable-offline-auto-reload-visible-only --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false,disallowFetchForDocWrittenScriptsInMainFrameOnSlowConnections=true --enable-pinch --num-raster-threads=2 --enable-main-frame-before-activation --content-image-texture-target=0,0,3553;0,1,3553;0,2,3553;0,3,3553;0,4,3553;0,5,3553;0,6,3553;0,7,3553;0,8,3553;0,9,3553;0,10,3553;0,11,3553;0,12,3553;0,13,3553;0,14,3553;0,15,3553;0,16,3553;0,17,3553;1,0,3553;1,1,3553;1,2,3553;1,3,3553;1,4,3553;1,5,3553;1,6,3553;1,7,3553;1,8,3553;1,9,3553;1,10,3553;1,11,3553;1,12,3553;1,13,3553;1,14,3553;1,15,3553;1,16,3553;1,17,3553;2,0,3553;2,1,3553;2,2,3553;2,3,3553;2,4,3553;2,5,3553;2,6,3553;2,7,3553;2,8,3553;2,9,3553;2,10,3553;2,11,3553;2,12,3553;2,13,3553;2,14,3553;2,15,3553;2,16,3553;2,17,3553;3,0,3553;3,1,3553;3,2,3553;3,3,3553;3,4,3553;3,5,3553;3,6,3553;3,7,3553;3,8,3553;3,9,3553;3,10,3553;3,11,3553;3,12,3553;3,13,3553;3,14,3553;3,15,3553;3,16,3553;3,17,3553;4,0,3553;4,1,3553;4,2,3553;4,3,3553;4,4,3553;4,5,3553;4,6,3553;4,7,3553;4,8,3553;4,9,3553;4,10,3553;4,11,3553;4,12,3553;4,13,3553;4,14,3553;4,15,3553;4,16,3553;4,17,3553 --disable-accelerated-video-decode --enable-gpu-async-worker-context --service-request-channel-token=A872D4F8B71EC4698C27F51A470D6BF3 --renderer-client-id=3 --shared-files=v8_natives_data:100,v8_snapshot_data:101
+mzr      29272 10586 29068 29272  19 Sl   futex_ /opt/google/chrome/chrome --type=renderer --force-device-scale-factor=1.2 --field-trial-handle=5997253294670834536,3145191747746376343,131072 --service-pipe-token=4637E9B25A3E29509DE696F2F6AB611B --lang=en-US --enable-offline-auto-reload --enable-offline-auto-reload-visible-only --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false,disallowFetchForDocWrittenScriptsInMainFrameOnSlowConnections=true --enable-pinch --num-raster-threads=2 --enable-main-frame-before-activation --content-image-texture-target=0,0,3553;0,1,3553;0,2,3553;0,3,3553;0,4,3553;0,5,3553;0,6,3553;0,7,3553;0,8,3553;0,9,3553;0,10,3553;0,11,3553;0,12,3553;0,13,3553;0,14,3553;0,15,3553;0,16,3553;0,17,3553;1,0,3553;1,1,3553;1,2,3553;1,3,3553;1,4,3553;1,5,3553;1,6,3553;1,7,3553;1,8,3553;1,9,3553;1,10,3553;1,11,3553;1,12,3553;1,13,3553;1,14,3553;1,15,3553;1,16,3553;1,17,3553;2,0,3553;2,1,3553;2,2,3553;2,3,3553;2,4,3553;2,5,3553;2,6,3553;2,7,3553;2,8,3553;2,9,3553;2,10,3553;2,11,3553;2,12,3553;2,13,3553;2,14,3553;2,15,3553;2,16,3553;2,17,3553;3,0,3553;3,1,3553;3,2,3553;3,3,3553;3,4,3553;3,5,3553;3,6,3553;3,7,3553;3,8,3553;3,9,3553;3,10,3553;3,11,3553;3,12,3553;3,13,3553;3,14,3553;3,15,3553;3,16,3553;3,17,3553;4,0,3553;4,1,3553;4,2,3553;4,3,3553;4,4,3553;4,5,3553;4,6,3553;4,7,3553;4,8,3553;4,9,3553;4,10,3553;4,11,3553;4,12,3553;4,13,3553;4,14,3553;4,15,3553;4,16,3553;4,17,3553 --disable-accelerated-video-decode --enable-gpu-async-worker-context --service-request-channel-token=4637E9B25A3E29509DE696F2F6AB611B --renderer-client-id=9 --shared-files=v8_natives_data:100,v8_snapshot_data:101
+mzr      29286 10586 29068 29286  19 Sl   futex_ /opt/google/chrome/chrome --type=renderer --force-device-scale-factor=1.2 --field-trial-handle=5997253294670834536,3145191747746376343,131072 --service-pipe-token=84C55B6AEAAE69F70FF57FC115A5E9CB --lang=en-US --extension-process --enable-offline-auto-reload --enable-offline-auto-reload-visible-only --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false,disallowFetchForDocWrittenScriptsInMainFrameOnSlowConnections=true --enable-pinch --num-raster-threads=2 --enable-main-frame-before-activation --content-image-texture-target=0,0,3553;0,1,3553;0,2,3553;0,3,3553;0,4,3553;0,5,3553;0,6,3553;0,7,3553;0,8,3553;0,9,3553;0,10,3553;0,11,3553;0,12,3553;0,13,3553;0,14,3553;0,15,3553;0,16,3553;0,17,3553;1,0,3553;1,1,3553;1,2,3553;1,3,3553;1,4,3553;1,5,3553;1,6,3553;1,7,3553;1,8,3553;1,9,3553;1,10,3553;1,11,3553;1,12,3553;1,13,3553;1,14,3553;1,15,3553;1,16,3553;1,17,3553;2,0,3553;2,1,3553;2,2,3553;2,3,3553;2,4,3553;2,5,3553;2,6,3553;2,7,3553;2,8,3553;2,9,3553;2,10,3553;2,11,3553;2,12,3553;2,13,3553;2,14,3553;2,15,3553;2,16,3553;2,17,3553;3,0,3553;3,1,3553;3,2,3553;3,3,3553;3,4,3553;3,5,3553;3,6,3553;3,7,3553;3,8,3553;3,9,3553;3,10,3553;3,11,3553;3,12,3553;3,13,3553;3,14,3553;3,15,3553;3,16,3553;3,17,3553;4,0,3553;4,1,3553;4,2,3553;4,3,3553;4,4,3553;4,5,3553;4,6,3553;4,7,3553;4,8,3553;4,9,3553;4,10,3553;4,11,3553;4,12,3553;4,13,3553;4,14,3553;4,15,3553;4,16,3553;4,17,3553 --disable-accelerated-video-decode --enable-gpu-async-worker-context --service-request-channel-token=84C55B6AEAAE69F70FF57FC115A5E9CB --renderer-client-id=10 --shared-files=v8_natives_data:100,v8_snapshot_data:101
+mzr      29298 10586 29068 29298  19 Sl   futex_ /opt/google/chrome/chrome --type=ppapi --field-trial-handle=5997253294670834536,3145191747746376343,131072 --ppapi-flash-args --lang=en-US --service-request-channel-token=4EC58CF0E72AAFC89B4ACE794A155482
+root     29621     0     2 29621  19 S    -      [kworker/1:2]
+mzr      29829 10586 29068 29829  19 Sl   futex_ /opt/google/chrome/chrome --type=renderer --force-device-scale-factor=1.2 --field-trial-handle=5997253294670834536,3145191747746376343,131072 --service-pipe-token=D6AC88AC4733666588435798EC15288E --lang=en-US --enable-offline-auto-reload --enable-offline-auto-reload-visible-only --blink-settings=disallowFetchForDocWrittenScriptsInMainFrame=false,disallowFetchForDocWrittenScriptsInMainFrameOnSlowConnections=true --enable-pinch --num-raster-threads=2 --enable-main-frame-before-activation --content-image-texture-target=0,0,3553;0,1,3553;0,2,3553;0,3,3553;0,4,3553;0,5,3553;0,6,3553;0,7,3553;0,8,3553;0,9,3553;0,10,3553;0,11,3553;0,12,3553;0,13,3553;0,14,3553;0,15,3553;0,16,3553;0,17,3553;1,0,3553;1,1,3553;1,2,3553;1,3,3553;1,4,3553;1,5,3553;1,6,3553;1,7,3553;1,8,3553;1,9,3553;1,10,3553;1,11,3553;1,12,3553;1,13,3553;1,14,3553;1,15,3553;1,16,3553;1,17,3553;2,0,3553;2,1,3553;2,2,3553;2,3,3553;2,4,3553;2,5,3553;2,6,3553;2,7,3553;2,8,3553;2,9,3553;2,10,3553;2,11,3553;2,12,3553;2,13,3553;2,14,3553;2,15,3553;2,16,3553;2,17,3553;3,0,3553;3,1,3553;3,2,3553;3,3,3553;3,4,3553;3,5,3553;3,6,3553;3,7,3553;3,8,3553;3,9,3553;3,10,3553;3,11,3553;3,12,3553;3,13,3553;3,14,3553;3,15,3553;3,16,3553;3,17,3553;4,0,3553;4,1,3553;4,2,3553;4,3,3553;4,4,3553;4,5,3553;4,6,3553;4,7,3553;4,8,3553;4,9,3553;4,10,3553;4,11,3553;4,12,3553;4,13,3553;4,14,3553;4,15,3553;4,16,3553;4,17,3553 --disable-accelerated-video-decode --enable-gpu-async-worker-context --service-request-channel-token=D6AC88AC4733666588435798EC15288E --renderer-client-id=18 --shared-files=v8_natives_data:100,v8_snapshot_data:101
+root     29863     0     2 29863  19 S    -      [kworker/2:1]
+root     30116     0     2 30116  19 S    -      [kworker/0:0]
+root     30145     0     2 30145  19 S    -      [kworker/1:1]
+root     30182     0     2 30182  19 S    -      [kworker/2:0]
+root     30272     0     2 30272  19 S    -      [kworker/3:0]
+mzr      30286 30286  1232 30286  19 Ssl  poll_s /usr/lib/gnome-terminal/gnome-terminal-server
+mzr      30294 30294 30286 30294  19 Ss   sigsus zsh
+root     30479     0     2 30479  19 S    -      [kworker/0:2]
+root     30506     0     2 30506  19 D    -      [kworker/1:0]
+root     30507     0     2 30507  19 S    -      [kworker/2:2]
+root     30542     0     2 30542  19 S    -      [kworker/3:1]
+mzr      30547 30547 30294 30547  19 R+   -      ps -eo user,pid,pgid,ppid,tid,pri,stat,wchan,cmd

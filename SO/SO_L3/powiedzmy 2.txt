@@ -1,0 +1,171 @@
+Zadanie 7 o sygnałach: Silberschatz strony 183 - 185
+http://cis.poly.edu/muller/CS623/signalsintro.htm
+
+SYGNAŁY:
+Mechanizm softwarowy powiadamiajacy procesy o zajściu jakiegoś zdarzenia. (SIGKILL,SIGSTOP,SIGINT,SIGSEGV, SIGFPE(?))
+Mechanizm komunikacji między procesami nie przesyłający żadnych danych.
+
+Proces wysyła sygnał, jądro przejmuje kontrolę i zapisuje w pcb adresata, że dany sygnał oczekuje na obsługę.
+Kiedy adresat ma wejść w user mode najpierw sprawdza się, czy nie ma żadnego sygnału do obsłużenia.
+
+Przerwania to zdarzenia, które wymagają natychmiastowego obsłużenia.
+Sygnały a przerwania
+
+Podobieństwa:
+-Działaja trochę podobnie do przerwań softwarowych.
+-Wcinają się w ciąg instrukcji do wykonania.
+-Mają własne programy do obsługi, które trzeba wczytać
+-Działają jak pułapki (?)
+
+Różnice:
+-Nie działają natychmiast
+-Sygnały nie mają priorytetów.
+-Sygnały sie nie kolejkują. Każdy rodzaj sygnału może mieć tylko jeden oczekujący sygnał, nadmiarowe są odrzucane (maska oczekujących sygnałów w pcb)
+-Kod obsługi w pcb
+-Proces może wybrać, które sygnały obsłuża, a które ignoruje
+-Przerwania są tylko asynchroniczne, sygnały mogą być synchroniczne (jeśli pochodzą od tego samego procesu) lub też asynchroniczne (pochodzą spoza procesu).
+-Przerwania są softwarowe i hardwarowe, sygnały softwarowe
+-Proces może wysyłać sygnały tylko do swojej grupy procesowej, nie do każdego procesu.
+
+Sygnały kończące działanie procesu: dzielenie przez zero, naruszenie pamięci, przepełnienie pamięci, zabicie przez inny proces, zakończenie przez użytkownika.
+
+SIGSEGV i SIGFPE - do debugowania, debuger przechwytuje sygnały
+
+735 Tanenbaum:
+sygnały jak przerwania softwarowe, mechanizmy obsługi przechowywane w pcb procesu adresata,
+przerwania są różne, hardwarowe, softwarowe etc. przerwania mają kod obsługi w jądrze.
+Przerwania mogą być tylko asynchroniczne, a sygnały mogą być zarówo asynchroniczne jak i synchroniczne ( pochodzić od tego samego procesu )
+Sygnały powiadamiają proces o jakimś zdarzeniu.
+Proces może wysyłać sygnały tylko do swojej grupy procesowej(dzieci, rodzeństwa, rodzica)
+Sygnały można zignorować, a przerwania to tak ciężko.
+Sygnały nie mają priorytetów.
+
+Ze stalina:
+Signals
+A signal is a software mechanism that informs a process of the occurrence of asynchronous
+events. A signal is similar to a hardware interrupt but does not employ
+priorities. That is, all signals are treated equally; signals that occur at the same time
+are presented to a process one at a time, with no particular ordering.
+Processes may send each other signals, or the kernel may send signals internally.
+A signal is delivered by updating a field in the process table for the process
+to which the signal is being sent. Because each signal is maintained as a single bit,
+signals of a given type cannot be queued. A signal is processed just after a process
+wakes up to run or whenever the process is preparing to return from a system call.
+A process may respond to a signal by performing some default action (e.g., termination),
+executing a signal-handler function, or ignoring the signal.
+Table 6.2 lists signals defined for UNIX SVR4.
+/////////////////////////////////////////////////////
+
+Zadanie 8 o wątkach jądrowych i userowych: rozdział w Stallingsie
+
+User-Level Threads:
+Jądro jest świadome istnienia tylko procesów. Wewnątrz procesów biblioteka odpowidzialna za wątki sama planuje, który wątek ile czasu będzie się wykonywał, sama robi zmiany wątków, etc.
+
+Zalety:
+-Szybkość zmian między wątkami
+-Planowanie może być dopasowywane do potrzeb programu.
+-ULT mogą działać na różnych systemach operacyjnych, nie wymagane jest żadne wsparcie ze strony jądra.
+
+Wady:
+-Nie można uruchamiać wielu wątków na raz
+-Jeśli wątek użyje blokującego wywołania systemowego (takiego, który blokuje proces i oddaje w tym czasie kontrole jądru), to cały proces jest zablokowany i żaden inny wątek w tym procesie nie może się wykonywać
+
+Obwolutowanie (Jacketing):
+Konwersja blokujących wywołań systemowych na nieblokujące. Zamiast bezpośrednio wywoływać systemową procedurę sprawdza się najpierw, czy potrzebne do niej zasoby są wolne, jeśli nie, to wątek zostaje zablokowany i oddaje kontrolę innemu wątkowi poprzez bibliotekę wątków. Po jakimś czasie znowu sprawdza się, czy zasoby są wolne. Jeśli zasoby są wolne, to wykonuje się system call.
+
+Kernel-Level Threads:
+Każdy wątek w przestrzeni użytkownika otrzymuje wątek w przestrzeni jądra. Jądro nie widzi procesów, tylko wiele wątków i samo planuje, który wątek ma zostać wykonywany.
+
+Zalety:
+-Można uruchamiać wiele wątków tego samego procesu na raz.
+-Mimo zablokowanych wątków, inne z tego samego procesu mogą się wykonywać
+Wady:
+-Bardzo duży narzut na zmiany kontekstu
+
+Aktywacje planisty - model hybrydowy:
+System operacyjny rozdaje procesom wątki jądrowe - wirtualne procesory (lightweight process LWP). W procesach biblioteka od ULT sama sobie rozporządza tymi wirtualnymi procesorami i przydziela im user levelowe wątki. Jeśli wątek jądrowy blokuje się (czeka na I/O etc) to cały wirtualny procesor zostaje zablokowany i wszystkie userowe wątki podpięte do niego. Procesy mogą dostać wiele procesorów, zaczynają z jednym.
+Zazwyczaj daje się 1 procesor na każdy blokujący system call.
+
+Sposób, w który biblioteka wątkowa user levelowa komunikuje się z jądrem nazywa się aktywacją planisty. Jądro wysyła upcalle do biblioteki wątkowej, a ta obsługuje je upcall handlerami działającymi na wirtualnych procesorach. Kiedy wątek ma się zablokować, system wysyła upcall mówiący, który się zablokuje, i daje nowy wirt. procesor. Aplikacja wywołuje upcall handler na nowym procesorze, aktywuje planistę, oddaje zablokowany procesor. Kiedy zablokowany wątek będzie mógł zostać wznowiony, aplikacja dostaje upcall, który zostaje obsłużony przez upcall handler albo na nowym, zapewnionym przez jądro, procesorze, albo wywłaszcza jeden z posiadanych.
+
+Planista systemu operacyjnego wybiera wątki jądrowe - wirtualne procesory i odpala je na prawdziwych CPU.
+
+++Zad 9:
+
+ A fork() duplicates all the threads of a process. The problem with this is that fork() in a process where threads work with external resources may corrupt those resources (e.g., writing duplicate records to a file) because neither thread may know that the fork() has occurred.
+
+ To avoid corruption in multithreaded applications, mutexes are used internally to protect the memory-management data structures employed by these functions. In a multithreaded application in which threads simultaneously allocate and free memory, there could be contention for these mutexes. To scalably handle memory allocation in multithreaded applications, glibc creates additional memory allocation arenas if mutex contention is detected. Each arena is a large region of memory that is internally allocated by the system (using brk(2) or mmap(2)), and managed with its own mutexes.
+
+Malloc ma linked listy obszarów pamięci - aren, zakłada na nie locki / mutexy etc.
+
+ TLS bierze pamięć ze sterty
+Control + C wysyła sygnał do wszystkich wątków. (Stalings)
+Obsługuje pierwszy lepszy. (??)
+
+++Zad 1:
+
+void echo()
+{
+	chin = getchar();
+	chout = chin
+	putchar(chout)
+}
+
+Powiedzmy, że mamy 2 procesy wykonujące te funkcje (na jednym procesorze). Jeśli pierwszy proces zostanie przerwany po wczytaniu, to drugi proces zmodyfikuje wczytane dane przez proces1.
+
+Na wielu procesorach jest jeszcze gorzej, bo wszystko zależy od tego, które instrukcje wykonają się szybciej.
+
+Jeśli jeden
+
+int a=1, b=3;
+
+void fun1()
+{
+	a = a + b;
+}
+
+void fun2()
+{
+	b = a + b;
+}
+
+jeśli fun 1 pierwsze: a = 4, b = 7,
+jeśli fun 2 pierwsze: a = 5, b = 4.
+
+-Sytuacja wyścigu - procesy lub wątki czytają i zapisują do tych samych danych, ostateczny winik zależy od kolejności wykonanych instrukcji.
+
+-Zakleszczenie - dwa procesy żądają dostępu do tych samych zasobów i nie zwolnią zajętych dopóki nie dostaną wszystkich wymaganych zasobów. Przykład: Każdy z procesów P1 i P2 wymaga obu zasobów R1 i R2, P1 dostanie przydzielony R1, a P2 dostanie R2. Zarówno P1 jak i P2 czeka, aż nie zwolni się brakujący zasób jednocześnie nie puszczając nigdy swojego.
+
+++Zad 2:
+Współbieżne - wiele obliczeń wykonuje się w tym samym przedziale czasowym.
+Równoległe - wiele obliczeń wykonuje się w dokładnie tych samych punktach w czasie.
+Równoległe zawiera się we współbieżnym.
+
+Sekcja krytyczna: część kodu, w którym korzystamy i modyfikujemy wspólne dane.
+
+Entry section - prosimy o pozwolenie na wejście do s. krytcznej
+critical section - wiadomo
+exit section - raportujemy o końcu sekcji kryt.
+remainder section - reszta kodu, whatever
+
+-Warunki sekcji krytycznej:
+1. Wzajemna rozłączność: jeśli jeden proces wykonuje swoją sekcję krytyczną, to żaden inny nie może się wykonywać w sekcji kryt.
+2. Progresja: jeśli żaden proces nie wykonuje swojej sekcji krytycznej, a jakieś procesy czekają ze swoją sekcją, to tylko one mogą zostać wykonane następnie.
+3. Ograniczone oczekiwanie: nie może być tak, że proces czeka w nieskończoność na dostęp do swojej sekcji, więc zostaje nałożony limit oczekiwania. Po upływie limitu proces musi zostać dopuszczony do swojej sekcji.
+
+-Warunki dla wzajemnej rozłączności:
+1. Musi być wymuszana siłą - tylko jeden proces w jednostce czasu może być w swojej sekcji krytycznej jeśli jest wiele procesów, które potrzebowały by tych samych zasobów do swoich sekcji krytycznych.
+2. Proces, który zatrzymuje się poza sekcją krytyczną nie może przeszkadzać innym procesom.
+3. Proces nie może czekać w nieskończoność na wykonanie swojej sekcji krytycznej - wykluczenie zakleszczeń i starvation
+4. Kiedy żaden proces nie jest w SK i pojawia się proces, który chce wejść do swojej SK, musi zostać szybko obsłużony.
+5. Nie zakłada się niczego o prędkości procesorów i ich liczbie.
+6. Proces może przebywać w swojej sekcji krytycznej tylko przez skończoną ilość czasu.
+
+-Funkcje wielobieżne(reentrant):
+Funkcje wielobieżne to takie, które można wykonywać drugi raz zanim pierwszy raz się nie skończy. Nigdy się nie zmieniają w trakcie działania. Wiele procesów może odpalać je w tym samym czasie i nic złego nie ma prawa się stać.
+
+1. Nie mogą operować na statycznych/globalnych niestałych danych.
+2. Muszą operować tylko na danych, które im podano.
+3. Nie mogą polegać na blokadach etc.
+4. Nie mogą modyfikować swojego kodu(chyba, że wykonuje się je w thread local storage)
+5. Nie mogą wywoływać niewielobieżnych funkcji.

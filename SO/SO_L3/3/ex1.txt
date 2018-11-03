@@ -1,0 +1,49 @@
+Process memory layout (The linux programming interface):
+Text: the instructions of the program.
+Data: the static variables used by the program.
+Initialized (global i static)
+Uninitialized ( global i static, bss! (block started by symbol)
+Odzielone ponieważ wystarczy trzymać na dysku tylko ile tego jest później wstawić same zera
+Heap: an area from which programs can dynamically allocate extra memory.
+Stack: a piece of memory that grows and shrinks as functions are called and
+return and that is used to allocate storage for local variables and function call
+linkage information.
+
+Procesowi zostaje przyznana pamięć wirtualną do której tylko ma dostęp.
+
+Na samej górze znajdują się funkcje jądra podłączone do procesu, jednak użytkownik nie ma do nich dostępu.
+Na górze mapy pamięci procesu znajdują się argumenty wywołania procesu i zmienne środowiskowe.
+
+Używamy pmap z -x dla nazw kolumn hehe
+Address:    start address of map
+Kbytes:    size of map in kilobytes
+RSS:    resident set size in kilobytes
+Dirty:    dirty pages (both shared and private) in kilobytes
+Mode:    permissions on map: read, write, execute, shared, private (copy on write)
+Mapping:    file backing the map, or '[ anon ]' for allocated memory, or '[ stack ]' for the program stack
+Offset:    offset into the file
+Device:    device name (major:minor)
+
+Obraz (process image) dane wymagane do wczytania (lub alokowania (stos, sterta)) do pamięci aby można było uruchomić program
+Text (kod)
+Data (jak w layout)
+Stack
+Heap
+Process control block
+
+Wszystko jest wczytywane leniwie, po page fault
+
+
+
+$ pmap $(pgrep xeyes)
+Address           Kbytes     RSS   Dirty Mode  Mapping
+0000000000400000      16      16       0 r-x-- xeyes
+0000000000400000       0       0       0 r-x-- xeyes < - - kod
+0000000000603000       4       4       4 r---- xeyes
+0000000000603000       0       0       0 r---- xeyes < - - process control block
+0000000000604000       4       4       4 rw--- xeyes
+0000000000604000       0       0       0 rw--- xeyes < - - argumenty i zmienne srodowiskowe?
+
+Stos to [stack]
+Sterta to [anon]
+

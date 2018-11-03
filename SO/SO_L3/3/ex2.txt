@@ -1,0 +1,11 @@
+# Blok kontrolny procesu - struktura danych zawierająca wszystkie istotne
+  informacje o nim
+
+# Uchwyt do zasobu - struktura dająca dostęp do pliku
+488: struct filedesc *p_fd;      /* (b) Open files. */
+
+# Atrybuty - ?
+487: struct ucred    *p_ucred;   /* (c) Process owner's identity. */
+
+# Blok kontrolny wątku - analogicznie do procesu
+206: struct proc *td_proc;   /* (*) Associated process. */<Paste>

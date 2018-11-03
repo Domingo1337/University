@@ -1,0 +1,33 @@
+# ltrace oraz strace służą do śledzenia wywołań bibliotecznych oraz systemowych danego programu
+ltrace program    # wywołania biblioteczne
+ltrace -S program # biblioteczne oraz systemowe
+strace program    # tylko wywołania systemowe
+
+# Dla aplikacji wielowątkowych możemy użyć flagi -f by śledzić wszystkie wątki oraz procesy przezeń tworzone
+strace -f program
+ltrace -f program
+
+# Aby zliczyć ilość wywołań możemy użyć flagi -c
+strace -c program
+ltrace -c program
+
+# Aby obserwować i na koniec podliczyć wywołania
+strace -C program
+# funkcjonalność niedostępna w ltrace
+
+
+# Jeśli chcemy ograniczyć wyjście jedynie do interesującyh nas wywołań możemy użyć flagi -e
+strace -e open,read,write program
+ltrace -e open+scanf+printf program
+
+# Powyższe flagi można łączyć
+strace -ce read,write program
+
+# Warto pamiętać, że flaga -e nie działa dla wywołań systemowych dla ltrace
+ltrace -Se ... program  # tutaj filtrujemy funkcje biblioteczne, nie wywołania systemowe
+
+# Przykładowe wywołania
+ltrace -fe fopen+fcanf program # obserwuj wszystkie otwarcia i zapisy do pliku programu i jego dzieci
+ltrace -fce printf program # zlicz wszystkie printf'y programu i dzieci
+strace -ce read,write program # zlicz wywołania read oraz write
+

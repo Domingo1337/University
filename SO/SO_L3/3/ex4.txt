@@ -1,0 +1,28 @@
+# Hierarchia procesów - procesy ułożone w drzewo relacją rodzic
+
+ps        # pokazuje procesy powiązane z terminalem, z którego została wywołana
+ps -A     # pokazuje wszystkie procesy
+ps -a     # wszystkie powiązane z terminalem, z którego została wywołana poza właścicielami grup procesów (właścicielem jest proces bash)
+ps -C cmd # filtruje po nazwie procesu
+ps -u usr # filtruje po nazwie właściciela procesu
+
+
+# Wyświetl informacje dla procesu
+ps -p 1 -o pid,ppid,uid,pgid,comm
+
+# Rodzicem procesu 1 jest proces 0, czyli ...
+
+# Które z nich są procesami jądra?
+ps -ef    # Procesy jądra są w kwadratowych nawiasach
+
+# Znaki w kolumnie STAT:
+  D    nieprzerywalne spanie (uninterruptible sleep)
+  R    chodzi
+  S    przewarywalne spanie (interruptible sleep)
+  T    zatrzymany
+  Z    zombie
+ps -Ao pid,s,comm
+
+# Wątki to te których nazwa wygląda tak: {nazwa}
+pstree
+

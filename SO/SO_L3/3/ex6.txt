@@ -1,0 +1,40 @@
+# Zaczynamy od uruchomienia procesu xeyes
+xeyes
+
+# Następnie musimy zdobyć jego PID
+ps -e | grep xeyes
+# albo
+pgrep xeyes
+
+# Aby zatrzymać xeyes używamy kombinacji CTRL^Z (to jest wysłać SIGSTOP)
+# Aby wznowić działanie możemy użyć komendy
+kill -SIGCONT pid
+
+# Następnie możemy wysyłać sygnały
+kill -SIGUSR1
+kill -SIGUSR2
+kill -SIGHUP
+kill -SIGINT
+
+# Wszystkie dostępne sygnały
+kill -l
+
+# kill, xkill oraz pkill domyślnie wysyłają SIGTERM
+
+# Różnice między programami:
+- kill -SIG pid   # wysyła sygnał do procesu o konkretnym pid
+- pkill -SIG name # wysyła sygnał do wszystkich procesów o nazwie name
+- xkill           # pozwala wysłać sygnał SIGTERM do procesu którego okno klikniemy
+
+# Aby zobaczyć maskę sygnałów i inne informacje związane z sygnałami danego procesu możemy użyć komendy
+cat /proc/pid/status | grep "S[ig|hd]"
+
+# SigQ   - liczba oczekującyh/maksymalna sygnałów
+# SigPnd - zgłoszone sygnały dla wątku
+# ShdPnd - zgłoszone, współdzielone sygnały
+# SigBlk - blokowane sygnały
+# SigIgn - ignorowane sygnały
+# SigCgt - złapane sygnały
+
+# Jako pierwszy wykonany zostanie program o najniższym numerze, czyli SIGHUP
+

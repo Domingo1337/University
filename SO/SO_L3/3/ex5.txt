@@ -1,0 +1,52 @@
+# sygnał - jeden z kilkudziesięciu kodów, które pozwalają powiadomić proces o
+  jakimś wydarzeniu
+
+# rola
+  - software interrupt
+  - prymitywna komunikacja między procesami
+  - proces może mieć zdefiniowany kod który zostanie wykonany po otrzymaniu sygnału
+    (signal handler)
+  - używany np przez debuggery do zatrzymywania procesów w trakcie wykonywania
+
+# sygnały wysyłane przez jądro
+  - wyjątek sprzętowy (hardware exception) np dzielenie przez zero, brak dostępu
+    do pamięci, zła instrukcja
+  - sygnały pochodzące od użytkownika np CTRL-C (interrupt), CTRL-Z (suspend)
+  - wydarzenia oprogramowania np dostępne nowe wejście, alarm, dziecko umarło,
+    zmieniło się okno terminala
+
+# domyślne działanie przy odbiorze sygnału (zależy od sygnału)
+  - sygnał zostaje zignorowany (a dokładniej jądro nawet go nie dostarcza)
+  - proces zostaje zakończony (bez własnej woli)
+  - zostaje utworzony obraz procesu, po czym zostaje zakończony
+  - proces zostaje zatrzymany
+  - proces zostaj wznowiony
+
+# obsługa sygnału
+  - domyślna akcja
+  - zignorowanie
+  - wykonanie funkcji obsługującej (signal handler)
+
+# proces odbiera sygnały gdy jest aktywny, lub przy następnym wznowieniu
+  (w przypadku sygnału SIGKILL proces jest od razu zakończony)
+
+# istnieją dwa sygnały których nie można zignorować, zablokować ani obsłużyć
+  - SIGKILL - kończy proces
+  - SIGSTOP - zatrzymuje proces
+
+# proces może wysyłać sygnały w określonych warunkach korzystając z wywołania
+  systemowego kill
+  - jeżeli posiada uprzywilejowanie (CAP_KILL) może wysłać do każdego innego procesu
+  - jeżeli jest nieuprzywilejowany, może wysłać sygnał do procesu jeżeli jego
+    real user ID lub effective user ID zgadzają się z real user ID lub saved
+    set-user-ID celu
+  - sygnał SIGCONT może zostać wysłany do procesów z tej samej sesji
+
+# Po co obsługiwać SIGSEGV?
+  - można na przykład wypisać stack-trace by pomóc programiście znaleźć problem
+    w kodzie
+
+# Po co obsługiwać SIGILL
+  - monitor maszyn wirtualnych może wykorzystać ten sygnał by symulować operacje
+    uprzywilejowane systemu gościa
+

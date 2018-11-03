@@ -1,0 +1,312 @@
+COMMAND   PID USER   FD      TYPE             DEVICE SIZE/OFF      NODE NAME
+firefox 31146  mat  cwd       DIR              254,0     4096  25698747 /home/mat
+firefox 31146  mat  rtd       DIR              254,0     4096         2 /
+firefox 31146  mat  txt       REG              254,0   158160  24652981 /usr/lib/firefox/firefox
+firefox 31146  mat  DEL       REG                0,5          328335372 /SYSV00000000
+firefox 31146  mat  DEL       REG                0,5          328302611 /SYSV00000000
+firefox 31146  mat  mem       REG              254,0    71496  23858788 /usr/lib/libdrm.so.2.4.0
+firefox 31146  mat  mem       REG              254,0  1105472  23870743 /usr/lib/libgomp.so.1.0.0
+firefox 31146  mat  mem       REG              254,0   528864  23866300 /usr/lib/liborc-0.4.so.0.27.0
+firefox 31146  mat  mem       REG              254,0    10056  23864074 /usr/lib/libva-drm.so.1.4000.0
+firefox 31146  mat  mem       REG              254,0    22480  23864063 /usr/lib/libva-x11.so.1.4000.0
+firefox 31146  mat  mem       REG              254,0   269304  23869011 /usr/lib/libsoxr.so.0.1.1
+firefox 31146  mat  mem       REG              254,0 15174320  23867601 /usr/lib/libx265.so.116
+firefox 31146  mat  mem       REG              254,0    14528  23869069 /usr/lib/libvdpau.so.1.0.0
+firefox 31146  mat  mem       REG              254,0    47440  23868778 /usr/lib/libgsm.so.1.0.13
+firefox 31146  mat  mem       REG              254,0   298632  23868884 /usr/lib/libmp3lame.so.0.0.0
+firefox 31146  mat  mem       REG              254,0   170080  23864153 /usr/lib/libopencore-amrnb.so.0.0.3
+firefox 31146  mat  mem       REG              254,0    79888  23864154 /usr/lib/libopencore-amrwb.so.0.0.3
+firefox 31146  mat  mem       REG              254,0   348304  23869518 /usr/lib/libopenjp2.so.2.2.0
+firefox 31146  mat  mem       REG              254,0   897080  23868995 /usr/lib/libschroedinger-1.0.so.0.11.0
+firefox 31146  mat  mem       REG              254,0   342408  23868133 /usr/lib/libopus.so.0.6.1
+firefox 31146  mat  mem       REG              254,0   100680  23869012 /usr/lib/libspeex.so.1.5.1
+firefox 31146  mat  mem       REG              254,0   100664  23869038 /usr/lib/libtheoradec.so.1.1.4
+firefox 31146  mat  mem       REG              254,0   264504  23869039 /usr/lib/libtheoraenc.so.1.1.2
+firefox 31146  mat  mem       REG              254,0 13144024  23867596 /usr/lib/libavcodec.so.57.89.100
+firefox 31146  mat  mem       REG              254,0   420512  23865555 /usr/lib/libwebp.so.7.0.0
+firefox 31146  mat  mem       REG              254,0  1027784  23864094 /usr/lib/libx264.so.148
+firefox 31146  mat  mem       REG              254,0    43328  23865770 /usr/lib/libwebpmux.so.3.0.0
+firefox 31146  mat  mem       REG              254,0   691624  23869115 /usr/lib/libxvidcore.so.4.3
+firefox 31146  mat  DEL       REG               0,21                190 /dev/shm/org.chromium.sworbC
+firefox 31146  mat  mem       REG              254,0    67568  23871713 /usr/lib/libnss_myhostname.so.2
+firefox 31146  mat  mem       REG              254,0    14488  23868604 /usr/lib/libXss.so.1.0.0
+firefox 31146  mat  mem       REG              254,0   740656  23868744 /usr/lib/libgdk-x11-2.0.so.0.2400.31
+firefox 31146  mat  mem       REG              254,0  4444512  23868809 /usr/lib/libgtk-x11-2.0.so.0.2400.31
+firefox 31146  mat  mem       REG              254,0 16480480  24780364 /usr/lib/mozilla/plugins/libflashplayer.so
+firefox 31146  mat  DEL       REG                0,5             940146 /memfd:pulseaudio
+firefox 31146  mat  DEL       REG                0,5              19844 /memfd:pulseaudio
+firefox 31146  mat  DEL       REG                0,5             926095 /memfd:pulseaudio
+firefox 31146  mat  mem       REG              254,0    31288  24650947 /usr/lib/libcanberra-0.30/libcanberra-pulse.so
+firefox 31146  mat  mem       REG              254,0   128936  23864066 /usr/lib/libva.so.1.4000.0
+firefox 31146  mat  mem       REG              254,0   456632  23868293 /usr/lib/libavutil.so.55.58.100
+firefox 31146  mat  DEL       REG                0,5          326041620 /SYSV00000000
+firefox 31146  mat  DEL       REG               0,21                127 /dev/shm/org.chromium.YUrNJF
+firefox 31146  mat  mem       REG              254,0  1059016  37099123 /home/mat/.mozilla/firefox/7qenmmco.default/extensions/{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}.xpi
+firefox 31146  mat  mem       REG              254,0    22488  23860669 /usr/lib/libnss_dns-2.25.so
+firefox 31146  mat  mem       REG              254,0   266120  23871722 /usr/lib/libnss_resolve.so.2
+firefox 31146  mat  mem       REG              254,0   266120  23871714 /usr/lib/libnss_mymachines.so.2
+firefox 31146  mat  mem       REG              254,0    52504  24785608 /usr/lib/gio/modules/libdconfsettings.so
+firefox 31146  mat  mem       REG              254,0   120728  23867590 /usr/lib/libswresample.so.2.7.100
+firefox 31146  mat  mem       REG              254,0  1711312  24652974 /usr/lib/firefox/libmozavcodec.so
+firefox 31146  mat  mem       REG              254,0    22384  24642344 /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-png.so
+firefox 31146  mat  mem       REG              254,0  1467200  23858027 /usr/lib/libxml2.so.2.9.4
+firefox 31146  mat  mem       REG              254,0   240240  23865540 /usr/lib/libcroco-0.6.so.3.0.1
+firefox 31146  mat  mem       REG              254,0   219160  23868227 /usr/lib/librsvg-2.so.2.40.18
+firefox 31146  mat  mem       REG              254,0    10168  24654574 /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.so
+firefox 31146  mat  mem       REG              254,0   380132  25034887 /usr/share/fonts/TTF/DejaVuSerif.ttf
+firefox 31146  mat  mem       REG              254,0   757076  25034875 /usr/share/fonts/TTF/DejaVuSans.ttf
+firefox 31146  mat  DEL       REG                0,5          325320726 /SYSV00000000
+firefox 31146  mat  mem       REG              254,0   206120  23868739 /usr/lib/libgconf-2.so.4.1.5
+firefox 31146  mat  mem       REG              254,0   215320  24652973 /usr/lib/firefox/libmozavutil.so
+firefox 31146  mat  mem       REG              254,0   811358  42080525 /home/mat/.mozilla/firefox/7qenmmco.default/extensions/{73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
+firefox 31146  mat  mem       REG              254,0    76256  23859102 /usr/lib/libtasn1.so.6.5.4
+firefox 31146  mat  mem       REG              254,0   245384  23859032 /usr/lib/libnssckbi-p11-kit.so
+firefox 31146  mat  mem       REG              254,0   554360  23859429 /usr/lib/libfreeblpriv3.so
+firefox 31146  mat  mem       REG              254,0   159752  23859427 /usr/lib/libnssdbm3.so
+firefox 31146  mat  mem       REG              254,0   292272  23856259 /usr/lib/libsoftokn3.so
+firefox 31146  mat  mem       REG              254,0   312468  25035819 /usr/share/fonts/noto/NotoSans-Bold.ttc
+firefox 31146  mat  mem       REG              254,0   307736  25035757 /usr/share/fonts/noto/NotoSans-Regular.ttc
+firefox 31146  mat  mem       REG              254,0   731280  23869077 /usr/lib/libvorbisenc.so.2.0.11
+firefox 31146  mat  mem       REG              254,0   490680  23868504 /usr/lib/libFLAC.so.8.3.0
+firefox 31146  mat  mem       REG              254,0    22760  23868617 /usr/lib/libasyncns.so.0.3.1
+firefox 31146  mat  mem       REG              254,0   483480  23866622 /usr/lib/libsndfile.so.1.0.28
+firefox 31146  mat  mem       REG              254,0   544920  24649057 /usr/lib/pulseaudio/libpulsecommon-10.0.so
+firefox 31146  mat  mem       REG              254,0   333640  23868206 /usr/lib/libpulse.so.0.20.1
+firefox 31146  mat  mem       REG              254,0   675501  36963015 /usr/lib/firefox/browser/features/firefox@getpocket.com.xpi
+firefox 31146  mat  mem       REG              254,0   135015  24266266 /usr/share/glib-2.0/schemas/gschemas.compiled
+firefox 31146  mat  mem       REG              254,0   143344  24910014 /usr/share/mime/mime.cache
+firefox 31146  mat  mem       REG              254,0  2992859  41587449 /home/mat/.cache/mozilla/firefox/7qenmmco.default/startupCache/startupCache.8.little
+firefox 31146  mat  mem       REG              254,0   110644  26216564 /usr/share/icons/gnome/icon-theme.cache
+firefox 31146  mat  mem       REG              254,0   103372  24911345 /usr/share/icons/Adwaita/icon-theme.cache
+firefox 31146  mat  mem       REG              254,0 13579934  36962536 /usr/lib/firefox/browser/omni.ja
+firefox 31146  mat  mem       REG              254,0  9669241  24652970 /usr/lib/firefox/omni.ja
+firefox 31146  mat  mem       REG              254,0    47064  23860655 /usr/lib/libnss_files-2.25.so
+firefox 31146  mat  DEL       REG                0,5          327483406 /SYSV00000000
+firefox 31146  mat  mem       REG              254,0   251720  24648701 /usr/lib/gvfs/libgvfscommon.so
+firefox 31146  mat  mem       REG              254,0   206904  24785609 /usr/lib/gio/modules/libgvfsdbus.so
+firefox 31146  mat  mem       REG              254,0    26840  23868926 /usr/lib/libogg.so.0.8.2
+firefox 31146  mat  mem       REG              254,0   183016  23869076 /usr/lib/libvorbis.so.0.4.8
+firefox 31146  mat  mem       REG              254,0    38592  23870020 /usr/lib/libltdl.so.7.3.1
+firefox 31146  mat  mem       REG              254,0    88896  23869031 /usr/lib/libtdb.so.1.3.12
+firefox 31146  mat  mem       REG              254,0    35272  23869078 /usr/lib/libvorbisfile.so.3.3.7
+firefox 31146  mat  mem       REG              254,0    72888  23865491 /usr/lib/libcanberra.so.0.2.5
+firefox 31146  mat  mem       REG              254,0    18896  23865492 /usr/lib/libcanberra-gtk3.so.0.1.9
+firefox 31146  mat  mem       REG              254,0    23168  24772641 /usr/lib/gtk-3.0/modules/libcanberra-gtk3-module.so
+firefox 31146  mat  mem       REG              254,0    14216  23862651 /usr/lib/gconv/UTF-16.so
+firefox 31146  mat  mem       REG              254,0    77304  24916113 /usr/share/icons/deepin/icon-theme.cache
+firefox 31146  mat  mem       REG              254,0   266144  31457599 /var/cache/fontconfig/923e285e415b1073c8df160bee08820f-le64.cache-7
+firefox 31146  mat  mem       REG              254,0  1778288  23868047 /usr/lib/locale/locale-archive
+firefox 31146  mat  mem       REG              254,0   102568  23868508 /usr/lib/libICE.so.6.3.0
+firefox 31146  mat  mem       REG              254,0    30920  23868589 /usr/lib/libSM.so.6.0.1
+firefox 31146  mat  mem       REG              254,0    22760  23869100 /usr/lib/libxcb-util.so.1.0.0
+firefox 31146  mat  mem       REG              254,0 26292888  23862365 /usr/lib/libicudata.so.59.1
+firefox 31146  mat  mem       REG              254,0   426296  23868605 /usr/lib/libXt.so.6.0.0
+firefox 31146  mat  mem       REG              254,0     5968  23860431 /usr/lib/libX11-xcb.so.1.0.0
+firefox 31146  mat  mem       REG              254,0    39648  23869019 /usr/lib/libstartup-notification-1.so.0.0.0
+firefox 31146  mat  mem       REG              254,0   160792  23868684 /usr/lib/libdbus-glib-1.so.2.3.3
+firefox 31146  mat  mem       REG              254,0  3447440  23869079 /usr/lib/libvpx.so.4.1.0
+firefox 31146  mat  mem       REG              254,0   463776  23867954 /usr/lib/libhunspell-1.6.so.0.0.1
+firefox 31146  mat  mem       REG              254,0   427936  23865514 /usr/lib/libjpeg.so.8.1.2
+firefox 31146  mat  mem       REG              254,0  1123256  23871479 /usr/lib/libsqlite3.so.0.8.6
+firefox 31146  mat  mem       REG              254,0   230480  23856401 /usr/lib/libnssutil3.so
+firefox 31146  mat  mem       REG              254,0  1405832  23859428 /usr/lib/libnss3.so
+firefox 31146  mat  mem       REG              254,0   199120  23856400 /usr/lib/libsmime3.so
+firefox 31146  mat  mem       REG              254,0   363808  23856258 /usr/lib/libssl3.so
+firefox 31146  mat  mem       REG              254,0   246152  23859378 /usr/lib/libnspr4.so
+firefox 31146  mat  mem       REG              254,0    18280  23859380 /usr/lib/libplc4.so
+firefox 31146  mat  mem       REG              254,0    14216  23859379 /usr/lib/libplds4.so
+firefox 31146  mat  mem       REG              254,0  1768120  23860191 /usr/lib/libicuuc.so.59.1
+firefox 31146  mat  mem       REG              254,0  2608136  23860192 /usr/lib/libicui18n.so.59.1
+firefox 31146  mat  mem       REG              254,0 82136496  24652979 /usr/lib/firefox/libxul.so
+firefox 31146  mat  mem       REG              254,0    84680  23860540 /usr/lib/libgpg-error.so.0.22.0
+firefox 31146  mat  mem       REG              254,0    80192  23860584 /usr/lib/liblz4.so.1.7.5
+firefox 31146  mat  mem       REG              254,0   154344  23860585 /usr/lib/liblzma.so.5.2.3
+firefox 31146  mat  mem       REG              254,0  1163856  23871700 /usr/lib/libgcrypt.so.20.2.0
+firefox 31146  mat  mem       REG              254,0    19016  23871698 /usr/lib/libuuid.so.1.3.0
+firefox 31146  mat  mem       REG              254,0   304040  23858825 /usr/lib/libblkid.so.1.1.0
+firefox 31146  mat  mem       REG              254,0    31024  23868682 /usr/lib/libdatrie.so.1.3.3
+firefox 31146  mat  mem       REG              254,0   178456  23867854 /usr/lib/libgraphite2.so.3.0.1
+firefox 31146  mat  mem       REG              254,0   548832  23871739 /usr/lib/libsystemd.so.0.19.0
+firefox 31146  mat  mem       REG              254,0    72280  23870641 /usr/lib/libGLX.so.0.0.0
+firefox 31146  mat  mem       REG              254,0   612840  23870638 /usr/lib/libGLdispatch.so.0.0.0
+firefox 31146  mat  mem       REG              254,0    22688  23860435 /usr/lib/libXdmcp.so.6.0.0
+firefox 31146  mat  mem       REG              254,0    14512  23860433 /usr/lib/libXau.so.6.0.0
+firefox 31146  mat  mem       REG              254,0    66960  23860455 /usr/lib/libbz2.so.1.0.6
+firefox 31146  mat  mem       REG              254,0   469216  23859049 /usr/lib/libpcre.so.1.2.9
+firefox 31146  mat  mem       REG              254,0    35280  23860510 /usr/lib/libffi.so.6.0.4
+firefox 31146  mat  mem       REG              254,0   341832  23871697 /usr/lib/libmount.so.1.1.0
+firefox 31146  mat  mem       REG              254,0    80056  23859973 /usr/lib/libresolv-2.25.so
+firefox 31146  mat  mem       REG              254,0   206664  23864632 /usr/lib/libexpat.so.1.6.5
+firefox 31146  mat  mem       REG              254,0    41456  23869036 /usr/lib/libthai.so.0.3.0
+firefox 31146  mat  mem       REG              254,0   620608  23863712 /usr/lib/libharfbuzz.so.0.10400.8
+firefox 31146  mat  mem       REG              254,0   321584  23855549 /usr/lib/libdbus-1.so.3.14.13
+firefox 31146  mat  mem       REG              254,0   201568  23863680 /usr/lib/libatspi.so.0.0.1
+firefox 31146  mat  mem       REG              254,0   563560  23870642 /usr/lib/libGL.so.1.0.0
+firefox 31146  mat  mem       REG              254,0    92056  23856820 /usr/lib/libz.so.1.2.11
+firefox 31146  mat  mem       REG              254,0    43544  23868603 /usr/lib/libXrender.so.1.3.0
+firefox 31146  mat  mem       REG              254,0    55616  23860728 /usr/lib/libxcb-render.so.0.0.0
+firefox 31146  mat  mem       REG              254,0    14448  23860732 /usr/lib/libxcb-shm.so.0.0.0
+firefox 31146  mat  mem       REG              254,0   218952  23863504 /usr/lib/libpng16.so.16.31.0
+firefox 31146  mat  mem       REG              254,0    76392  23870640 /usr/lib/libEGL.so.1.0.0
+firefox 31146  mat  mem       REG              254,0   686856  23868956 /usr/lib/libpixman-1.so.0.34.0
+firefox 31146  mat  mem       REG              254,0   166864  23860742 /usr/lib/libxcb.so.1.1.0
+firefox 31146  mat  mem       REG              254,0   814520  23867763 /usr/lib/libfreetype.so.6.14.0
+firefox 31146  mat  mem       REG              254,0    73688  23860436 /usr/lib/libXext.so.6.4.0
+firefox 31146  mat  mem       REG              254,0    60000  23856803 /usr/lib/libwayland-client.so.0.3.0
+firefox 31146  mat  mem       REG              254,0     5808  23856839 /usr/lib/libwayland-egl.so.1.0.0
+firefox 31146  mat  mem       REG              254,0    30640  23856804 /usr/lib/libwayland-cursor.so.0.0.0
+firefox 31146  mat  mem       REG              254,0   259992  23868463 /usr/lib/libxkbcommon.so.0.0.0
+firefox 31146  mat  mem       REG              254,0    10280  23860434 /usr/lib/libXdamage.so.1.1.0
+firefox 31146  mat  mem       REG              254,0    10256  23868592 /usr/lib/libXcomposite.so.1.0.0
+firefox 31146  mat  mem       REG              254,0    43680  23868593 /usr/lib/libXcursor.so.1.0.2
+firefox 31146  mat  mem       REG              254,0    43352  23868602 /usr/lib/libXrandr.so.2.2.0
+firefox 31146  mat  mem       REG              254,0    10392  23868598 /usr/lib/libXinerama.so.1.0.0
+firefox 31146  mat  mem       REG              254,0  1123352  23857430 /usr/lib/libglib-2.0.so.0.5200.3
+firefox 31146  mat  mem       REG              254,0   338896  23857433 /usr/lib/libgobject-2.0.so.0.5200.3
+firefox 31146  mat  mem       REG              254,0  1676864  23857434 /usr/lib/libgio-2.0.so.0.5200.3
+firefox 31146  mat  mem       REG              254,0   277888  23869334 /usr/lib/libfontconfig.so.1.9.4
+firefox 31146  mat  mem       REG              254,0   321352  23868150 /usr/lib/libpango-1.0.so.0.4000.9
+firefox 31146  mat  mem       REG              254,0    83704  23869197 /usr/lib/libpangoft2-1.0.so.0.4000.9
+firefox 31146  mat  mem       REG              254,0   942632  23867712 /usr/lib/libepoxy.so.0.0.0
+firefox 31146  mat  mem       REG              254,0   193248  23867557 /usr/lib/libatk-bridge-2.0.so.0.0.0
+firefox 31146  mat  mem       REG              254,0   155256  23862562 /usr/lib/libatk-1.0.so.0.22409.1
+firefox 31146  mat  mem       REG              254,0   145232  23865752 /usr/lib/libgdk_pixbuf-2.0.so.0.3600.8
+firefox 31146  mat  mem       REG              254,0  1228040  23867611 /usr/lib/libcairo.so.2.11400.10
+firefox 31146  mat  mem       REG              254,0    34840  23868651 /usr/lib/libcairo-gobject.so.2.11400.10
+firefox 31146  mat  mem       REG              254,0    22624  23860437 /usr/lib/libXfixes.so.3.1.0
+firefox 31146  mat  mem       REG              254,0    68040  23868597 /usr/lib/libXi.so.6.1.0
+firefox 31146  mat  mem       REG              254,0  1306096  23860432 /usr/lib/libX11.so.6.3.0
+firefox 31146  mat  mem       REG              254,0    50992  23869199 /usr/lib/libpangocairo-1.0.so.0.4000.9
+firefox 31146  mat  mem       REG              254,0    14560  23857431 /usr/lib/libgmodule-2.0.so.0.5200.3
+firefox 31146  mat  mem       REG              254,0  1009592  23863938 /usr/lib/libgdk-3.so.0.2200.18
+firefox 31146  mat  mem       REG              254,0  7386064  23863939 /usr/lib/libgtk-3.so.0.2200.18
+firefox 31146  mat  mem       REG              254,0    31056  23859939 /usr/lib/librt-2.25.so
+firefox 31146  mat  DEL       REG               0,21                305 /dev/shm/org.chromium.eGq8bA
+firefox 31146  mat  DEL       REG               0,21                309 /dev/shm/org.chromium.uBmJVS
+firefox 31146  mat  DEL       REG               0,21                270 /dev/shm/org.chromium.mlrVG5
+firefox 31146  mat  mem-r     REG              254,0    32768  36969253 /home/mat/.mozilla/firefox/7qenmmco.default/webappsstore.sqlite-shm
+firefox 31146  mat  mem       REG              254,0   220832  31458591 /var/cache/fontconfig/f6b893a7224233d96cb72fd88691c0b4-le64.cache-7
+firefox 31146  mat  mem       REG              254,0    86752  31457470 /var/cache/fontconfig/f349e9996a5320f6dd491cedd2b1f964-le64.cache-7
+firefox 31146  mat  mem       REG              254,0  1120216  23860674 /usr/lib/libm-2.25.so
+firefox 31146  mat  mem       REG              254,0  1985472  23859972 /usr/lib/libc-2.25.so
+firefox 31146  mat  mem       REG              254,0   747440  23870746 /usr/lib/libgcc_s.so.1
+firefox 31146  mat  mem       REG              254,0 11556768  23868870 /usr/lib/libstdc++.so.6.0.24
+firefox 31146  mat  mem       REG              254,0    14296  23860600 /usr/lib/libdl-2.25.so
+firefox 31146  mat  mem       REG              254,0   146440  23859941 /usr/lib/libpthread-2.25.so
+firefox 31146  mat  mem       REG              254,0   172688  23859960 /usr/lib/ld-2.25.so
+firefox 31146  mat  mem-r     REG              254,0    32768  36969159 /home/mat/.mozilla/firefox/7qenmmco.default/cookies.sqlite-shm
+firefox 31146  mat  mem       REG              254,0     9974  37233416 /home/mat/.mozilla/firefox/7qenmmco.default/features/{c0c61e2b-f10a-4aa1-9787-121e1b3747fa}/followonsearch@mozilla.com.xpi
+firefox 31146  mat  DEL       REG               0,21                142 /dev/shm/org.chromium.OBcjWD
+firefox 31146  mat  DEL       REG               0,21                135 /dev/shm/org.chromium.OoVMwQ
+firefox 31146  mat  DEL       REG               0,21                132 /dev/shm/org.chromium.Oir0lE
+firefox 31146  mat  mem       REG              254,0    63744  24652966 /usr/lib/firefox/liblgpllibs.so
+firefox 31146  mat  mem       REG              254,0     7301  25834618 /home/mat/.config/dconf/user
+firefox 31146  mat  mem       REG               0,48        2        29 /run/user/1000/dconf/user
+firefox 31146  mat  mem-r     REG              254,0    32768  36966834 /home/mat/.mozilla/firefox/7qenmmco.default/places.sqlite-shm
+firefox 31146  mat  mem       REG              254,0    18488  25060687 /usr/share/icons/hicolor/icon-theme.cache
+firefox 31146  mat  mem       REG              254,0     1632  25833742 /home/mat/.cache/fontconfig/a41116dafaf8b233ac2c61cb73f2ea5f-le64.cache-7
+firefox 31146  mat  mem       REG              254,0     6368  31458779 /var/cache/fontconfig/6ba42ae0000f58711b5caaf10d690066-le64.cache-7
+firefox 31146  mat  mem       REG              254,0      367  25690508 /usr/share/locale/en/LC_MESSAGES/gtk30-properties.mo
+firefox 31146  mat  mem       REG              254,0     3263  25690509 /usr/share/locale/en/LC_MESSAGES/gtk30.mo
+firefox 31146  mat  mem       REG              254,0     5920  24652975 /usr/lib/firefox/libmozgtk.so
+firefox 31146  mat  mem       REG              254,0   104616  24652963 /usr/lib/firefox/libmozsandbox.so
+firefox 31146  mat    0u      CHR              136,6      0t0         9 /dev/pts/6
+firefox 31146  mat    1u      CHR              136,6      0t0         9 /dev/pts/6
+firefox 31146  mat    2u      CHR              136,6      0t0         9 /dev/pts/6
+firefox 31146  mat    3u     unix 0xffff8803a3a33c00      0t0    939252 type=STREAM
+firefox 31146  mat    4u     unix 0xffff8803a3a26800      0t0    845713 type=STREAM
+firefox 31146  mat    5u  a_inode               0,11        0      7471 [eventfd]
+firefox 31146  mat    6u  a_inode               0,11        0      7471 [eventfd]
+firefox 31146  mat    7u     unix 0xffff8803a3a30000      0t0    939242 type=STREAM
+firefox 31146  mat    8u  a_inode               0,11        0      7471 [eventfd]
+firefox 31146  mat    9r      REG              254,0  1059016  37099123 /home/mat/.mozilla/firefox/7qenmmco.default/extensions/{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}.xpi
+firefox 31146  mat   10wW     REG              254,0        0  36965356 /home/mat/.mozilla/firefox/7qenmmco.default/.parentlock
+firefox 31146  mat   11u  a_inode               0,11        0      7471 [eventpoll]
+firefox 31146  mat   12u     unix 0xffff8803fa707c00      0t0    926044 type=STREAM
+firefox 31146  mat   13u     unix 0xffff8803fa705800      0t0    926045 type=STREAM
+firefox 31146  mat   14r     FIFO               0,10      0t0    926046 pipe
+firefox 31146  mat   15w     FIFO               0,10      0t0    926046 pipe
+firefox 31146  mat   16r      REG              254,0  9669241  24652970 /usr/lib/firefox/omni.ja
+firefox 31146  mat   17r      REG              254,0 13579934  36962536 /usr/lib/firefox/browser/omni.ja
+firefox 31146  mat   18r     FIFO               0,10      0t0    926047 pipe
+firefox 31146  mat   19w     FIFO               0,10      0t0    926047 pipe
+firefox 31146  mat   20r     FIFO               0,10      0t0    939246 pipe
+firefox 31146  mat   21w     FIFO               0,10      0t0    939246 pipe
+firefox 31146  mat   22u  netlink                         0t0    926048 ROUTE
+firefox 31146  mat   23r     FIFO               0,10      0t0    844710 pipe
+firefox 31146  mat   24w     FIFO               0,10      0t0    844710 pipe
+firefox 31146  mat   25r      CHR                1,9      0t0        11 /dev/urandom
+firefox 31146  mat   26r      REG              254,0  2992859  41587449 /home/mat/.cache/mozilla/firefox/7qenmmco.default/startupCache/startupCache.8.little
+firefox 31146  mat   27u     unix 0xffff8803a3a37800      0t0    939248 type=STREAM
+firefox 31146  mat   28r     FIFO               0,10      0t0    939249 pipe
+firefox 31146  mat   29w     FIFO               0,10      0t0    939249 pipe
+firefox 31146  mat   30u      REG              254,0   196608  36965370 /home/mat/.mozilla/firefox/7qenmmco.default/cert8.db
+firefox 31146  mat   31u      REG              254,0    16384  36965371 /home/mat/.mozilla/firefox/7qenmmco.default/key3.db
+firefox 31146  mat   32u     unix 0xffff8803a3a36000      0t0    939250 type=STREAM
+firefox 31146  mat   33u  a_inode               0,11        0      7471 [eventfd]
+firefox 31146  mat   34u      REG              254,0   229376  36965378 /home/mat/.mozilla/firefox/7qenmmco.default/content-prefs.sqlite
+firefox 31146  mat   35u      REG              254,0    98304  36965364 /home/mat/.mozilla/firefox/7qenmmco.default/permissions.sqlite
+firefox 31146  mat   36ur     REG              254,0 10485760  36965374 /home/mat/.mozilla/firefox/7qenmmco.default/places.sqlite
+firefox 31146  mat   37u      REG              254,0        0  36966833 /home/mat/.mozilla/firefox/7qenmmco.default/places.sqlite-wal
+firefox 31146  mat   38ur     REG              254,0    32768  36966834 /home/mat/.mozilla/firefox/7qenmmco.default/places.sqlite-shm
+firefox 31146  mat   39u      REG               0,21       40       305 /dev/shm/org.chromium.eGq8bA (deleted)
+firefox 31146  mat   40r      REG              254,0   675501  36963015 /usr/lib/firefox/browser/features/firefox@getpocket.com.xpi
+firefox 31146  mat   41r      REG              254,0   811358  42080525 /home/mat/.mozilla/firefox/7qenmmco.default/extensions/{73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
+firefox 31146  mat   42u     unix 0xffff88033599c800      0t0    846560 type=SEQPACKET
+firefox 31146  mat   43u     unix 0xffff88033599c000      0t0    846561 type=SEQPACKET
+firefox 31146  mat   44r     FIFO               0,10      0t0    846562 pipe
+firefox 31146  mat   45w     FIFO               0,10      0t0    846562 pipe
+firefox 31146  mat   46u     unix 0xffff8803fa707400      0t0    926086 type=STREAM
+firefox 31146  mat   47u     unix 0xffff880336ae2400      0t0    841597 type=STREAM
+firefox 31146  mat   48u     unix 0xffff8803fa704000      0t0    926088 type=SEQPACKET
+firefox 31146  mat   49u     unix 0xffff8803fa700800      0t0    926089 type=SEQPACKET
+firefox 31146  mat   50u     unix 0xffff8803a3a34800      0t0    939257 type=STREAM
+firefox 31146  mat   51u     unix 0xffff8803c1971000      0t0    848985 type=STREAM
+firefox 31146  mat   52u     unix 0xffff8803c1975c00      0t0    848991 type=SEQPACKET
+firefox 31146  mat   53u     unix 0xffff8803c1977c00      0t0    848987 type=STREAM
+firefox 31146  mat   54u     unix 0xffff8803c1976400      0t0    848992 type=SEQPACKET
+firefox 31146  mat   55u     unix 0xffff8803c1977400      0t0    848989 type=STREAM
+firefox 31146  mat   56u      REG               0,21       40       135 /dev/shm/org.chromium.OoVMwQ (deleted)
+firefox 31146  mat   57r  a_inode               0,11        0      7471 inotify
+firefox 31146  mat   58r      REG              254,0     9974  37233416 /home/mat/.mozilla/firefox/7qenmmco.default/features/{c0c61e2b-f10a-4aa1-9787-121e1b3747fa}/followonsearch@mozilla.com.xpi
+firefox 31146  mat   59u      REG               0,21       40       142 /dev/shm/org.chromium.OBcjWD (deleted)
+firefox 31146  mat   60u     unix 0xffff8803c1973400      0t0    848993 type=STREAM
+firefox 31146  mat   61ur     REG              254,0   524288  36965385 /home/mat/.mozilla/firefox/7qenmmco.default/cookies.sqlite
+firefox 31146  mat   62u      REG              254,0    65616  36968005 /home/mat/.mozilla/firefox/7qenmmco.default/cookies.sqlite-wal
+firefox 31146  mat   63ur     REG              254,0    32768  36969159 /home/mat/.mozilla/firefox/7qenmmco.default/cookies.sqlite-shm
+firefox 31146  mat   64ur     REG              254,0   524288  36965385 /home/mat/.mozilla/firefox/7qenmmco.default/cookies.sqlite
+firefox 31146  mat   65ur     REG              254,0    98304  36965379 /home/mat/.mozilla/firefox/7qenmmco.default/webappsstore.sqlite
+firefox 31146  mat   66rr     REG              254,0 10485760  36965374 /home/mat/.mozilla/firefox/7qenmmco.default/places.sqlite
+firefox 31146  mat   67u      REG              254,0        0  36963918 /home/mat/.mozilla/firefox/7qenmmco.default/webappsstore.sqlite-wal
+firefox 31146  mat   68ur     REG              254,0    32768  36969253 /home/mat/.mozilla/firefox/7qenmmco.default/webappsstore.sqlite-shm
+firefox 31146  mat   69rr     REG              254,0    98304  36965379 /home/mat/.mozilla/firefox/7qenmmco.default/webappsstore.sqlite
+firefox 31146  mat   70u      REG              254,0        0  36963918 /home/mat/.mozilla/firefox/7qenmmco.default/webappsstore.sqlite-wal
+firefox 31146  mat   71u     IPv4             986692      0t0       TCP matjaro.home:57584->bud02s22-in-f202.1e100.net:https (ESTABLISHED)
+firefox 31146  mat   72u      REG              254,0        0  36966833 /home/mat/.mozilla/firefox/7qenmmco.default/places.sqlite-wal
+firefox 31146  mat   74r     FIFO               0,10      0t0    926093 pipe
+firefox 31146  mat   75w     FIFO               0,10      0t0    926093 pipe
+firefox 31146  mat   76u  a_inode               0,11        0      7471 [eventfd]
+firefox 31146  mat   77u     unix 0xffff8803fa702800      0t0    926096 type=STREAM
+firefox 31146  mat   78u  a_inode               0,11        0      7471 [eventfd]
+firefox 31146  mat   79u      REG              254,0    12288  25821490 /home/mat/.cache/event-sound-cache.tdb.03b934103f334256a1e8d41443cc1db1.x86_64-unknown-linux-gnu
+firefox 31146  mat   81u     IPv4             983016      0t0       TCP matjaro.home:46264->waw02s08-in-f195.1e100.net:https (ESTABLISHED)
+firefox 31146  mat   82u     IPv4             988352      0t0       TCP matjaro.home:37790->ham04s01-in-f4.1e100.net:https (ESTABLISHED)
+firefox 31146  mat   83u      REG               0,21       40       135 /dev/shm/org.chromium.OoVMwQ (deleted)
+firefox 31146  mat   84u     IPv4             986897      0t0       TCP matjaro.home:56872->cha.mah.vagh.42.us.org:https (ESTABLISHED)
+firefox 31146  mat   85rr     REG              254,0 10485760  36965374 /home/mat/.mozilla/firefox/7qenmmco.default/places.sqlite
+firefox 31146  mat   86u     IPv4             989258      0t0       TCP matjaro.home:55784->ham04s01-in-f3.1e100.net:https (ESTABLISHED)
+firefox 31146  mat   87u     IPv4             960459      0t0       TCP matjaro.home:41594->waw02s07-in-f3.1e100.net:https (ESTABLISHED)
+firefox 31146  mat   88u      REG              254,0   262144  36965428 /home/mat/.cache/mozilla/firefox/7qenmmco.default/OfflineCache/index.sqlite
+firefox 31146  mat   90u     IPv4             989288      0t0       TCP matjaro.home:48664->public102936.xdsl.centertel.pl:https (ESTABLISHED)
+firefox 31146  mat   91u     IPv4             993486      0t0       TCP matjaro.home:43358->waw02s07-in-f14.1e100.net:https (ESTABLISHED)
+firefox 31146  mat   92u     IPv4             960466      0t0       TCP matjaro.home:39886->waw02s05-in-f3.1e100.net:https (ESTABLISHED)
+firefox 31146  mat   94u      REG               0,21       40       270 /dev/shm/org.chromium.mlrVG5 (deleted)
+firefox 31146  mat   96u      REG               0,21       40       305 /dev/shm/org.chromium.eGq8bA (deleted)
+firefox 31146  mat   97u     IPv4             960462      0t0       TCP matjaro.home:40646->waw02s08-in-f14.1e100.net:https (ESTABLISHED)
+firefox 31146  mat   98rr     REG              254,0 10485760  36965374 /home/mat/.mozilla/firefox/7qenmmco.default/places.sqlite
+firefox 31146  mat   99u      REG              254,0        0  36966833 /home/mat/.mozilla/firefox/7qenmmco.default/places.sqlite-wal
+firefox 31146  mat  101u     IPv4             985306      0t0       TCP matjaro.home:58666->waw02s08-in-f200.1e100.net:https (ESTABLISHED)
+firefox 31146  mat  102u      REG               0,21       40       309 /dev/shm/org.chromium.uBmJVS (deleted)
+firefox 31146  mat  103u     IPv4             991298      0t0       TCP matjaro.home:59318->text-lb.esams.wikimedia.org:https (ESTABLISHED)
+firefox 31146  mat  106u      REG              254,0        0  36966833 /home/mat/.mozilla/firefox/7qenmmco.default/places.sqlite-wal
+firefox 31146  mat  112u     IPv4             984567      0t0       TCP matjaro.home:35262->upload-lb.esams.wikimedia.org:https (ESTABLISHED)
