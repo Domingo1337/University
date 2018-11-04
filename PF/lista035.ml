@@ -79,7 +79,7 @@ let mtx_map2 (f: 'a -> 'a -> 'b) (m1: 'a mtx) (m2: 'a mtx) =
   List.map2 (fun r1 r2 -> List.map2 (fun a1 a2 -> f a1 a2) r1 r2) m1 m2
 
 let mtx_add =
-  mtx_map2 (+)
+  mtx_map2 (+.)
 
 (* Zadanie 12 *)
 type 'a vector = 'a list
