@@ -1,3 +1,35 @@
+(* lazy lists *)
+type 'a llist = LNil | LCons of 'a * 'a llist Lazy.t
+
+let lhd  = function
+  | LNil -> failwith "lhd"
+  | LCons(x, _) -> x
+
+let ltl = function
+  | LNil -> failwith "ltl"
+  | LCons(_, lazy xs) -> xs
+
+let rec ltake n ll =
+  match n, ll with
+  |  0, _ -> []
+  | _, LNil -> []
+  | n, LCons(x,lazy xs) -> x::(ltake (n-1) xs)
+
+let rec toLazyList = function
+    [] -> LNil
+  | x::xs -> LCons(x, lazy (toLazyList xs))
+
+let rec (@$) ll1 ll2 =
+  match ll1 with
+    LNil -> ll2
+  | LCons(x, lazy xs) -> LCons(x, lazy (xs @$ ll2))
+
+let rec lmap f ll =
+  match ll with
+  | LNil -> LNil
+  | LCons(x, lazy xs) -> LCons(f x, lazy(lmap f xs))
+
+(* streams *)
 (* source: https://www.cs.cornell.edu/courses/cs3110/2017fa/l/12-streams/notes.html *)
 type 'a stream = Cons of 'a * (unit -> 'a stream)
 
@@ -17,15 +49,13 @@ let rec drop n s =
   if n = 0 then s
   else drop (n-1) (tl s)
 
+
 (* Zadanie 1 *)
 let leibnitz_stream : float stream =
   let rec aux n sgn acc =
     let acc = acc +. (sgn /. n)
     in Cons(acc, fun () -> aux (n +. 2.) (-. sgn) acc)
   in aux 1. 1. 0.
-;;
-(* List.iter (fun x -> print_float (4. *. x); print_string " ") (take 100 leibnitz_stream) *)
-
 
 let apply3 (f: 'a -> 'a -> 'a -> 'b) (s: 'a stream) : 'b stream =
   let rec aux x1 x2 x3 s =
@@ -33,10 +63,30 @@ let apply3 (f: 'a -> 'a -> 'a -> 'b) (s: 'a stream) : 'b stream =
   in let x1 = hd s and s = tl s
   in let x2 = hd s and s = tl s
   in let x3 = hd s and s = tl s
-  in aux x1 x2 x3 s;;
+  in aux x1 x2 x3 s
 
 let euler : float stream =
   apply3 (fun x y z -> z -. (y -. z) *. (y -. z) /. (x -. 2. *. y +. z)) leibnitz_stream
+
+(* Lazy module *)
+let lazy_leibnitz : float llist =
+  let rec aux n sgn acc =
+    let acc = acc +. (sgn /. n)
+    in LCons(acc, lazy (aux (n+.2.) (-. sgn) acc))
+  in aux 1. 1. 0.
+
+
+let lazy_apply3 (f: 'a -> 'a -> 'a -> 'b) (ll: 'a llist) : 'b llist =
+  let rec aux x1 x2 x3 ll=
+    LCons( f x1 x2 x3, lazy (aux x2 x3 (lhd ll) (ltl ll)))
+  in let x1 = lhd ll and ll = ltl ll
+  in let x2 = lhd ll and ll = ltl ll
+  in let x3 = lhd ll and ll = ltl ll
+  in aux x1 x2 x3 ll
+
+let lazy_euler : float llist =
+  lazy_apply3 (fun x y z -> z -. (y -. z) *. (y -. z) /. (x -. 2. *. y +. z)) lazy_leibnitz
+
 
 (* Zad 2 *)
 (* kolejka do bfs *)
@@ -101,6 +151,7 @@ let rec apply_move (m: move) (s: state) : state =
         and new_to = min (from_vol+to_vol) to_gls in
         State(glasses,
               change from new_from _to new_to (vol::volumes) [])
+
 let concatmap (f: 'a -> 'b list) (xs: 'a list) : 'b list =
   List.concat (List.map f xs)
 
@@ -116,17 +167,95 @@ let moves (len: int) =
   (List.map (fun m -> DRAIN m) positions) @
   (List.map (fun (m,n) -> TRANSFER(m,n)) (product positions positions))
 
-let n_sols (glasses, volumes) n : (move list) list =
+(* gorliwa *)
+let n_sols (glasses, volume) n : (move list) list =
   let s = State(glasses, List.map (fun _ -> 0) glasses)
   and m = moves (List.length glasses)
-  and pred = fun (State(_, vs )) -> vs = volumes in
+  and pred = fun (State(_, vs )) -> List.mem volume vs in
   let rec bfs ((current, lst), que) =
     if (pred current) then lst, que
-    else bfs (pop
-                (push_many
-                   (List.map (fun move -> (apply_move move current), move::lst) m)
-                   que)) in
+    else bfs (pop (push_many
+                     (List.map (fun move -> (apply_move move current), move::lst) m)
+                     que)) in
   let rec solution_stream prev =
     let (next, rest) = bfs prev in
     Cons(List.rev next, fun () -> solution_stream (pop rest)) in
   take n (solution_stream ((s, []), emptyQueue))
+
+(* leniwa *)
+let lazy_sols (glasses, volume) n : (move list) list =
+  let s = State(glasses, List.map (fun _ -> 0) glasses)
+  and m = toLazyList(moves (List.length glasses))
+  and pred = fun (State(_, vs )) -> List.mem volume vs in
+  let rec bfs =
+    function
+    | LNil -> LNil
+    | (LCons((current, lst), lazy que)) ->
+      if (pred current) then LCons(List.rev lst, lazy (bfs que))
+      else bfs (que @$ (lmap (fun move -> (apply_move move current), move::lst) m))
+  in ltake n (bfs (LCons((s,[]), lazy LNil)))
+
+
+(* Zadanie 3 *)
+type expression =
+  | BOOL of bool
+  | LIT of bool * char
+  | AND of expression * expression
+  | OR of expression * expression
+  | IMPL of expression * expression
+
+type proof =
+  | EXP of expression
+  | FRAME of proof list
+  | PROOF of proof list
+
+let rec print_e = function
+  | BOOL b -> if b then print_string "T" else print_string "F"
+  | LIT(b, c) -> if b then () else print_string "~" ; print_char c
+  | AND(p,q) -> print_e p ; print_string " ∧ "; print_e q
+  | OR(p,q) -> print_e p ; print_string " ∨ "; print_e q
+  | IMPL(p,q) -> print_string "(" ; print_e p ; print_string " ⇒ "; print_e q; print_string ")"
+
+let rec print_p =
+  function
+  | EXP(e) -> print_e e
+  | FRAME(es) -> print_string "["; print_e (List.hd es) ; print_string ":" ;List.iter (fun e -> print_string "\n  " ; print_e e ) (List.tl es); print_string "]"
+  | PROOF(ps) -> List.iter (fun p -> print_p p; print_string ";\n") ps;;
+
+let frame = PROOF([FRAME([EXP(AND(LIT(true, 'p'), IMPL(LIT(true, 'p'), LIT(true, 'q'))));
+                          EXP(LIT(true, 'p'));
+                          EXP(IMPL(LIT(true, 'p'), LIT(true, 'q')));
+                          EXP(LIT(true, 'q'))]);
+                   EXP(IMPL((AND(LIT(true, 'p'), IMPL(LIT(true, 'p'), LIT(true, 'q')))), LIT(true, 'q')))])
+
+(* Zadanie 4 *)
+type varlist = VARS of char list * char list
+
+let negate_vars (VARS(p,n)) =
+  VARS(n,p)
+
+let merge_vars (VARS(p1,n1)) (VARS(p2,n2)) (negateFirst: bool) : varlist =
+  let rec merge l1 l2 =
+    match l1, l2 with
+    | [], lst
+    | lst, [] -> lst
+    | (h1::t1), (h2::t2) ->
+      if h1 < h2 then h1::(merge t1 l2)
+      else if h1 = h2 then  h2::(merge t1 t2)
+      else h2::(merge l1 t2) in
+  if negateFirst then VARS(merge n1 p2, merge p1 n2)
+  else VARS(merge p1 p2, merge n1 n2)
+
+let rec vars_of_e (e: expression) : varlist =
+  match e with
+  | BOOL(_) -> VARS([],[])
+  | LIT (b,c) -> if b then VARS([c],[]) else VARS([],[c])
+  | AND (e1, e2)
+  | OR  (e1, e2) -> merge_vars (vars_of_e e1) (vars_of_e e2) false
+  | IMPL(e1, e2) -> merge_vars (vars_of_e e1) (vars_of_e e2) true
+
+let rec vars_of_p (p: proof) : varlist =
+  match p with
+  | EXP(e) -> vars_of_e e
+  | FRAME(ps) -> List.fold_left (fun acc p -> merge_vars (vars_of_p p) acc true)  (VARS([], [])) ps
+  | PROOF(ps) -> List.fold_left (fun acc p -> merge_vars (vars_of_p p) acc false) (VARS([], [])) ps
