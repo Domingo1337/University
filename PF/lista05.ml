@@ -199,42 +199,43 @@ let lazy_sols (glasses, volume) n : (move list) list =
 (* Zadanie 3 *)
 type expression =
   | BOOL of bool
-  | LIT of bool * char
-  | AND of expression * expression
-  | OR of expression * expression
+  | LIT  of bool * char
+  | AND  of expression * expression
+  | OR   of expression * expression
   | IMPL of expression * expression
 
 type proof =
   | EXP of expression
-  | FRAME of proof list
+  | FRAME of expression * proof
   | PROOF of proof list
 
 let rec print_e = function
   | BOOL b -> if b then print_string "T" else print_string "F"
-  | LIT(b, c) -> if b then () else print_string "~" ; print_char c
-  | AND(p,q) -> print_e p ; print_string " ∧ "; print_e q
-  | OR(p,q) -> print_e p ; print_string " ∨ "; print_e q
-  | IMPL(p,q) -> print_string "(" ; print_e p ; print_string " ⇒ "; print_e q; print_string ")"
+  | LIT (b, c) -> if b then () else print_string "¬" ; print_char c
+  | AND (p, q) -> print_e p ; print_string " ∧ "; print_e q
+  | OR  (p, q) -> print_e p ; print_string " ∨ "; print_e q
+  | IMPL(p, q) -> print_string "(" ; print_e p ; print_string " ⇒ "; print_e q; print_string ")"
 
 let rec print_p =
   function
-  | EXP(e) -> print_e e
-  | FRAME(es) -> print_string "["; print_e (List.hd es) ; print_string ":" ;List.iter (fun e -> print_string "\n  " ; print_e e ) (List.tl es); print_string "]"
-  | PROOF(ps) -> List.iter (fun p -> print_p p; print_string ";\n") ps;;
+  | EXP  (e) -> print_e e
+  | FRAME(e, p) -> print_string "["; print_e e; print_string ":\n" ; print_p p; print_string "]"
+  | PROOF(ps) -> print_p (List.hd ps) ; List.iter (fun p -> print_string ";\n" ; print_p p) (List.tl ps); print_string "\n";;
 
-let frame = PROOF([FRAME([EXP(AND(LIT(true, 'p'), IMPL(LIT(true, 'p'), LIT(true, 'q'))));
-                          EXP(LIT(true, 'p'));
-                          EXP(IMPL(LIT(true, 'p'), LIT(true, 'q')));
-                          EXP(LIT(true, 'q'))]);
+let frame = PROOF([FRAME(AND(LIT(true, 'p'), IMPL(LIT(true, 'p'), LIT(true, 'q'))),
+                         PROOF([EXP(LIT(true, 'p'));
+                                EXP(IMPL(LIT(true, 'p'), LIT(true, 'q')));
+                                EXP(LIT(true, 'q'))]));
                    EXP(IMPL((AND(LIT(true, 'p'), IMPL(LIT(true, 'p'), LIT(true, 'q')))), LIT(true, 'q')))])
 
 (* Zadanie 4 *)
+(* list of positive literals * list of negative literals *)
 type varlist = VARS of char list * char list
 
-let negate_vars (VARS(p,n)) =
+let negate_vars (VARS(p,n)) : varlist =
   VARS(n,p)
 
-let merge_vars (VARS(p1,n1)) (VARS(p2,n2)) (negateFirst: bool) : varlist =
+let merge_vars (VARS(p1,n1)) (VARS(p2,n2)) : varlist =
   let rec merge l1 l2 =
     match l1, l2 with
     | [], lst
@@ -243,19 +244,29 @@ let merge_vars (VARS(p1,n1)) (VARS(p2,n2)) (negateFirst: bool) : varlist =
       if h1 < h2 then h1::(merge t1 l2)
       else if h1 = h2 then  h2::(merge t1 t2)
       else h2::(merge l1 t2) in
-  if negateFirst then VARS(merge n1 p2, merge p1 n2)
-  else VARS(merge p1 p2, merge n1 n2)
+  VARS(merge p1 p2, merge n1 n2)
 
 let rec vars_of_e (e: expression) : varlist =
   match e with
-  | BOOL(_) -> VARS([],[])
-  | LIT (b,c) -> if b then VARS([c],[]) else VARS([],[c])
+  | BOOL _ -> VARS([],[])
+  | LIT (b, c) -> if b then VARS([c],[]) else VARS([],[c])
   | AND (e1, e2)
-  | OR  (e1, e2) -> merge_vars (vars_of_e e1) (vars_of_e e2) false
-  | IMPL(e1, e2) -> merge_vars (vars_of_e e1) (vars_of_e e2) true
+  | OR  (e1, e2) -> merge_vars (vars_of_e e1) (vars_of_e e2)
+  | IMPL(e1, e2) -> merge_vars (negate_vars (vars_of_e e1)) (vars_of_e e2)
 
 let rec vars_of_p (p: proof) : varlist =
   match p with
-  | EXP(e) -> vars_of_e e
-  | FRAME(ps) -> List.fold_left (fun acc p -> merge_vars (vars_of_p p) acc true)  (VARS([], [])) ps
-  | PROOF(ps) -> List.fold_left (fun acc p -> merge_vars (vars_of_p p) acc false) (VARS([], [])) ps
+  | EXP  (e) -> vars_of_e e
+  | FRAME(e, p) -> merge_vars (negate_vars (vars_of_e e)) (vars_of_p p)
+  | PROOF(ps) -> List.fold_left (fun acc p -> merge_vars (vars_of_p p) acc) (VARS([], [])) ps;;
+
+let print_vars (VARS(p,n)) =
+  print_string "pos:[";
+  List.iter (fun v -> print_char v; print_string "; ") p;
+  print_string "]\nneg:[";
+  List.iter (fun v -> print_char v; print_string "; ") n;
+  print_string "]\n";;
+
+
+print_p frame;;
+print_vars (vars_of_p frame);;
