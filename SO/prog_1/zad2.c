@@ -13,15 +13,40 @@
  * A: ...
  */
 
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
 #include <string.h>
+#include <sys/prctl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <sys/prctl.h>
+#include <unistd.h>
 
 int main(void) {
-  return EXIT_SUCCESS;
+  // args for calling ps
+  char *args[] = {"/bin/ps", "-o", "pid,ppid,cmd", NULL};
+
+  // set this process as subreaper
+  //prctl(PR_SET_CHILD_SUBREAPER);
+
+  pid_t pid;
+  // create child
+  if ((pid = fork()) == 0) {
+    // create granchild
+    if ((pid = fork()) == 0) {
+      if (fork() == 0) {
+        execve(args[0], args, __environ);
+      }
+      wait(NULL);
+    }
+    // kill child
+    else {
+      printf("grandchild pid is %d\n", pid);
+    }
+  } else {
+    printf("parent pid is %d\n", getpid());
+    printf("child pid is %d\n", pid);
+    wait(NULL);
+    sleep(1);
+  }
 }
