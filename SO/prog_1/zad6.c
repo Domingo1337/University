@@ -8,7 +8,8 @@
  *
  * Q: Dlaczego w pliku Makefile przekazujemy opcję '-Wl,-rpath,ścieżka'
  *    do sterownika kompilatora?
- * A: ...
+ * A: -Wl przekazuje nastepny argument do linkera.
+ *    -rd dodaje ścieżkę do zbioru ścieżek w których szukane są biblioteki w czasie wykonywania.
  */
 
 #include <dlfcn.h>

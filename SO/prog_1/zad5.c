@@ -7,7 +7,9 @@
  *  - a w szczególności nie będę go publikować w sieci Internet.
  *
  * Q: Czemu procedura printf nie jest wielobieżna, a snprintf jest?
- * A: ...
+ * A: Procedura printf ma statyczne struktury, m.in. bufor do ktorego zapisuje napis do wypisania,
+ *    zawołanie printf z innego wątku zanim bufor zostanie wypisany nadpisze go.
+ *    Snprintf nie posiada bufora, pisze od razu pod zadany adres.
  */
 
 #define _GNU_SOURCE
@@ -71,7 +73,6 @@ int main(int argc, char *argv[]) {
       int *p = (int *)main;
       *p = 2137;
     }
-
   } else {
     return EXIT_FAILURE;
   }

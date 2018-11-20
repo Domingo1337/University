@@ -7,7 +7,8 @@
  *  - a w szczególności nie będę go publikować w sieci Internet.
  *
  * Q: Czemu nie musisz synchronizować dostępu do zmiennych współdzielonych?
- * A: Naraz działać może tylko jedno włókno.
+ * A: Naraz działać może tylko jedno włókno. Poszczególne włókna nie są
+ * wywłaszczane.
  */
 
 #include <ctype.h>
@@ -19,16 +20,15 @@
 
 static ucontext_t uctx_func_1, uctx_func_2, uctx_func_3;
 
-char buffer[256];
-char word[256];
-unsigned short word_size;
-_Bool end = 0;
+static char buffer[256];
+static char word[256];
+static unsigned short word_size;
+static _Bool end = 0;
 
 static void func_1() {
   static int words = 0;
 
   while (!end) {
-
     char current = ' ';
     while (current == ' ') {
       if (!read(STDIN_FILENO, &current, 1)) {
@@ -38,29 +38,21 @@ static void func_1() {
     }
 
     words++;
-
     buffer[0] = current;
 
     unsigned short i = 1;
-
-    while (!end && read(STDIN_FILENO, &current, 1)) {
-      // printf("[%c] %s\n", current, buffer);
-
+    while (read(STDIN_FILENO, &current, 1)) {
       // next character is space then the word is finished, set current as 0
-      if (current == ' ') {
-        current = '\0';
-      }
-
-      buffer[i++] = current;
-      // newline should be the last character of word, set next as 0
-      if (current == '\n') {
+      if (current == ' ' || current == '\n') {
         buffer[i] = '\0';
-        setcontext(&uctx_func_2);
-      } else if (current == '\0') {
-        setcontext(&uctx_func_2);
+      } else {
+        buffer[i++] = current;
       }
+      setcontext(&uctx_func_2);
     }
+    end = 1;
   }
+
   fprintf(stderr, "words = %d\n", words);
   setcontext(&uctx_func_2);
 }
@@ -80,7 +72,7 @@ static void func_2() {
       i++;
     }
 
-    //tell func_3 how much bytes to write
+    // tell func_3 how much bytes to write
     word_size = j;
 
     if (end) {

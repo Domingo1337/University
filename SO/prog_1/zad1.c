@@ -7,7 +7,8 @@
  *  - a w szczególności nie będę go publikować w sieci Internet.
  *
  * Q: Zdefiniuj proces "zombie".
- * A: ...
+ * A: Niefukncjonujący proces, który nie został zakończony przez rodzica,
+ *    więc jego struktury są dalej przechowywanie w tablicy procesów.
  */
 
 #include <signal.h>
@@ -34,6 +35,7 @@ int main(int argc, char *argv[]) {
     exit(0);
   }
 
+  // call ps
   if (fork() == 0) {
     execve(args[0], args, __environ);
   }

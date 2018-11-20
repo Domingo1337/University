@@ -7,10 +7,11 @@
  *  - a w szczególności nie będę go publikować w sieci Internet.
  *
  * Q: Zdefiniuj proces "sierotę".
- * A: ...
+ * A: Proces w chwilowym stanie pomiędzy śmiercią rodzica a przygarnięciem
+ *    procesu przez inny.
  *
  * Q: Co się stanie, jeśli główny proces nie podejmie się roli żniwiarza?
- * A: ...
+ * A: Żniwiarzem osieroconego procesu zostaje init(1).
  */
 
 #include <signal.h>
@@ -27,26 +28,26 @@ int main(void) {
   char *args[] = {"/bin/ps", "-o", "pid,ppid,cmd", NULL};
 
   // set this process as subreaper
-  //prctl(PR_SET_CHILD_SUBREAPER);
+  prctl(PR_SET_CHILD_SUBREAPER);
 
   pid_t pid;
   // create child
   if ((pid = fork()) == 0) {
     // create granchild
     if ((pid = fork()) == 0) {
+      // call ps
       if (fork() == 0) {
         execve(args[0], args, __environ);
       }
       wait(NULL);
-    }
-    // kill child
-    else {
+    } else {
+      // let child die
       printf("grandchild pid is %d\n", pid);
     }
   } else {
     printf("parent pid is %d\n", getpid());
     printf("child pid is %d\n", pid);
-    wait(NULL);
+    // wait(NULL); // wait for granchild
     sleep(1);
   }
 }

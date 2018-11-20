@@ -7,7 +7,8 @@
  *  - a w szczególności nie będę go publikować w sieci Internet.
  *
  * Q: Jak proces wykrywa, że drugi koniec potoku został zamknięty?
- * A: Próba pisania do zamkniętego potoku powoduje przyjście sygnału SIGTERM.
+ * A: Próba pisania do zamkniętego potoku powoduje przyjście sygnału SIGTERM,
+ *    a wywołanie read na zamkniętym potoku zwraca 0.
  */
 
 #include <ctype.h>
@@ -18,13 +19,31 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-int fd_read, fd_write;
+static int fd_read, fd_write;
 
 static void func_1() {
   static int words = 0;
-  char c;
+  static char c;
+  static char buffer[255];
+
   while (read(fd_read, &c, 1)) {
-    write(fd_write, &c, 1);
+    while (c == ' ') { //isspace tutaj
+      // printf("[%c]", c);
+      if (!read(fd_read, &c, 1)) {
+        break;
+      }
+    }
+
+    buffer[0] = c;
+    unsigned short i = 1;
+    while (read(fd_read, &c, 1) && c != ' ' && c != '\n') {
+      buffer[i++] = c;
+    }
+
+    buffer[i] = '\0';
+    if (write(fd_write, buffer, i)) {
+      words++;
+    }
   }
 
   close(fd_read);
@@ -37,8 +56,11 @@ static void func_2() {
   char c;
 
   while (read(fd_read, &c, 1)) {
-    if (c != ' ')
+    if (isalnum(c)) {
       write(fd_write, &c, 1);
+    } else {
+      removed++;
+    }
   }
 
   close(fd_read);
@@ -48,9 +70,10 @@ static void func_2() {
 
 static void func_3() {
   static int chars = 0;
-  char c;
-  while (read(fd_read, &c, 1) > 0) {
-    write(fd_write, &c, 1);
+  static char buffer[255];
+  static int size;
+  while ((size = read(fd_read, buffer, 255)) > 0) {
+    chars += write(fd_write, buffer, size);
   }
 
   close(fd_read);
@@ -60,8 +83,10 @@ static void func_3() {
 
 int main(void) {
   int pipes[4];
-  pipe(pipes);
-  pipe(pipes + 2);
+  if (pipe(pipes) || pipe(pipes + 2)) {
+    perror("could not open pipes");
+    return EXIT_FAILURE;
+  }
 
   pid_t proc[3];
 
@@ -90,10 +115,11 @@ int main(void) {
     close(pipes[1]);
     close(pipes[2]);
     close(pipes[3]);
+
     for (unsigned short i = 0; i < 3; i++) {
       int status;
       if (waitpid(proc[i], &status, 0) == -1) {
-        perror("waitpid failed");
+        fprintf(stderr, "waitpid failed for proc %d", i);
         return EXIT_FAILURE;
       }
 
