@@ -1,0 +1,12 @@
+
+Goal modus_ponens_s : A /\ (A => B) => B =
+  [A /\ (A => B) :
+   A;
+   A => B;
+   B];
+  A /\ (A => B) => B
+
+Goal modus_ponens_t : A ∧ (A ⇒ B) ⇒ B =
+  ImplI ([A ∧ (A ⇒ B) :
+    ImplE (ConjEL (Ax (A ∧ (A ⇒ B))),
+           ConjER (Ax (A ∧ (A ⇒ B))))])
