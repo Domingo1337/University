@@ -9,7 +9,7 @@ zad3: zad3.o
 zad4: zad4.o
 zad5: zad5.o
 zad6: zad6.o | libmystr.so
-	$(CC) $(CFLAGS) -o $@ $^ -ldl -Wl,-rpath,`pwd`
+	$(CC) $(CFLAGS) -o $@ $^ -ldl -Wl,-rpath,'$$ORIGIN'
 
 libmystr.so: strdrop.lo strcnt.lo
 	$(CC) -shared -o $@ $^

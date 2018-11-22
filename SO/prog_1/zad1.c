@@ -1,5 +1,5 @@
-/* Imię nazwisko: Maksymilian Debeściak
- * Numer indeksu: 999999
+/* Imię nazwisko: Dominik Gulczyński
+ * Numer indeksu: 299391
  *
  * Oświadczam, że:
  *  - rozwiązanie zadania jest mojego autorstwa,
@@ -20,9 +20,6 @@
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
-  // args for calling ps
-  char *args[] = {"/bin/ps", "-o", "pid,ppid,stat,cmd", NULL};
-
   // set SIGCHILD handler to ignore
   if (argc > 1 && strcmp(argv[1], "--bury") == 0) {
     struct sigaction sa;
@@ -37,6 +34,7 @@ int main(int argc, char *argv[]) {
 
   // call ps
   if (fork() == 0) {
+    char *args[] = {"/bin/ps", "-o", "pid,ppid,stat,cmd", NULL};
     execve(args[0], args, __environ);
   }
 

@@ -1,5 +1,5 @@
-/* Imię nazwisko: Maksymilian Debeściak
- * Numer indeksu: 999999
+/* Imię nazwisko: Dominik Gulczyński
+ * Numer indeksu: 299391
  *
  * Oświadczam, że:
  *  - rozwiązanie zadania jest mojego autorstwa,
@@ -24,30 +24,25 @@
 #include <unistd.h>
 
 int main(void) {
-  // args for calling ps
-  char *args[] = {"/bin/ps", "-o", "pid,ppid,cmd", NULL};
+  prctl(PR_SET_CHILD_SUBREAPER); /* set this process as subreaper */
 
-  // set this process as subreaper
-  prctl(PR_SET_CHILD_SUBREAPER);
+  if (fork() == 0) {
+    if (fork() == 0) {
+      printf("grandchild pid is %d\n", getpid());
 
-  pid_t pid;
-  // create child
-  if ((pid = fork()) == 0) {
-    // create granchild
-    if ((pid = fork()) == 0) {
-      // call ps
       if (fork() == 0) {
+        char *args[] = {"/bin/ps", "-o", "pid,ppid,cmd", NULL};
         execve(args[0], args, __environ);
       }
-      wait(NULL);
+      while (wait(NULL) > 0)
+        ; /* wait for all grandchildren */
+
     } else {
-      // let child die
-      printf("grandchild pid is %d\n", pid);
+      printf("child pid is %d\n", getpid());
     }
   } else {
     printf("parent pid is %d\n", getpid());
-    printf("child pid is %d\n", pid);
-    // wait(NULL); // wait for granchild
-    sleep(1);
+    while (wait(NULL) > 0)
+      ; /* wait for all children */
   }
 }

@@ -1,5 +1,5 @@
-/* Imię nazwisko: Maksymilian Debeściak
- * Numer indeksu: 999999
+/* Imię nazwisko: Dominik Gulczyński
+ * Numer indeksu: 299391
  *
  * Oświadczam, że:
  *  - rozwiązanie zadania jest mojego autorstwa,
@@ -8,7 +8,7 @@
  *
  * Q: Dlaczego w pliku Makefile przekazujemy opcję '-Wl,-rpath,ścieżka'
  *    do sterownika kompilatora?
- * A: -Wl przekazuje nastepny argument do linkera.
+ * A: -Wl sprawia, że następny argument przekazany będzie linkera.
  *    -rd dodaje ścieżkę do zbioru ścieżek w których szukane są biblioteki w czasie wykonywania.
  */
 
@@ -16,8 +16,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 int main(void) {
+  char s_pid[6]; /* max pid == 32767 */
+  sprintf(s_pid, "%d", getpid());
+  char *args[] = {"/usr/bin/pmap", s_pid, NULL};
+
+  if (fork() == 0) {
+    execve(args[0], args, __environ);
+  } else {
+    wait(NULL);
+  }
+
   void *handle;
   int (*strdrop)(char *, const char *);
   int (*strcnt)(const char *, const char *);
@@ -32,10 +43,15 @@ int main(void) {
     return EXIT_FAILURE;
   }
 
-  char str[] = "hahaha!!!";
+  char str[] = "hahaha, hohoho!!!";
 
-  printf("%d", strcnt(str, "a!"));
-  printf("%d", strdrop(str, "a!"));
+  printf("%d\n", strdrop(str, "h"));
+  printf("%d\n", strcnt(str, "ha!"));
 
+  if (fork() == 0) {
+    execve(args[0], args, __environ);
+  } else {
+    wait(NULL);
+  }
   return EXIT_SUCCESS;
 }
