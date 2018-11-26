@@ -65,8 +65,9 @@ static void func_2() {
       }
       i++;
     }
-    word[j++] = ' ';
-
+    if (j != 0){
+      word[j++] = ' ';
+    }
     word_size = j;
 
     if (end) {
