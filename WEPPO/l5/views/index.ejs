@@ -1,0 +1,17 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <form method="POST">
+        <div> imie: <input type='text' name='imie' value='<%= imie %>' /> </div>
+        <div> nazwisko: <input type='text' name='nazwisko' value='<%= nazwisko %>' /> </div>
+        <div> przedmiot: <input type='text' name='przedmiot' value='<%= przedmiot %>' /> </div>
+        <% for ( var i=0; i<10; i++ ) { %>
+            <div> zadanie <%= i+1%>: <input type='text' name='zadania' value='<%= zadania[i] %>' /> </div>
+        <% } %>        
+        <button>Zapisz</button>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+<!-- views/print.ejs -->
+<!DOCTYPE html>
+
+<body>
+    <table>
+        <tr>
+            <th>Imie</th> <td><%= imie%></td>
+            <th>Nazwisko</th> <td><%= nazwisko%></td>
+            <th>Przedmiot</th> <td><%= przedmiot%></td>
+        </tr>
+    </table>
+    <table>
+            <tr>
+                <% for ( var i=0; i<10; i++ ) { %>
+                    <th>[ <%= i+1%> ]<th>
+                <% } %>
+            </tr>
+
+            <tr>
+                    <% for ( var i=0; i<10; i++ ) { %>
+                        <td>[ <%= zadania[i]%> ]<td>
+                    <% } %>
+            </tr>
+    </table>
+</body>
+
+</html>
