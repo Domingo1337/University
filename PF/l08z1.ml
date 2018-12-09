@@ -31,6 +31,7 @@ struct
     | (p, e)::rest -> (p, e, rest)
 end
 
+
 (* 2 *)
 let sort (lst: int list) : int list =
   let rec flatten que acc=
@@ -42,6 +43,7 @@ let sort (lst: int list) : int list =
        | [] -> flatten que []
        | x::xs -> aux xs (Pqueue.insert que x x)
   in aux lst Pqueue.empty
+
 
 (* 3 *)
 module type ORDTYPE =
@@ -66,7 +68,6 @@ struct
       if Order.compare p h_p = Order.LT then (h_p, h_e)::(insert rest p elem)
       else (p, elem)::que
 
-
   let remove (que: 'a t) : 'priority * 'a * 'a t =
     match que with
     | [] -> raise EmptyPQueue
@@ -83,15 +84,26 @@ struct
     else GT
 end
 
-module Intque = Ordque(IntOrder);;
-
-let sort_ (lst: int list) : int list =
+let sort_f (lst: int list) : int list =
+  let module Q = Ordque(IntOrder) in
   let rec flatten que acc =
-    if que = Intque.empty then acc
-    else let (_, e, rest) = Intque.remove que
+    if que = Q.empty then acc
+    else let (_, e, rest) = Q.remove que
       in flatten rest (e::acc)
   in let rec aux lst que =
        match lst with
        | [] -> flatten que []
-       | x::xs -> aux xs (Intque.insert que x x)
-  in aux lst Intque.empty
+       | x::xs -> aux xs (Q.insert que x x)
+  in aux lst Q.empty
+
+let sort_fcm (type a) (module Ord : ORDTYPE with type t = a) (lst: a list) : a list =
+  let module PQ = Ordque(Ord)
+  in let rec flatten que acc =
+       if que = PQ.empty then acc
+       else let (_, e, rest) = PQ.remove que
+         in flatten rest (e::acc)
+  in let rec aux lst que =
+       match lst with
+       | [] -> flatten que []
+       | x::xs -> aux xs (PQ.insert que x x)
+  in aux lst PQ.empty

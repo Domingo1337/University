@@ -7,6 +7,7 @@ sig
   val label : t -> label
 end
 
+(* 1 *)
 module type EDGE =
 sig
   type t
@@ -19,7 +20,8 @@ sig
   val stop : t -> vertex
 end
 
-module Vertex : VERTEX with type t = int = 
+(* 2 *)
+module Vertex : VERTEX with type t = int and type label = int= 
 struct
   type label = int
   type t = int
@@ -28,7 +30,7 @@ struct
   let label = fun v -> v
 end
 
-module Edge : EDGE with type vertex = Vertex.t and type t = int * Vertex.t * Vertex.t =
+module Edge : EDGE with type vertex = Vertex.t and type label = int and type t = int * Vertex.t * Vertex.t =
 struct
   type t = int * Vertex.t * Vertex.t
   type label = int
@@ -73,31 +75,112 @@ sig
   val fold_e : (edge ->'a ->'a) -> t ->'a ->'a
 end
 
+
+(* 3 *)
 module Graph : GRAPH with type V.t = Vertex.t and type E.t = Edge.t =
 struct
-  module V = Vertex
-  type vertex = Vertex.t
+  module V : VERTEX with type t = Vertex.t = Vertex
+  type vertex = V.t
 
   module E = Edge
-  type edge = Edge.t
+  type edge = E.t
 
   type t = vertex list * edge list
 
-  let mem_v (vs, es) v = List.exists (fun x -> Vertex.equal x v) vs
-  let mem_e (vs, es) e = List.exists (fun x -> Edge.equal x e) es
-  let mem_e_v (vs, es) v1 v2 = List.exists (fun e -> Vertex.equal (Edge.stop e) v2) (List.filter (fun e -> Vertex.equal (Edge.start e) v1) es)
-  let find_e (vs, es) v1 v2 = List.find (fun e -> Vertex.equal (Edge.stop e) v2) (List.filter (fun e -> Vertex.equal (Edge.start e) v1) es)
-  let succ (vs, es) v = List.map (fun e -> Edge.stop e) (List.filter (fun e -> Vertex.equal (Edge.start e) v) es)
-  let pred (vs, es) v = List.map (fun e -> Edge.start e) (List.filter (fun e -> Vertex.equal (Edge.stop e) v) es)
-  let succ_e (vs, es) v = List.filter (fun e -> Vertex.equal (Edge.start e) v) es
-  let pred_e (vs, es) v = List.filter (fun e -> Vertex.equal (Edge.stop e) v) es
+  let mem_v (vs, es) v = List.exists (fun x -> V.equal x v) vs
+  let mem_e (vs, es) e = List.exists (fun x -> E.equal x e) es
+  let mem_e_v (vs, es) v1 v2 = List.exists (fun e -> V.equal (E.stop e) v2) (List.filter (fun e -> V.equal (E.start e) v1) es)
+  let find_e (vs, es) v1 v2 = List.find (fun e -> V.equal (E.stop e) v2) (List.filter (fun e -> V.equal (E.start e) v1) es)
+  let succ (vs, es) v = List.map (fun e -> E.stop e) (List.filter (fun e -> V.equal (E.start e) v) es)
+  let pred (vs, es) v = List.map (fun e -> E.start e) (List.filter (fun e -> V.equal (E.stop e) v) es)
+  let succ_e (vs, es) v = List.filter (fun e -> V.equal (E.start e) v) es
+  let pred_e (vs, es) v = List.filter (fun e -> V.equal (E.stop e) v) es
 
   let empty = ([], [])
   let add_e (vs, es) e = (vs, e::es)
   let add_v (vs, es) v = (v::vs, es)
-  let rem_e (vs, es) e = (vs, List.filter (fun x -> not (Edge.equal x e)) es)
-  let rem_v (vs, es) v = (List.filter (fun x -> not (Vertex.equal x v)) vs, es)
+  let rem_e (vs, es) e = (vs, List.filter (fun x -> not (E.equal x e)) es)
+  let rem_v (vs, es) v = (List.filter (fun x -> not (V.equal x v)) vs, es)
 
   let fold_v f (vs, es) v = List.fold_right f vs v
   let fold_e f (vs, es) e = List.fold_right f es e
 end
+
+
+(* 4 *)
+let g = Graph.empty
+let one = Vertex.create 1 and two = Vertex.create 2 and
+  three = Vertex.create 3 and four  = Vertex.create 4 and five = Vertex.create 5
+let g = Graph.add_v g one 
+let g = Graph.add_v g two 
+let g = Graph.add_v g three 
+let g = Graph.add_v g four
+let g = Graph.add_v g five
+
+let g = Graph.add_e g (Edge.create 0 five four)
+let g = Graph.add_e g (Edge.create 1 four one)
+let g = Graph.add_e g (Edge.create 2 one two)
+let g = Graph.add_e g (Edge.create 3 four two)
+let g = Graph.add_e g (Edge.create 4 three two)
+let g = Graph.add_e g (Edge.create 5 two three)
+
+let succ_one = Graph.succ g one
+let edges_to_two = Graph.pred_e g two
+let from_four_to_two = Graph.find_e g four two
+
+
+(* 5 *)
+module GraphFunctor (V: VERTEX) (E: EDGE with type vertex = V.t): GRAPH =
+struct 
+  module V = V
+  type vertex = V.t
+
+  module E = E
+  type edge = E.t
+
+  type t = vertex list * edge list
+
+  let mem_v (vs, es) v = List.exists (fun x -> V.equal x v) vs
+  let mem_e (vs, es) e = List.exists (fun x -> E.equal x e) es
+  let mem_e_v (vs, es) v1 v2 = List.exists (fun e -> V.equal (E.stop e) v2) (List.filter (fun e -> V.equal (E.start e) v1) es)
+  let find_e (vs, es) v1 v2 = List.find (fun e -> V.equal (E.stop e) v2) (List.filter (fun e -> V.equal (E.start e) v1) es)
+  let succ (vs, es) v = List.map (fun e -> E.stop e) (List.filter (fun e -> V.equal (E.start e) v) es)
+  let pred (vs, es) v = List.map (fun e -> E.start e) (List.filter (fun e -> V.equal (E.stop e) v) es)
+  let succ_e (vs, es) v = List.filter (fun e -> V.equal (E.start e) v) es
+  let pred_e (vs, es) v = List.filter (fun e -> V.equal (E.stop e) v) es
+
+  let empty = ([], [])
+  let add_e (vs, es) e = (vs, e::es)
+  let add_v (vs, es) v = (v::vs, es)
+  let rem_e (vs, es) e = (vs, List.filter (fun x -> not (E.equal x e)) es)
+  let rem_v (vs, es) v = (List.filter (fun x -> not (V.equal x v)) vs, es)
+
+  let fold_v f (vs, es) v = List.fold_right f vs v
+  let fold_e f (vs, es) e = List.fold_right f es e
+end
+
+
+(* 6 *)
+let bfs graph elem =
+  let rec aux que visited =
+    match que with
+    | [] -> List.rev visited
+    | h::t ->
+      if List.mem h visited then aux t visited
+      else aux (t@(Graph.succ graph h)) (h::visited)
+  in aux [elem] []
+
+let dfs graph elem =
+  let rec aux que visited =
+    match que with
+    | [] -> List.rev visited
+    | h::t ->
+      if List.mem h visited then aux t visited
+      else aux ((Graph.succ graph h)@t) (h::visited)
+  in aux [elem] []
+
+(* test  *)
+let dfs_g = dfs g 5
+let bfs_g = bfs g 5
+
+;;
