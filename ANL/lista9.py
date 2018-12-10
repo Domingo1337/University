@@ -69,14 +69,13 @@ while(True):
     plt.show(block=False)
     print('Points\t', W)
     print('Weights\t', w)
-    s = input("Change weight of: ")
-    i = int(s)
-    s = input("to: ")
-    w[i] = int(s)
+    i = int(input('Change weight of: '))
+    val = int(input('to: '))
+    w[i] = val
     for i in range(n+1):
         point = beizer(i/n)
         x[i] = point[0]
         y[i] = point[1]
-    plt.plot(x,y)
+    plt.plot(x, y)
     plt.show(block=False)
     input('')
