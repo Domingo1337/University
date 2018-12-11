@@ -6,7 +6,7 @@ f (x:xs) = [y | y <- xs, y `mod` x /= 0]
 primes = map head (iterate f [2 ..])
 
 -- Zadanie 2
-primes' = 2 :[x | x <- [3..], all (\y -> x `mod` y /= 0) (takeWhile (\y -> y * y <= x) [2 ..])]
+primes' = 2 : [x | x <- [3 ..], all (\y -> x `mod` y /= 0) (takeWhile (\y -> y * y <= x) primes')]
 
 -- Zadanie 3
 fib = 1 : 1 : zipWith (+) fib (tail fib)
@@ -22,8 +22,7 @@ iperm (x:xs) = concatMap (insAll x) (iperm xs)
 
 sperm :: [a] -> [[a]]
 sperm [] = [[]]
-sperm (x:xs) =
-  concatMap (\xs -> map (head xs :) (sperm (tail xs))) (mixhead x xs [])
+sperm (x:xs) = concatMap (\xs -> map (head xs :) (sperm (tail xs))) (mixhead x xs [])
   where
     mixhead :: a -> [a] -> [a] -> [[a]]
     mixhead x [] rys = [x : reverse rys]
@@ -35,15 +34,93 @@ sublist [] = [[]]
 sublist (x:xs) = map (x :) (sublist xs) ++ sublist xs
 
 -- Zadanie 6
-diagonal :: [a] -> [b] -> [(a, b)]
-diagonal [] _ = []
-diagonal _ [] = []
-diagonal (x:xs) (y:ys) = (x, y) : diagonal xs ys
-
 (><) :: [a] -> [b] -> [(a, b)]
 (><) xs ys = mixhead xs ys []
   where
-    mixhead :: [a] -> [b] -> [b] -> [(a, b)]
-    mixhead [] [] _ = []
-    mixhead (x:xs) [] rys = diagonal xs rys ++ mixhead xs [] rys
-    mixhead xs (y:ys) rys = diagonal xs (y : rys) ++ mixhead xs ys (y : rys)
+    diagonal :: [a] -> [b] -> [(a, b)]
+    diagonal [] _ = []
+    diagonal _ [] = []
+    diagonal (x:xs) (y:ys) = (x, y) : diagonal xs ys
+    walk :: [a] -> [b] -> [b] -> [(a, b)]
+    walk [] [] _ = []
+    walk (x:xs) [] rys = diagonal xs rys ++ walk xs [] rys
+    walk xs (y:ys) rys = diagonal xs (y : rys) ++ walk xs ys (y : rys)
+
+-- Zadanie 7
+data Tree a
+  = Node (Tree a)
+         a
+         (Tree a)
+  | Leaf
+
+data Set a
+  = Fin (Tree a)
+  | Cofin (Tree a)
+
+insert, delete :: Ord a => a -> Tree a -> Tree a
+insert x Leaf = Node Leaf x Leaf
+insert x (Node l v r)
+  | x == v = Node l v r
+  | x < v = Node (insert x l) v r
+  | otherwise = Node l v (insert x r)
+
+delete _ Leaf = Leaf
+delete x (Node Leaf v r)
+  | x == v = r
+  | otherwise = Node Leaf v (delete x r)
+delete x (Node l v Leaf)
+  | x == v = l
+  | otherwise = Node (delete x l) v Leaf
+delete x (Node l v (Node lr vr rr))
+  | x == v = Node l vr (delete vr rr)
+  | x < v = Node (delete x l) v (Node lr vr rr)
+  | otherwise = Node l v (delete x (Node lr vr rr))
+
+foldTree :: Ord a => (a -> b -> b) -> Tree a -> b -> b
+foldTree _ Leaf acc = acc
+foldTree f (Node l v r) acc = foldTree f l (f v (foldTree f r acc))
+
+intersecTree :: Ord a => Tree a -> Tree a -> Tree a
+intersecTree x y = foldTree delete (foldTree delete x y) y
+
+findTree :: Ord a => a -> Tree a -> Bool
+findTree x Leaf = False
+findTree x (Node l v r)
+  | x == v = True
+  | x < v = findTree x l
+  | otherwise = findTree x r
+
+setFromList :: Ord a => [a] -> Set a
+setFromList xs = Fin (foldl (flip insert) Leaf xs)
+
+setEmpty, setFull :: Ord a => Set a
+setEmpty = Fin Leaf
+
+setFull = Cofin Leaf
+
+setUnion, setIntersection :: Ord a => Set a -> Set a -> Set a
+setUnion (Fin x) (Fin y) = Fin (foldTree insert x y)
+setUnion (Fin f) (Cofin c) = Cofin (foldTree delete f c)
+setUnion (Cofin c) (Fin f) = Cofin (foldTree delete f c)
+setUnion (Cofin x) (Cofin y) = Cofin (intersecTree x y)
+
+setIntersection (Fin x) (Fin y) = Fin (intersecTree x y)
+setIntersection (Cofin c) (Fin f) = Fin (foldTree delete c f)
+setIntersection (Fin f) (Cofin c) = Fin (foldTree delete c f)
+setIntersection (Cofin x) (Cofin y) = Cofin (foldTree insert x y)
+
+setComplement :: Ord a => Set a -> Set a
+setComplement (Fin x) = Cofin x
+setComplement (Cofin x) = Fin x
+
+setMember :: Ord a => a -> Set a -> Bool
+setMember x (Cofin c) = not (findTree x c)
+setMember x (Fin f) = findTree x f
+
+instance (Show a) => Show (Tree a) where
+  show Leaf = "Leaf"
+  show (Node l v r) = "(" ++ show l ++ "/" ++ show v ++ "\\" ++ show r ++ ")"
+
+instance (Show a) => Show (Set a) where
+  show (Fin f) = "Fin:   " ++ show f
+  show (Cofin f) = "Cofin: " ++ show f
