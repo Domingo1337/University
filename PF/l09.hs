@@ -14,39 +14,38 @@ fib = 1 : 1 : zipWith (+) fib (tail fib)
 -- Zadanie 4
 iperm :: [a] -> [[a]]
 iperm [] = [[]]
-iperm (x:xs) = concatMap (insAll x) (iperm xs)
+iperm (x:xs) = concatMap (insEv x) (iperm xs)
   where
-    insAll :: a -> [a] -> [[a]]
-    insAll x [] = [[x]]
-    insAll x (y:ys) = (x : y : ys) : map (y :) (insAll x ys)
+    insEv :: a -> [a] -> [[a]]
+    insEv x [] = [[x]]
+    insEv x (y:ys) = (x : y : ys) : map (y :) (insEv x ys)
 
+-- iperm (x:xs) = [p' | p' <- insEv x p, p <- iperm xs]
 sperm :: [a] -> [[a]]
 sperm [] = [[]]
-sperm (x:xs) = concatMap (\xs -> map (head xs :) (sperm (tail xs))) (mixhead x xs [])
+sperm xs = [x : p | (x, rest) <- mixhead xs [], p <- sperm rest]
   where
-    mixhead :: a -> [a] -> [a] -> [[a]]
-    mixhead x [] rys = [x : reverse rys]
-    mixhead x (y:ys) rs = (x : reverse rs ++ (y : ys)) : mixhead y ys (x : rs)
+    mixhead :: [a] -> [a] -> [(a, [a])]
+    mixhead [] _ = []
+    mixhead (x:xs) rxs = (x, reverse rxs ++ xs) : mixhead xs (x : rxs)
 
 -- Zadanie 5
 sublist :: [a] -> [[a]]
 sublist [] = [[]]
-sublist (x:xs) = map (x :) (sublist xs) ++ sublist xs
+sublist (x:xs) =
+  let rest = sublist xs
+   in map (x :) rest ++ rest
 
 -- Zadanie 6
 (><) :: [a] -> [b] -> [(a, b)]
-(><) xs ys = mixhead xs ys []
+(><) xs ys = walk xs ys []
   where
-    diagonal :: [a] -> [b] -> [(a, b)]
-    diagonal [] _ = []
-    diagonal _ [] = []
-    diagonal (x:xs) (y:ys) = (x, y) : diagonal xs ys
     walk :: [a] -> [b] -> [b] -> [(a, b)]
-    walk [] [] _ = []
-    walk (x:xs) [] rys = diagonal xs rys ++ walk xs [] rys
-    walk xs (y:ys) rys = diagonal xs (y : rys) ++ walk xs ys (y : rys)
+    walk [] _ _ = []
+    walk (x:xs) [] rys = zip xs rys ++ walk xs [] rys
+    walk xs (y:ys) rys = zip xs (y : rys) ++ walk xs ys (y : rys)
 
--- Zadanie 7
+    -- Zadanie 7
 data Tree a
   = Node (Tree a)
          a
@@ -56,6 +55,18 @@ data Tree a
 data Set a
   = Fin (Tree a)
   | Cofin (Tree a)
+
+instance (Show a) => Show (Tree a) where
+  show Leaf = "Leaf"
+  show (Node l v r) = "(" ++ show l ++ "/" ++ show v ++ "\\" ++ show r ++ ")"
+
+instance (Show a) => Show (Set a) where
+  show (Fin f) = "Fin:" ++ show f
+  show (Cofin f) = "Cofin:" ++ show f
+
+smallestOf :: Ord a => Tree a -> a
+smallestOf (Node Leaf v _) = v
+smallestOf (Node l _ _) = smallestOf l
 
 insert, delete :: Ord a => a -> Tree a -> Tree a
 insert x Leaf = Node Leaf x Leaf
@@ -71,10 +82,15 @@ delete x (Node Leaf v r)
 delete x (Node l v Leaf)
   | x == v = l
   | otherwise = Node (delete x l) v Leaf
-delete x (Node l v (Node lr vr rr))
-  | x == v = Node l vr (delete vr rr)
-  | x < v = Node (delete x l) v (Node lr vr rr)
-  | otherwise = Node l v (delete x (Node lr vr rr))
+delete x (Node l v r)
+  | x == v =
+    let vr = smallestOf r
+          where
+            smallestOf (Node Leaf v _) = v
+            smallestOf (Node l _ _) = smallestOf l
+     in Node l vr (delete vr r)
+  | x < v = Node (delete x l) v r
+  | otherwise = Node l v (delete x r)
 
 foldTree :: Ord a => (a -> b -> b) -> Tree a -> b -> b
 foldTree _ Leaf acc = acc
@@ -91,22 +107,22 @@ findTree x (Node l v r)
   | otherwise = findTree x r
 
 setFromList :: Ord a => [a] -> Set a
-setFromList xs = Fin (foldl (flip insert) Leaf xs)
+setFromList xs = Fin (foldr insert Leaf xs)
 
 setEmpty, setFull :: Ord a => Set a
 setEmpty = Fin Leaf
 
-setFull = Cofin Leaf
+setFull = setComplement setEmpty
 
 setUnion, setIntersection :: Ord a => Set a -> Set a -> Set a
 setUnion (Fin x) (Fin y) = Fin (foldTree insert x y)
-setUnion (Fin f) (Cofin c) = Cofin (foldTree delete f c)
-setUnion (Cofin c) (Fin f) = Cofin (foldTree delete f c)
+setUnion (Fin f) (Cofin c) = Cofin (foldTree delete c f)
+setUnion (Cofin c) (Fin f) = Cofin (foldTree delete c f)
 setUnion (Cofin x) (Cofin y) = Cofin (intersecTree x y)
 
 setIntersection (Fin x) (Fin y) = Fin (intersecTree x y)
-setIntersection (Cofin c) (Fin f) = Fin (foldTree delete c f)
-setIntersection (Fin f) (Cofin c) = Fin (foldTree delete c f)
+setIntersection (Cofin c) (Fin f) = Fin (foldTree delete f c)
+setIntersection (Fin f) (Cofin c) = Fin (foldTree delete f c)
 setIntersection (Cofin x) (Cofin y) = Cofin (foldTree insert x y)
 
 setComplement :: Ord a => Set a -> Set a
@@ -114,13 +130,5 @@ setComplement (Fin x) = Cofin x
 setComplement (Cofin x) = Fin x
 
 setMember :: Ord a => a -> Set a -> Bool
-setMember x (Cofin c) = not (findTree x c)
 setMember x (Fin f) = findTree x f
-
-instance (Show a) => Show (Tree a) where
-  show Leaf = "Leaf"
-  show (Node l v r) = "(" ++ show l ++ "/" ++ show v ++ "\\" ++ show r ++ ")"
-
-instance (Show a) => Show (Set a) where
-  show (Fin f) = "Fin:   " ++ show f
-  show (Cofin f) = "Cofin: " ++ show f
+setMember x (Cofin c) = not (setMember x (Fin c))
