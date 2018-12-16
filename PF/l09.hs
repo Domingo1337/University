@@ -10,17 +10,16 @@ primes' = 2 : [x | x <- [3 ..], all (\y -> x `mod` y /= 0) (takeWhile (\y -> y *
 
 -- Zadanie 3
 fib = 1 : 1 : zipWith (+) fib (tail fib)
-
 -- Zadanie 4
 iperm :: [a] -> [[a]]
 iperm [] = [[]]
-iperm (x:xs) = concatMap (insEv x) (iperm xs)
+iperm (x:xs) = concat [insEv x p | p <- iperm xs]
   where
     insEv :: a -> [a] -> [[a]]
     insEv x [] = [[x]]
     insEv x (y:ys) = (x : y : ys) : map (y :) (insEv x ys)
 
--- iperm (x:xs) = [p' | p' <- insEv x p, p <- iperm xs]
+-- iperm (x:xs) = concatMap (insEv x) (iperm xs)
 sperm :: [a] -> [[a]]
 sperm [] = [[]]
 sperm xs = [x : p | (x, rest) <- mixhead xs [], p <- sperm rest]
@@ -45,7 +44,7 @@ sublist (x:xs) =
     walk (x:xs) [] rys = zip xs rys ++ walk xs [] rys
     walk xs (y:ys) rys = zip xs (y : rys) ++ walk xs ys (y : rys)
 
-    -- Zadanie 7
+-- Zadanie 7
 data Tree a
   = Node (Tree a)
          a
