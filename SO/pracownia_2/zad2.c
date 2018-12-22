@@ -11,9 +11,9 @@
 #include "sem.h"
 #include <signal.h>
 
-#define N 3
+#define N 6
 #define MAX_SLEEP 3
-#define MIN_SLEEP 2
+#define MIN_SLEEP 1
 
 pthread_mutex_t forks[N];
 pthread_t thread[N];
@@ -55,12 +55,15 @@ void *philosopher(void *arg) {
 }
 
 void handler(int sig, siginfo_t *si, void *context) {
+
     for (int i = 0; i < N; i++) {
         if (pthread_cancel(thread[i])) {
             fprintf(stderr, "Error canceling thread %d\n", i);
-            exit(3);
+            exit(4);
         }
     }
+    for (int i = 0; i < N; i++)
+        pthread_mutex_destroy(&forks[i]);
     exit(EXIT_SUCCESS);
 }
 
@@ -71,17 +74,28 @@ int main() {
     sigaction(SIGINT, &sa, NULL);
 
     srand(time(NULL));
+
+    for (int i = 0; i < N; i++) {
+        if (pthread_mutex_init(&forks[i], NULL)) {
+            fprintf(stderr, "Error initializing mutex.\n");
+            return 1;
+        }
+    }
+
     for (long i = 0; i < N; i++) {
         if (pthread_create(&thread[i], NULL, philosopher, (void *)i)) {
-            fprintf(stderr, "Error creating thread\n");
-            return 1;
+            fprintf(stderr, "Error creating thread.\n");
+            return 2;
         }
     }
 
     for (int i = 0; i < N; i++) {
         if (pthread_join(thread[i], NULL)) {
-            fprintf(stderr, "Error joining thread\n");
-            return 2;
+            fprintf(stderr, "Error joining thread.\n");
+            return 3;
         }
     }
+    for (int i = 0; i < N; i++)
+        pthread_mutex_destroy(&forks[i]);
+    return 0;
 }

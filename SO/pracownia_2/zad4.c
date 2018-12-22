@@ -49,13 +49,11 @@ int main() {
     }
 
     int left = HORSES;
-    while (wait(NULL) != -1) {
+    while (wait(NULL) != -1) { /* Wait for all the children */
         fprintf(stderr, "%d horses remain.\n", --left);
         if (left < N) {
-            // now the barrier may not work properly as there are less processes than the barrier's n
-            // maybe do something
+            /* now the barrier may not work properly as there are less processes than the barrier's size */
         }
-    } /* Wait for all the children */
-
+    }
     barrier_destroy(barrier);
 }
