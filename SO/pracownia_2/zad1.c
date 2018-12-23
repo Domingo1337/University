@@ -1,3 +1,7 @@
+/* Imię nazwisko: Dominik Gulczyński
+ * Numer indeksu: 299391
+ */
+
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,14 +12,15 @@
 
 #define N 7
 #define K 3
+#define S 3
 #define MAX_SLEEP 3
 #define MIN_SLEEP 1
 
 sem_t *sem;
 
 void *func(void *data) {
-    int id = *(int *)data;
-    for (int i = 0; i < 1; i++) {
+    int id = (long)data;
+    for (int i = 0; i < K; i++) {
         printf("thread #%d, waiting\n", id);
         sem_wait(sem);
 
@@ -33,14 +38,12 @@ int main() {
     srand(time(NULL));
 
     pthread_t thread[N];
-    int id[N];
-    sem_t st;
-    sem = &st;
-    sem_init(sem, K);
+    sem_t _sem;
+    sem = &_sem;
+    sem_init(sem, S);
 
-    for (int i = 0; i < N; i++) {
-        id[i] = i;
-        if (pthread_create(&thread[i], NULL, func, &id[i])) {
+    for (long i = 0; i < N; i++) {
+        if (pthread_create(&thread[i], NULL, func, (void *)i)) {
             fprintf(stderr, "Error creating thread\n");
             return 1;
         }

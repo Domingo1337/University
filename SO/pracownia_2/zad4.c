@@ -34,8 +34,6 @@ void horse_around(int num) {
 }
 
 int main() {
-    srand(time(NULL));
-
     bar_t *barrier = barrier_init(GATE, N);
 
     for (int i = 1; i <= HORSES; i++) {

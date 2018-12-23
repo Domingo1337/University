@@ -1,3 +1,7 @@
+/* Imię nazwisko: Dominik Gulczyński
+ * Numer indeksu: 299391
+ */
+
 #include "barbershop.h"
 
 void barbershop_init(barbershop_t *barbershop, int seats) {

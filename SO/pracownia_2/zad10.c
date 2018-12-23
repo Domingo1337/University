@@ -9,7 +9,7 @@
 
 #include "barbershop.h"
 
-#define SEATS 5
+#define SEATS 3
 #define CUSTOMERS 10
 
 barbershop_t *barbershop;

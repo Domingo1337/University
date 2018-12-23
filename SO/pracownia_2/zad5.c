@@ -9,12 +9,12 @@
 
 #include "ramen.h"
 
-#define RAMEN "Tsuta Ramen"
+#define RAMEN "/Tsuta Ramen"
 #define SEATS 5
 
 #define CUSTOMERS 23
-#define EATING_TIME 15
-#define MAX_DELAY 60
+#define EATING_TIME 10
+#define MAX_DELAY 30
 
 void eat_ramen_and_die(int num) {
     ramen_t *ramen = ramen_open(RAMEN);

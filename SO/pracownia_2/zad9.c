@@ -11,8 +11,8 @@
 #include "sem.h"
 #include <signal.h>
 
-#define N 6
-#define SIZE 2
+#define N 15
+#define SIZE 5
 #define MAX_SLEEP 3
 #define MIN_SLEEP 2
 
