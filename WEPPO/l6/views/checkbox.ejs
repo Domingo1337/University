@@ -1,0 +1,7 @@
+<!-- checkbox.ejs -->
+<checkbox name='<%= name %>'>
+    <% options.forEach( option => { %>
+    <input type="checkbox"'<%= option.value %>'>
+    <%= option.text %>
+    <% }) %>
+</checkbox>

@@ -1,0 +1,8 @@
+<!-- select.ejs -->
+<select name='<%= name %>'>
+    <% options.forEach( option => { %>
+    <option value='<%= option.value %>'>
+        <%= option.text %>
+    </option>
+    <% }) %>
+</select>
