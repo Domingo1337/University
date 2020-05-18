@@ -3,16 +3,8 @@
 -- 19.05.2020
 -- Lista 9
 
-{-# LANGUAGE DataKinds          #-}
-{-# LANGUAGE GADTs              #-}
-{-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TupleSections      #-}
-{-# LANGUAGE TypeFamilies       #-}
-{-# LANGUAGE TypeOperators      #-}
 
-
-
-import           Prelude                 hiding ( zipWith )
 import           Data.Foldable           hiding ( find )
 import           Control.Parallel               ( par )
 import           Control.Monad.ST
@@ -42,21 +34,19 @@ bucketSort xs = runST $ do
   lst <- getAssocs arr
   return $ concatMap (\(i, ys) -> map (i, ) ys) lst
  where
-  create xs =
-    newArray (minimum fxs, maximum fxs) [] :: ST s (STArray s Int [a])
-    where fxs = map fst xs
+  create :: [(Int, a)] -> ST s (STArray s Int [a])
+  create xs = newArray (minimum fxs, maximum fxs) [] where fxs = map fst xs
 
 
 -- Zadanie 3 -------------------------------------------------------------------
-type Weight = Int
-type Vertex = Int
-type Graph = Array Vertex [(Vertex, Weight)]
-type STGraph s = STArray s Vertex [(Vertex, Weight)]
 
-createUF :: (Vertex, Vertex) -> ST s (STArray s Vertex Vertex)
-createUF (vmin, vmax) = newListArray (vmin, vmax) [vmin .. vmax]
+-- Struktura Union-Find oparta o tablicę
+type UnionFind s i = STArray s i i
 
-find :: STArray s Vertex Vertex -> Vertex -> ST s Vertex
+createUF :: Enum i => Ix i => (i, i) -> ST s (UnionFind s i)
+createUF (imin, imax) = newListArray (imin, imax) [imin .. imax]
+
+find :: Ix i => UnionFind s i -> i -> ST s i
 find arr v = do
   v' <- readArray arr v
   v' <- readArray arr v
@@ -67,11 +57,18 @@ find arr v = do
       writeArray arr v v'
       return v'
 
-union :: STArray s Vertex Vertex -> Vertex -> Vertex -> ST s ()
+union :: Ix i => UnionFind s i -> i -> i -> ST s ()
 union arr v u = do
   v' <- find arr v
   u' <- find arr u
   writeArray arr v' u'
+
+
+-- Graf jako tablica indeksowana wierzchołkami, przechowuje listy (sąsiad, waga krawędzi)
+type Graph = Array Vertex [(Vertex, Weight)]
+type STGraph s = STArray s Vertex [(Vertex, Weight)]
+type Weight = Int
+type Vertex = Int
 
 toEdges :: Graph -> [(Vertex, Vertex, Weight)]
 toEdges graph =
@@ -88,10 +85,13 @@ addEdge arr (v, u, w) = do
   writeArray arr u $ (v, w) : uedges
   return ()
 
+createSTGraph :: (Vertex, Vertex) -> ST s (STGraph s)
+createSTGraph bounds = newArray bounds []
+
 minimalSpanningTree :: Graph -> Graph
 minimalSpanningTree graph = runSTArray $ do
   uf       <- createUF (bounds graph)
-  newgraph <- newArray (bounds graph) [] :: ST s (STGraph s)
+  newgraph <- createSTGraph (bounds graph)
 
   forM_ (toEdges graph) $ \edge@(v, u, w) -> do
     v' <- find uf v
